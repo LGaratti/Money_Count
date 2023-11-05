@@ -45,10 +45,24 @@
     box-shadow: 0 0 5px black; /* ombra intorno al bottone */
 }
 
-@media (max-width: 700px){
+@media (max-width: 800px){
+    .input__box {
+        font-size: 17px;
+    }
     .input__submit {
         width: 40px;
         height: 40px;
-        right: 17px;
+        /* right: 17px; */
+    }
+}
+
+@media (max-width: 700px){
+    .input__box {
+        font-size: 17px;
+    }
+    .input__submit {
+        width: 40px;
+        height: 40px;
+        /* right: 17px; */
     }
 }
