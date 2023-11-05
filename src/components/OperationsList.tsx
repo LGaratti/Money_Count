@@ -23,7 +23,7 @@ const OperationsList: React.FC<Props> = ({
 
     <div className="container">
       <div className="active">
-        <span className="active__heading"> Active Operation </span>
+        <span className="active__heading"> Active Operations </span>
         {operationArray.filter(t => t.active).map((operation) => (
           <SingleOperation           
             key={operation.id}
@@ -32,8 +32,8 @@ const OperationsList: React.FC<Props> = ({
           />
         ))}
       </div>
-      <div className="deactive">
-        <span className="deactive__heading">Not Active Operation</span>
+      <div className="inactive">
+        <span className="inactive__heading">Inactive Operations</span>
         {operationArray.filter(t => !t.active).map((operation) => (
           <SingleOperation           
             key={operation.id}

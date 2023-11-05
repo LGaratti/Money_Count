@@ -16,6 +16,7 @@
 .operation_title--text {
     flex: 1;
     padding: 5px;
+    font-size: 20px;
 }
 
 .icon {
@@ -23,18 +24,29 @@
     font-size: 25px;
     cursor: pointer;
 }
-
+@media (max-width: 940px) {
+  .operation__icons {
+    display: flex;            /* Use flexbox to layout icons */
+    justify-content: space-evenly; /* Distribute space evenly around items */
+  }
+}
 @media (max-width: 800px) {
     .single_operation {
       flex-direction: column; /* Cambia la direzione del flex container per disporre i figli verticalmente */
-      align-items: center;
+      /* align-items: center; */
       padding: 5px;
     }
-  
+
+    .operation__icons {
+      display: flex;            /* Use flexbox to layout icons */
+      justify-content: space-evenly; /* Distribute space evenly around items */
+    }
+    
     .operation_title--text {
       /* Fai le regolazioni necessarie per l'input come la larghezza e il margine */
       width: 100%; /* Potresti voler farlo occupare l'intera larghezza */
       margin-bottom: 10px; /* Aggiungi spazio sotto l'input prima delle icone */
+      font-size: 17px;
     }
   
     .icon {

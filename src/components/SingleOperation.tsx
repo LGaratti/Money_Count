@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { MdClear, MdModeEdit } from "react-icons/md";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import "../style/Operation.css";
+// import "../style/InputField.css";
 import { Operation } from "../interfaces/Operation";
 import { OperationsAction } from "../interfaces/OperationTypes";
 
@@ -83,7 +84,7 @@ export const SingleOperation = ({ operation, operationArrayReducer }: Props) => 
              : ( <span className="operation_title--text"> {operation.title} </span> )
       }
       
-      <div>
+      <div className="operation__icons">
         <span className="icon" onClick={handleEditClick} >
           <MdModeEdit />
         </span>
