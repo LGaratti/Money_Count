@@ -1,0 +1,54 @@
+.input {
+    display: flex;
+    width: 95%;
+    position: relative;
+    align-items: center;
+}
+
+.input__box {
+    width: 100%;
+    border-radius: 50px;
+    padding: 20px 30px;
+    font-size: 25px;
+    border: none;
+    transition: 0.2s;
+    box-shadow: inset 0 0 5px black;
+}
+
+/* Quando l'input box è focussato oscuri tutto tranne lui */
+.input__box:focus { 
+    box-shadow: 0 0 10px 1000px rgba(0, 0, 0, 0.5);
+    outline: none;
+}
+
+.input__submit {
+    position: absolute; /* fa rimanere il bottone all'interno dell'input__box */
+    width: 50px;
+    height: 50px;
+    margin: 12px;
+    border-radius: 50px; /* rende il bottone tondo*/
+    right: 0px;
+    border: none;
+    font-size: 15px;
+    background-color: cadetblue;
+    color: white;
+    transition: 0.2 all;
+    box-shadow: 0 0 10px black; /* ombra intorno al bottone */
+}
+
+.input__submit:hover {
+    background-color: rgb(77, 119, 119);
+}
+
+.input__submit:active {
+    transform: scale(0.8);
+    box-shadow: 0 0 5px black; /* ombra intorno al bottone */
+}
+
+@media (max-width: 700px){
+    .input__submit {
+        width: 40px;
+        height: 40px;
+        right: 17px;
+    }
+}
