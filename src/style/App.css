@@ -19,7 +19,7 @@
     text-align: center;
 }
 
-@media (max-widht:800) {
+@media (max-width:800) {
     .heading {
         margin: 15px 0;
         font-size: 35px;
