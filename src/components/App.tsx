@@ -6,12 +6,14 @@ import jsonObject from '../data/operations.json';
 import '../style/App.css';
 import OperationsList from './OperationsList';
 import { Operation } from '../interfaces/Operation';
-import { operationArrayReducer, fromJsonToOperations } from '../utils/OperationArrayUtils'
+import { operationArrayReducer } from '../utils/OperationArrayReducer'
+import { fromJsonToOperations } from '../utils/OperationsUtils'
 import  InputField from './InputField'
+import { DragDropContext } from 'react-beautiful-dnd'
 // import { OperationsAction } from '../interfaces/OperationTypes';
 
 
-// VERA qua reinderizza alle varie pagine, log ecc...
+// VERA qua reinderizza alle varie pagine, log ecc+++
 const App:React.FC = () => {
 
   // Ricezione Operations da operations.json
@@ -51,13 +53,15 @@ const App:React.FC = () => {
  
   return (
 
-    <div className="App">
-      <span className='heading'>Money Count</span>
-      {/* Dichiaro il form di ingresso nome operation  */}
-      <InputField operationName={operationName} setOperationName={setOperationName} checkAndAddOperation={checkAndAddOperation} />
-      {/* Dichiaro la lista di Operations */}
-      <OperationsList operationArray={operationArray} operationArrayReducer={dispatch} />      
-    </div>
+    <DragDropContext onDragEnd={() => {}}>
+      <div className="App">
+        <span className='heading'>Money Count</span>
+        {/* Dichiaro il form di ingresso nome operation  */}
+        <InputField operationName={operationName} setOperationName={setOperationName} checkAndAddOperation={checkAndAddOperation} />
+        {/* Dichiaro la lista di Operations */}
+        <OperationsList operationArray={operationArray} operationArrayReducer={dispatch} />      
+      </div>
+    </DragDropContext>
 
   );
 }

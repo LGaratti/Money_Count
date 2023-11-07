@@ -4,9 +4,12 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import "../style/Operation.css";
 // import "../style/InputField.css";
 import { Operation } from "../interfaces/Operation";
+import { deleteOperations, modifyOperations } from "../utils/OperationsUtils";
 import { OperationsAction } from "../interfaces/OperationTypes";
+import { Draggable } from "react-beautiful-dnd";
 
 interface Props {
+  index: number;
   operation: Operation;
   operationArrayReducer: React.Dispatch<OperationsAction>;
 }
@@ -18,10 +21,10 @@ interface Props {
 		- operationArrayReducer: funzione che chiamata durante invio del form.  Modifica operationArray
 */
 
-export const SingleOperation = ({ operation, operationArrayReducer }: Props) => {
+export const SingleOperation = ({ index, operation, operationArrayReducer}: Props) => {
 
   // Hook per l'abilitazione/disabilitazione della schermata edit
-  const [edit, setEdit] = useState<boolean>(false); // se edit è a true
+  const [edit, setEdit] = useState<boolean>(operation.active); // se edit è a true
 
   // Hook per il cambio del titolo dell'operation 
   const [editTitle, setEditTitle] = useState<string>(operation.title);
@@ -35,12 +38,9 @@ export const SingleOperation = ({ operation, operationArrayReducer }: Props) => 
 
   // Funzione che invia i dati contenuti nel form
   const submitForm = () => {
-    const updatedOperation: Operation = { ...operation, title: editTitle };
     // TODO aggiornamento e controllo di tutti i valori inseriti nel form
-    operationArrayReducer({
-      type: 'modify',
-      payload: [updatedOperation]
-    })
+    const updatedOperation: Operation[] = [{ ...operation, title: editTitle }];
+    modifyOperations(operationArrayReducer, updatedOperation);
     setEdit(false);
   };
 
@@ -55,56 +55,49 @@ export const SingleOperation = ({ operation, operationArrayReducer }: Props) => 
     // Apre l'edit
     else setEdit(true); 
   };
-  
-  const deleteOperation = () => {
-    operationArrayReducer({
-        type: 'remove',
-        payload: [operation]
-    })
-  };
 
   const toggleOperationActiveVal = () => {
-    const updatedOperation = { ...operation, active: !operation.active };
-    operationArrayReducer({
-        type: 'modify',
-        payload: [updatedOperation]
-    })
-    // operationArrayReducer( operationArray.map((t) => t.id === id ? { ...operation, active: !t.active } : t));
+    const updatedOperation: Operation[] = [{ ...operation, active: !operation.active }];
+    modifyOperations(operationArrayReducer, updatedOperation);
   };
 
   return (
-
-    <form className="single_operation" onSubmit={(e) => { 
-        e.preventDefault(); 
-        submitForm();  
-      }}>
-      {/* Se edit è true crea l'input, altrimenti crea span */}
-      {
-        edit ? ( <input className="operation_title--text" ref={inputRef} value = {editTitle} onChange={(e) => setEditTitle(e.target.value)} /> ) 
-             : ( <span className="operation_title--text"> {operation.title} </span> )
-      }
-      
-      <div className="operation__icons">
-        <span className="icon" onClick={handleEditClick} >
-          <MdModeEdit />
-        </span>
-        <span className="icon" onClick={() => deleteOperation()} >
-          <MdClear />
-        </span>
-        {/* Se operation.active è true, mostra IoMdEyeOff, altrimenti mostra IoMdEye */}
+    <Draggable draggableId={operation.id} index={index}>
+      {(provided) => (
+        <form className="single_operation" onSubmit={(e) => { e.preventDefault(); submitForm();}} 
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        ref={provided.innerRef}>
+        {/* Se edit è true crea l'input, altrimenti crea span */}
         {
-          operation.active ? (
-            <span className="icon" onClick={() => toggleOperationActiveVal()} >
-              <IoMdEyeOff />
-            </span>
-          ) : (
-            <span className="icon" onClick={() => toggleOperationActiveVal()} >
-              <IoMdEye />
-            </span>
-          )
+          edit ? ( <input className="operation_title--text" ref={inputRef} value = {editTitle} onChange={(e) => setEditTitle(e.target.value)} /> ) 
+              : ( <span className="operation_title--text"> {operation.title} </span> )
         }
-      </div>
-    </form>
+        
+        <div className="operation__icons">
+          <span className="icon" onClick={handleEditClick} >
+            <MdModeEdit />
+          </span>
+          <span className="icon" onClick={() => deleteOperations(operationArrayReducer,[operation])} >
+            <MdClear />
+          </span>
+          {/* Se operation.active è true, mostra IoMdEyeOff, altrimenti mostra IoMdEye */}
+          {
+            operation.active ? (
+              <span className="icon" onClick={() => toggleOperationActiveVal()} >
+                <IoMdEyeOff />
+              </span>
+            ) : (
+              <span className="icon" onClick={() => toggleOperationActiveVal()} >
+                <IoMdEye />
+              </span>
+            )
+          }
+        </div>
+      </form>
+      )}
+      
+    </Draggable>
   );
 };
 
