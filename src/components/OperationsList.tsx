@@ -20,6 +20,7 @@ const OperationsList: React.FC<Props> = ({
   operationArray,
   operationArrayReducer,
 }: Props) => {
+  
   return (
 
     <div className="container">
@@ -40,7 +41,7 @@ const OperationsList: React.FC<Props> = ({
       </Droppable>
       <Droppable droppableId="InactiveOpsList">
         {(provided) => (
-          <div className="inactive">
+          <div className="inactive" ref={provided.innerRef} {...provided.droppableProps}> 
             <span className="inactive__heading">Inactive Operations</span>
             {operationArray.filter(t => !t.active).map((operation, index) => (
               <SingleOperation           
