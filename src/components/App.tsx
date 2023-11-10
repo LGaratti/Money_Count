@@ -7,7 +7,7 @@ import '../style/App.css';
 import OperationsList from './OperationsList';
 import { Operation } from '../interfaces/Operation';
 import { operationArrayReducer } from '../utils/OperationArrayReducer'
-import { fromJsonToOperations } from '../utils/OperationsUtils'
+import { fromJsonToOperations, fromOpArrayToJson } from '../utils/OperationsUtils'
 import  InputField from './InputField'
 import { DragDropContext } from 'react-beautiful-dnd'
 // import { OperationsAction } from '../interfaces/OperationTypes';
@@ -17,7 +17,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 const App:React.FC = () => {
 
   // Ricezione Operations da operations.json
-  let initialOperation: Operation[] = fromJsonToOperations(jsonObject)
+  let initialOperations: Operation[] = fromJsonToOperations(jsonObject)
 
   // TODO studiarsi gli Hook
 
@@ -29,11 +29,12 @@ const App:React.FC = () => {
 
   // Hook useEffect per stampare operationArray nella console quando subisce un cambiamento 
   useEffect(() => {
-    if (operationArray !== initialOperation) {
+    if (operationArray !== initialOperations) {
       console.log(operationArray);
       // TODO salavare operationArray su json
+      fromOpArrayToJson(operationArray);
     }
-  }, [operationArray, initialOperation]); // Questo array di dipendenza dice a React di eseguire l'effetto solo quando operationArray cambia.
+  }, [operationArray, initialOperations]); // Questo array di dipendenza dice a React di eseguire l'effetto solo quando operationArray cambia.
 
 
   // funzione onSumit del form di aggiunta di una nuova operation.
