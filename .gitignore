@@ -54,3 +54,6 @@ Desktop.ini
 
 #file per utilizzre node 18 su linux
 .nvmrc
+
+#template di settaggi locali .json
+*_template.json

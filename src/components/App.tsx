@@ -8,7 +8,7 @@ import '../style/App.css';
 import OperationsList from './OperationsList';
 import { Operation } from '../interfaces/Operation';
 import { operationArrayReducer } from '../utils/OperationArrayReducer'
-import { fromJsonToOperations, fromOpArrayToJson } from '../utils/OperationsUtils'
+import { fromJsonToOperations, sendOpArrayToServer } from '../utils/OperationsUtils'
 import  InputField from './InputField'
 import { DragDropContext } from 'react-beautiful-dnd'
 // import { OperationsAction } from '../interfaces/OperationTypes';
@@ -17,29 +17,25 @@ import { DragDropContext } from 'react-beautiful-dnd'
 // VERA qua reinderizza alle varie pagine, log ecc+++
 const App:React.FC = () => {
 
-  // Ricezione Operations da operations.json
-  let initialOperations: Operation[] = fromJsonToOperations(jsonObject)
-
   // TODO studiarsi gli Hook
+
+  // Hook per la sincronizzazione delle operation nel server
+  const [serverOpArray, setServerOpArray] = useState<Operation[]>(fromJsonToOperations(jsonObject));
 
   // Hook useState per la modifica della stringa operationName
   const [operationName, setOperationName] = useState<string>(""); // Inizializza operationName come stringa vuota. checkOperationName è la funzione per aggiornare il valore di operationName.
 
   // Hook useReducer per la gestione delle operazione sull'operationArray
-  const [operationArray, dispatch] = useReducer(operationArrayReducer, initialOperations);
+  const [operationArray, dispatch] = useReducer(operationArrayReducer, serverOpArray);
   // Hook useReducer per la gestione delle operazione sull'operationArray
   const initialInactiveOperations = operationArray.filter((operation) => !operation.active);
   const [inactiveOpArray, dispatchInactive] = useReducer(operationArrayReducer, initialInactiveOperations);
 
-  // Hook useEffect per stampare operationArray nella console quando subisce un cambiamento 
-  useEffect(() => {
-    // if (operationArray !== initialOperations) {
-    if (lodash.isEqual(operationArray, initialOperations)) {
-      // console.log(operationArray);
-      // TODO salavare operationArray su json
-      fromOpArrayToJson(operationArray);
-    }
-  }, [operationArray, initialOperations]); // Questo array di dipendenza dice a React di eseguire l'effetto solo quando operationArray cambia.
+  // Hook useEffect per inviare operationArray al server
+  useEffect(() => { 
+    if (!lodash.isEqual(operationArray, serverOpArray) && sendOpArrayToServer(operationArray)) 
+      setServerOpArray(operationArray); // sincronizza client e server
+  }, [operationArray, serverOpArray]); 
 
 
   // funzione onSumit del form di aggiunta di una nuova operation.

@@ -24,55 +24,50 @@ const lodash = require('lodash');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware per il parsing del body delle richieste in JSON
+// Middleware for JSON request body parsing
 app.use(express.json());
 
-// Endpoint per salvare le operazioni in operations.json
+// Endpoint to save operations to operations.json
 app.post('/save-operations', (req, res) => {
   
   const operations = req.body;
   
-//   // Definisci il percorso del file
+  // Define the file path
   const filePath = path.join(__dirname, 'data', 'operations.json');
-  let operationsSaved = {};
-  // Controlla se il file esiste
+
+  // Check if the file exists
   if (fs.existsSync(filePath)) {
-    // Leggi il contenuto corrente del file
-    // operationsSaved = JSON.parse(fs.readFileSync(filePath));
+    // Read the current content of the file
+    let operationsSaved = JSON.parse(fs.readFileSync(filePath));
 
-    operationsSaved = require(filePath)
-
-    // Confronta i contenuti del file con i dati inviati
+    // Compare the contents of the file with the submitted data
     if (lodash.isEqual(operations, operationsSaved)) {
-      console.log('File non sovrascritto perché uguale');
-      return res.status(200).send('No needs to update files');
+      console.log('File not overwritten because it is the same.');
+      return res.status(200).send('No need to update the file.');
     }
-    // if (JSON.stringify(operations) === JSON.stringify(operationsSaved)) {
-      
-    // }
   }
 
-  //Scrive il file
-  fs.writeFile(path.join(__dirname, 'data', 'operations.json'), JSON.stringify(operations, null, 2), (err) => {
+  // Write the file
+  fs.writeFile(filePath, JSON.stringify(operations, null, 2), (err) => {
     if (err) {
-      console.error('Si è verificato un errore durante il salvataggio del file:', err);
-      res.status(500).send('Errore durante il salvataggio del file');
+      console.error('An error occurred while saving the file:', err);
+      res.status(500).send('Error during file saving.');
     } else {
-      console.log('File salvato con successo');
-      res.status(200).send('Operazioni salvate con successo');
+      console.log('File saved successfully.');
+      res.status(200).send('Operations saved successfully.');
     }
   });
 });
 
-// Servire la build di React
-// Assicurati che il path della directory build sia corretto
+// Serve the React build
+// Ensure the build directory path is correct
 app.use(express.static(path.join(__dirname, '..', 'build')));
 
 app.get('*', (req, res) => {
-  // Assicurati che il path del file index.html sia corretto
+  // Ensure the index.html file path is correct
   res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`Server in ascolto sulla porta ${PORT}`);
+  console.log(`Server listening on port ${PORT}`);
 });

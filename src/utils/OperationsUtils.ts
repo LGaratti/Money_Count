@@ -42,14 +42,9 @@ export function fromJsonToOperations(jsonObj: any): Operation[] {
   });
 }
 
-export function fromOpArrayToJson(operationArray:Operation[]): boolean {
+export function sendOpArrayToServer(operationArray:Operation[]): boolean {
   // Codice per effettuare la chiamata POST al server Node.js
-  axios.post('/save-operations', { "operations":operationArray
-    
-    // Dati che desideri inviare al server (ad esempio, un oggetto JSON)
-    // Puoi utilizzare il corpo della richiesta req.body del server per ricevere questi dati
-    // Esempio: { key1: 'value1', key2: 'value2' }
-  })
+  axios.post('/save-operations', { "operations":operationArray})
   .then((response) => {
     // Gestisci la risposta dal server se necessario
     console.log(response.data);
