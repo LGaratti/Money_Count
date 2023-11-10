@@ -1,5 +1,3 @@
-import React from "react";
-
 import "../style/OperationList.css";
 import { SingleOperation } from "./SingleOperation";
 import { Operation } from "../interfaces/Operation";
@@ -10,15 +8,21 @@ import { Droppable } from "react-beautiful-dnd";
 	OperationList è una funzione che restituisce un React FunctionComponent con 2 parametri in ingresso che sono:
 		- operationArray: array di operazioni
 		- operationArrayReducer: funzione per modificare l'array
+    - inactiveOpArray
+    - inactiveOpArrayReducer
 */
 
 interface Props {
   operationArray: Operation[];
   operationArrayReducer: React.Dispatch<OperationsAction>;
+  inactiveOpArray: Operation[];
+  inactiveOpArrayReducer: React.Dispatch<OperationsAction>;
 }
 const OperationsList: React.FC<Props> = ({
   operationArray,
   operationArrayReducer,
+  inactiveOpArray,
+  inactiveOpArrayReducer,
 }: Props) => {
   
   return (
@@ -43,12 +47,12 @@ const OperationsList: React.FC<Props> = ({
         {(provided) => (
           <div className="inactive" ref={provided.innerRef} {...provided.droppableProps}> 
             <span className="inactive__heading">Inactive Operations</span>
-            {operationArray.filter(t => !t.active).map((operation, index) => (
+            {inactiveOpArray.map((operation, index) => (
               <SingleOperation           
                 index={index}
                 key={operation.id}
                 operation={operation}
-                operationArrayReducer={operationArrayReducer}
+                operationArrayReducer={inactiveOpArrayReducer}
               />
             ))}
           </div>

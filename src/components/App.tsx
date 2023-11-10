@@ -25,7 +25,10 @@ const App:React.FC = () => {
   const [operationName, setOperationName] = useState<string>(""); // Inizializza operationName come stringa vuota. checkOperationName è la funzione per aggiornare il valore di operationName.
 
   // Hook useReducer per la gestione delle operazione sull'operationArray
-  const [operationArray, dispatch] = useReducer(operationArrayReducer, initialOperation);
+  const [operationArray, dispatch] = useReducer(operationArrayReducer, initialOperations);
+  // Hook useReducer per la gestione delle operazione sull'operationArray
+  const initialInactiveOperations = operationArray.filter((operation) => !operation.active);
+  const [inactiveOpArray, dispatchInactive] = useReducer(operationArrayReducer, initialInactiveOperations);
 
   // Hook useEffect per stampare operationArray nella console quando subisce un cambiamento 
   useEffect(() => {
@@ -60,7 +63,7 @@ const App:React.FC = () => {
         {/* Dichiaro il form di ingresso nome operation  */}
         <InputField operationName={operationName} setOperationName={setOperationName} checkAndAddOperation={checkAndAddOperation} />
         {/* Dichiaro la lista di Operations */}
-        <OperationsList operationArray={operationArray} operationArrayReducer={dispatch} />      
+        <OperationsList operationArray={operationArray} operationArrayReducer={dispatch} inactiveOpArray={inactiveOpArray} inactiveOpArrayReducer={dispatchInactive}/>      
       </div>
     </DragDropContext>
 
