@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { v4 as uuidv4 } from "uuid";
+import lodash from 'lodash';
 
 import jsonObject from '../data/operations.json';
 
@@ -32,8 +33,9 @@ const App:React.FC = () => {
 
   // Hook useEffect per stampare operationArray nella console quando subisce un cambiamento 
   useEffect(() => {
-    if (operationArray !== initialOperations) {
-      console.log(operationArray);
+    // if (operationArray !== initialOperations) {
+    if (lodash.isEqual(operationArray, initialOperations)) {
+      // console.log(operationArray);
       // TODO salavare operationArray su json
       fromOpArrayToJson(operationArray);
     }

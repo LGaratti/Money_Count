@@ -1,6 +1,7 @@
 # dependencies
 /node_modules
-/server/node_modules # Ignora la cartella node_modules del server
+/server/node_modules 
+# Ignora la cartella node_modules del server
 
 # yarn
 .yarn/*
@@ -15,18 +16,21 @@
 
 # production
 /build
-/server/build # Se il tuo server crea una cartella di build
+# Se il tuo server crea una cartella di build
+/server/build 
 
 # logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-/server/*.log # Ignora tutti i file di log nella cartella del server
+/server/*.log 
+# Ignora tutti i file di log nella cartella del server
 
 # misc
 .DS_Store
 .env*
-!.env.example # Se hai un file .env.example che vuoi tenere nel repo
+# Se hai un file .env.example che vuoi tenere nel repo
+!.env.example 
 
 # Sistema operativo specifico
 # Windows

@@ -44,3 +44,19 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+
+
+
+
+
+# Appunti da tradurre
+## requisiti
+# npm
+# yarn
+# 
+## installazione pacchetti
+alcuni pacchetti richiedono di scaricare i tipi.
+Di solito si scaricano in questo modo:
+yarn add --dev @types/{package_name}

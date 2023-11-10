@@ -45,7 +45,7 @@ app.post('/save-operations', (req, res) => {
     // Confronta i contenuti del file con i dati inviati
     if (lodash.isEqual(operations, operationsSaved)) {
       console.log('File non sovrascritto perché uguale');
-      return res.status(200).send('Operazioni non modificate');
+      return res.status(200).send('No needs to update files');
     }
     // if (JSON.stringify(operations) === JSON.stringify(operationsSaved)) {
       

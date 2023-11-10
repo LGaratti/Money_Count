@@ -46,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.201",
     "@types/react-beautiful-dnd": "^13.1.7",
     "@types/uuid": "^9.0.6"
   }
