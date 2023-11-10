@@ -21,12 +21,26 @@ app.use(express.json());
 
 // Endpoint per salvare le operazioni in operations.json
 app.post('/save-operations', (req, res) => {
-  // Prendi il path assoluto della directory principale del progetto
-  const projectRoot = path.join(__dirname, '..');
   
   const operations = req.body;
-  // Assicurati che il path del file sia corretto
-  fs.writeFile(path.join(projectRoot, 'data', 'operations.json'), JSON.stringify(operations, null, 2), (err) => {
+  
+//   // Definisci il percorso del file
+//   const filePath = path.join(__dirname, 'data', 'operations.json');
+//   let operationsSaved = {};
+//   // Controlla se il file esiste
+//   if (fs.existsSync(filePath)) {
+//     // Leggi il contenuto corrente del file
+//     operationsSaved = JSON.parse(fs.readFileSync(filePath));
+// 
+//     // Confronta i contenuti del file con i dati inviati
+//     if (JSON.parse(operations) === JSON.parse(operationsSaved)) {
+//       console.log('File non sovrascritto perché uguale');
+//       return res.status(200).send('Operazioni non modificate');
+//     }
+//   }
+
+  //Scrive il file
+  fs.writeFile(path.join(__dirname, 'data', 'operations.json'), JSON.stringify(operations, null, 2), (err) => {
     if (err) {
       console.error('Si è verificato un errore durante il salvataggio del file:', err);
       res.status(500).send('Errore durante il salvataggio del file');

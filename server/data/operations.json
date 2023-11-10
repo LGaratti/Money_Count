@@ -1,0 +1,20 @@
+{
+  "operations": [
+    {
+      "id": "9e1780af-5897-4ab5-b30b-b69848cfad67",
+      "title": "Consulting",
+      "active": true,
+      "description": "consulting in computer vision",
+      "filters": [
+        "Job, Programming, Monthly"
+      ],
+      "amount": 100,
+      "periodic": {
+        "unit": "month",
+        "amount": 1,
+        "lastDate": "2023-10-30T22:28:43.000Z",
+        "firstDate": "2023-10-30T22:28:43.000Z"
+      }
+    }
+  ]
+}
