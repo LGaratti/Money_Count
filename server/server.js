@@ -1,19 +1,20 @@
-// COME CREARLO
+// Come inizializzare la cartella server dopo aver clonato il repo
 // cd .\server\
 // yarn init -y
-// yarn add express
 
-// COME USARLO
+// Come avviare il server dopo l'init
+// ATTENZIONE 
+//    Assicurati di eseguire yarn build nella directory root del tuo progetto React per generare la build di produzione prima di avviare il server Node.js con node server.js.
 // cd .\server\
-// release
-// node server.js
-// debug
-// node --inspect server.js
-// Apri Google Chrome.
-// Digita chrome://inspect nella barra degli indirizzi.
-// Clicca su "Open dedicated DevTools for Node" o trova il tuo processo Node.js nell'elenco dei dispositivi di destinazione e clicca su "inspect".
+// per release
+//    node server.js
+// per debug
+//    node --inspect server.js
+//    Apri Google Chrome.
+//    Digita chrome://inspect nella barra degli indirizzi.
+//    Clicca su "Open dedicated DevTools for Node" o trova il tuo processo Node.js nell'elenco dei dispositivi di destinazione e clicca su "inspect".
+// apri un browser e collegati a questa pagina: http://localhost:3000/
 
-// P.S. Assicurati di eseguire yarn build nella directory root del tuo progetto React per generare la build di produzione prima di avviare il server Node.js con node server.js.
 
 const express = require('express');
 const fs = require('fs');
