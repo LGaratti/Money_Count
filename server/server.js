@@ -1,17 +1,16 @@
 // COME CREARLO
 // cd .\server\
 // yarn init -y
-// yarn add express
 
 // COME USARLO
 // cd .\server\
 // release
-// node server.js
+//  node server.js
 // debug
-// node --inspect server.js
-// Apri Google Chrome.
-// Digita chrome://inspect nella barra degli indirizzi.
-// Clicca su "Open dedicated DevTools for Node" o trova il tuo processo Node.js nell'elenco dei dispositivi di destinazione e clicca su "inspect".
+//  node --inspect server.js
+//  Apri Google Chrome.
+//  Digita chrome://inspect nella barra degli indirizzi.
+//  Clicca su "Open dedicated DevTools for Node" o trova il tuo processo Node.js nell'elenco dei dispositivi di destinazione e clicca su "inspect".
 
 // P.S. Assicurati di eseguire yarn build nella directory root del tuo progetto React per generare la build di produzione prima di avviare il server Node.js con node server.js.
 
