@@ -5,13 +5,20 @@
 
 // COME USARLO
 // cd .\server\
+// release
 // node server.js
+// debug
+// node --inspect server.js
+// Apri Google Chrome.
+// Digita chrome://inspect nella barra degli indirizzi.
+// Clicca su "Open dedicated DevTools for Node" o trova il tuo processo Node.js nell'elenco dei dispositivi di destinazione e clicca su "inspect".
 
 // P.S. Assicurati di eseguire yarn build nella directory root del tuo progetto React per generare la build di produzione prima di avviare il server Node.js con node server.js.
 
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const lodash = require('lodash');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,19 +32,24 @@ app.post('/save-operations', (req, res) => {
   const operations = req.body;
   
 //   // Definisci il percorso del file
-//   const filePath = path.join(__dirname, 'data', 'operations.json');
-//   let operationsSaved = {};
-//   // Controlla se il file esiste
-//   if (fs.existsSync(filePath)) {
-//     // Leggi il contenuto corrente del file
-//     operationsSaved = JSON.parse(fs.readFileSync(filePath));
-// 
-//     // Confronta i contenuti del file con i dati inviati
-//     if (JSON.parse(operations) === JSON.parse(operationsSaved)) {
-//       console.log('File non sovrascritto perché uguale');
-//       return res.status(200).send('Operazioni non modificate');
-//     }
-//   }
+  const filePath = path.join(__dirname, 'data', 'operations.json');
+  let operationsSaved = {};
+  // Controlla se il file esiste
+  if (fs.existsSync(filePath)) {
+    // Leggi il contenuto corrente del file
+    // operationsSaved = JSON.parse(fs.readFileSync(filePath));
+
+    operationsSaved = require(filePath)
+
+    // Confronta i contenuti del file con i dati inviati
+    if (lodash.isEqual(operations, operationsSaved)) {
+      console.log('File non sovrascritto perché uguale');
+      return res.status(200).send('Operazioni non modificate');
+    }
+    // if (JSON.stringify(operations) === JSON.stringify(operationsSaved)) {
+      
+    // }
+  }
 
   //Scrive il file
   fs.writeFile(path.join(__dirname, 'data', 'operations.json'), JSON.stringify(operations, null, 2), (err) => {
