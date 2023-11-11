@@ -42,6 +42,23 @@ export function fromJsonToOperations(jsonObj: any): Operation[] {
   });
 }
 
+export function recvOpArrayFromServer(setServerOpArray: React.Dispatch<React.SetStateAction<Operation[]>>): Boolean {
+
+  axios.post('/get-operations', {})
+  .then((response) => {
+    // Gestisci la risposta dal server se necessario
+    setServerOpArray(fromJsonToOperations(response.data));
+    console.log(response.data);
+  })
+  .catch((error) => {
+    // Gestisci gli errori qui
+    console.error('Errore nella richiesta:', error);
+    return false;
+  });
+
+  return true;
+}
+
 export function sendOpArrayToServer(operationArray:Operation[]): boolean {
   // Codice per effettuare la chiamata POST al server Node.js
   axios.post('/save-operations', { "operations":operationArray})

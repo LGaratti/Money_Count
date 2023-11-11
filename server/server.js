@@ -59,6 +59,38 @@ app.post('/save-operations', (req, res) => {
   });
 });
 
+// Endpoint to save operations to operations.json
+app.post('/load-operations', (req, res) => {
+  
+  const operations = req.body;
+  
+  // Define the file path
+  const filePath = path.join(__dirname, 'data', 'operations.json');
+
+  // Check if the file exists
+  if (fs.existsSync(filePath)) {
+    // Read the current content of the file
+    let operationsSaved = JSON.parse(fs.readFileSync(filePath));
+
+    // Compare the contents of the file with the submitted data
+    if (lodash.isEqual(operations, operationsSaved)) {
+      console.log('File not overwritten because it is the same.');
+      return res.status(200).send('No need to update the file.');
+    }
+  }
+
+  // Write the file
+  fs.writeFile(filePath, JSON.stringify(operations, null, 2), (err) => {
+    if (err) {
+      console.error('An error occurred while saving the file:', err);
+      res.status(500).send('Error during file saving.');
+    } else {
+      console.log('File saved successfully.');
+      res.status(200).send('Operations saved successfully.');
+    }
+  });
+});
+
 // Serve the React build
 // Ensure the build directory path is correct
 app.use(express.static(path.join(__dirname, '..', 'build')));

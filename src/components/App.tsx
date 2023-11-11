@@ -8,7 +8,7 @@ import '../style/App.css';
 import OperationsList from './OperationsList';
 import { Operation } from '../interfaces/Operation';
 import { operationArrayReducer } from '../utils/OperationArrayReducer'
-import { fromJsonToOperations, sendOpArrayToServer } from '../utils/OperationsUtils'
+import { fromJsonToOperations, recvOpArrayFromServer, sendOpArrayToServer } from '../utils/OperationsUtils'
 import  InputField from './InputField'
 import { DragDropContext } from 'react-beautiful-dnd'
 // import { OperationsAction } from '../interfaces/OperationTypes';
@@ -18,10 +18,15 @@ import { DragDropContext } from 'react-beautiful-dnd'
 const App:React.FC = () => {
 
   // TODO studiarsi gli Hook
-
+  
   // Hook per la sincronizzazione delle operation nel server
   const [serverOpArray, setServerOpArray] = useState<Operation[]>(fromJsonToOperations(jsonObject));
 
+  // Hook per ricevere l'array dal server 
+  useEffect(() => { 
+    recvOpArrayFromServer(setServerOpArray)
+  }, []);
+   
   // Hook useState per la modifica della stringa operationName
   const [operationName, setOperationName] = useState<string>(""); // Inizializza operationName come stringa vuota. checkOperationName è la funzione per aggiornare il valore di operationName.
 
