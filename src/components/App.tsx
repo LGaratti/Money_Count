@@ -2,13 +2,13 @@ import React, { useState, useEffect, useReducer } from 'react'
 import { v4 as uuidv4 } from "uuid";
 import lodash from 'lodash';
 
-import jsonObject from '../data/operations.json';
+// import jsonObject from '../data/operations.json';
 
 import '../style/App.css';
 import OperationsList from './OperationsList';
 import { Operation } from '../interfaces/Operation';
 import { operationArrayReducer } from '../utils/OperationArrayReducer'
-import { fromJsonToOperations, recvOpArrayFromServer, sendOpArrayToServer } from '../utils/OperationsUtils'
+import { recvOpArrayFromServer, sendOpArrayToServer } from '../utils/OperationsUtils'
 import  InputField from './InputField'
 import { DragDropContext } from 'react-beautiful-dnd'
 // import { OperationsAction } from '../interfaces/OperationTypes';
@@ -20,12 +20,7 @@ const App:React.FC = () => {
   // TODO studiarsi gli Hook
   
   // Hook per la sincronizzazione delle operation nel server
-  const [serverOpArray, setServerOpArray] = useState<Operation[]>(fromJsonToOperations(jsonObject));
-
-  // Hook per ricevere l'array dal server 
-  useEffect(() => { 
-    recvOpArrayFromServer(setServerOpArray)
-  }, []);
+  const [serverOpArray, setServerOpArray] = useState<Operation[]>([]);
    
   // Hook useState per la modifica della stringa operationName
   const [operationName, setOperationName] = useState<string>(""); // Inizializza operationName come stringa vuota. checkOperationName è la funzione per aggiornare il valore di operationName.
@@ -35,6 +30,12 @@ const App:React.FC = () => {
   // Hook useReducer per la gestione delle operazione sull'operationArray
   const initialInactiveOperations = operationArray.filter((operation) => !operation.active);
   const [inactiveOpArray, dispatchInactive] = useReducer(operationArrayReducer, initialInactiveOperations);
+
+  // Hook per ricevere l'array dal server  DA TESTARE
+  useEffect(() => { 
+    console.log("initOpArray")
+    recvOpArrayFromServer(setServerOpArray,dispatch);
+  },[]);
 
   // Hook useEffect per inviare operationArray al server
   useEffect(() => { 

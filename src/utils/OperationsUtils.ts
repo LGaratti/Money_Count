@@ -17,6 +17,13 @@ export const modifyOperations = (operationArrayReducer: React.Dispatch<Operation
   })
 };
 
+export const initOperations = (operationArrayReducer: React.Dispatch<OperationsAction>, updatedOperation: Operation[]) => {
+  operationArrayReducer({
+    type: 'init',
+    payload: updatedOperation
+  })
+};
+
 export function fromJsonToOperations(jsonObj: any): Operation[] {
   // Assicurati che l'oggetto JSON contenga la proprietà "operations" e che sia un array
   if (!jsonObj.operations || !Array.isArray(jsonObj.operations)) {
@@ -42,21 +49,19 @@ export function fromJsonToOperations(jsonObj: any): Operation[] {
   });
 }
 
-export function recvOpArrayFromServer(setServerOpArray: React.Dispatch<React.SetStateAction<Operation[]>>): Boolean {
+export function recvOpArrayFromServer(setServerOpArray: React.Dispatch<React.SetStateAction<Operation[]>>, operationArrayReducer: React.Dispatch<OperationsAction>): void {
 
-  axios.post('/get-operations', {})
+  axios.post('/load-operations', {})
   .then((response) => {
-    // Gestisci la risposta dal server se necessario
-    setServerOpArray(fromJsonToOperations(response.data));
-    console.log(response.data);
+    const operations = fromJsonToOperations(response.data);
+    setServerOpArray(operations);
+    initOperations(operationArrayReducer, operations);
+    console.log("Operazioni ricevute dal server:", operations);
   })
   .catch((error) => {
-    // Gestisci gli errori qui
     console.error('Errore nella richiesta:', error);
-    return false;
+    // In caso di errore, potresti voler gestire lo stato o mostrare un messaggio all'utente
   });
-
-  return true;
 }
 
 export function sendOpArrayToServer(operationArray:Operation[]): boolean {

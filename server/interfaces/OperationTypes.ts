@@ -17,6 +17,6 @@ export enum TimeUnit {
 }
 
 export interface OperationsAction {
-  type: 'add' | 'init' | 'remove' | 'modify';
+  type: 'add' | 'addMore' | 'remove' | 'modify';
   payload:  Operation[];
 }

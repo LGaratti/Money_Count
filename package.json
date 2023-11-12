@@ -49,5 +49,9 @@
     "@types/lodash": "^4.14.201",
     "@types/react-beautiful-dnd": "^13.1.7",
     "@types/uuid": "^9.0.6"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/LGaratti/Money_Count.git",
+  "author": "Luca <l.garatti1996@gmail.com>",
+  "license": "MIT"
 }

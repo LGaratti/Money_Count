@@ -62,33 +62,23 @@ app.post('/save-operations', (req, res) => {
 // Endpoint to save operations to operations.json
 app.post('/load-operations', (req, res) => {
   
-  const operations = req.body;
+  // const operations = req.body;
   
   // Define the file path
   const filePath = path.join(__dirname, 'data', 'operations.json');
 
   // Check if the file exists
   if (fs.existsSync(filePath)) {
-    // Read the current content of the file
-    let operationsSaved = JSON.parse(fs.readFileSync(filePath));
-
-    // Compare the contents of the file with the submitted data
-    if (lodash.isEqual(operations, operationsSaved)) {
-      console.log('File not overwritten because it is the same.');
-      return res.status(200).send('No need to update the file.');
-    }
+    // Read the current content of the file and parse it as JSON
+    const operations = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    console.log('File loaded successfully.');
+    // Send the JSON content as a response
+    res.status(200).json(operations);
+  } else {
+    // If the file does not exist, send a 404 error
+    console.log('File not found.');
+    res.status(404).send('Operations not found.');
   }
-
-  // Write the file
-  fs.writeFile(filePath, JSON.stringify(operations, null, 2), (err) => {
-    if (err) {
-      console.error('An error occurred while saving the file:', err);
-      res.status(500).send('Error during file saving.');
-    } else {
-      console.log('File saved successfully.');
-      res.status(200).send('Operations saved successfully.');
-    }
-  });
 });
 
 // Serve the React build
