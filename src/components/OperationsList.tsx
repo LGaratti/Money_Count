@@ -13,14 +13,14 @@ import { Droppable } from "react-beautiful-dnd";
 */
 
 interface Props {
-  operationArray: Operation[];
-  operationArrayReducer: React.Dispatch<OperationsAction>;
+  activeOpArray: Operation[];
+  activeOpArrayReducer: React.Dispatch<OperationsAction>;
   inactiveOpArray: Operation[];
   inactiveOpArrayReducer: React.Dispatch<OperationsAction>;
 }
 const OperationsList: React.FC<Props> = ({
-  operationArray,
-  operationArrayReducer,
+  activeOpArray,
+  activeOpArrayReducer,
   inactiveOpArray,
   inactiveOpArrayReducer,
 }: Props) => {
@@ -32,14 +32,15 @@ const OperationsList: React.FC<Props> = ({
         {(provided) => (
           <div className="active" ref={provided.innerRef} {...provided.droppableProps}> 
             <span className="active__heading"> Active Operations </span>
-            {operationArray.filter(t => t.active).map((operation,index) => (
+            {activeOpArray.map((operation,index) => (
               <SingleOperation
                 index={index}          
                 key={operation.id}
                 operation={operation}
-                operationArrayReducer={operationArrayReducer}
+                operationArrayReducer={activeOpArrayReducer}
               />
             ))}
+            {provided.placeholder}
           </div>
         )}
       </Droppable>
@@ -55,6 +56,7 @@ const OperationsList: React.FC<Props> = ({
                 operationArrayReducer={inactiveOpArrayReducer}
               />
             ))}
+            {provided.placeholder}
           </div>
         )}
       </Droppable>

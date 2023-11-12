@@ -24,7 +24,7 @@ interface Props {
 export const SingleOperation = ({ index, operation, operationArrayReducer}: Props) => {
 
   // Hook per l'abilitazione/disabilitazione della schermata edit
-  const [edit, setEdit] = useState<boolean>(operation.active); // se edit è a true
+  const [edit, setEdit] = useState<boolean>(false); // se edit è a true
 
   // Hook per il cambio del titolo dell'operation 
   const [editTitle, setEditTitle] = useState<string>(operation.title);

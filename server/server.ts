@@ -53,7 +53,7 @@ app.post('/save-operations', (req, res) => {
       console.error('An error occurred while saving the file:', err);
       res.status(500).send('Error during file saving.');
     } else {
-      console.log('File saved successfully.');
+      console.log('File saved successfully.' + JSON.stringify(operations));
       res.status(200).send('Operations saved successfully.');
     }
   });

@@ -55,13 +55,17 @@ export function fromJsonToOperations(jsonObj: any): Operation[] {
   });
 }
 
-export function recvOpArrayFromServer(setServerOpArray: React.Dispatch<React.SetStateAction<Operation[]>>, operationArrayReducer: React.Dispatch<OperationsAction>): void {
+export function recvOpArrayFromServer(setServerOpArray: React.Dispatch<React.SetStateAction<Operation[]>>, 
+  operationArrayReducer: React.Dispatch<OperationsAction>, activeOpsArrayReducer: React.Dispatch<OperationsAction>, inactiveOpsArrayReducer: React.Dispatch<OperationsAction>,
+  ): void {
 
   axios.post('/load-operations', {})
   .then((response) => {
     const operations = fromJsonToOperations(response.data);
     setServerOpArray(operations);
     initOperations(operationArrayReducer, operations);
+    initOperations(activeOpsArrayReducer, operations.filter((operation) => operation.active))
+    initOperations(inactiveOpsArrayReducer, operations.filter((operation) => !operation.active))
     console.log("Operazioni ricevute dal server:", operations);
   })
   .catch((error) => {

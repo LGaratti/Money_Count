@@ -15,6 +15,22 @@
         "lastDate": "2023-10-30T22:28:43.000Z",
         "firstDate": "2023-10-30T22:28:43.000Z"
       }
+    },
+    {
+      "id": "1bfdc38e-1a42-4539-9dc7-305912c31fcb",
+      "title": "Pippo",
+      "active": true,
+      "description": "prova",
+      "filters": [],
+      "amount": 300
+    },
+    {
+      "id": "402671c5-a1a9-45ff-8608-19c4e34a767c",
+      "title": "Ciao",
+      "active": false,
+      "description": "prova",
+      "filters": [],
+      "amount": 300
     }
   ]
 }
