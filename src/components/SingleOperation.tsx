@@ -4,7 +4,7 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import "../style/Operation.css";
 // import "../style/InputField.css";
 import { Operation } from "../interfaces/Operation";
-import { deleteOperations, modifyOperations } from "../utils/OperationsUtils";
+import { removeOperations, modifyOperations } from "../utils/OperationsUtils";
 import { OperationsAction } from "../interfaces/OperationTypes";
 import { Draggable } from "react-beautiful-dnd";
 
@@ -78,7 +78,7 @@ export const SingleOperation = ({ index, operation, operationArrayReducer}: Prop
           <span className="icon" onClick={handleEditClick} >
             <MdModeEdit />
           </span>
-          <span className="icon" onClick={() => deleteOperations(operationArrayReducer,[operation])} >
+          <span className="icon" onClick={() => removeOperations(operationArrayReducer,[operation])} >
             <MdClear />
           </span>
           {/* Se operation.active è true, mostra IoMdEyeOff, altrimenti mostra IoMdEye */}

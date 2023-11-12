@@ -2,8 +2,14 @@ import { Operation } from "../interfaces/Operation";
 import { OperationsAction } from "../interfaces/OperationTypes";
 import axios from 'axios';
 
+export const addOperations = (operationArrayReducer: React.Dispatch<OperationsAction>, operation: Operation[]) => {
+  operationArrayReducer({
+      type: 'add',
+      payload: operation
+  })
+};
 
-export const deleteOperations = (operationArrayReducer: React.Dispatch<OperationsAction>, operation: Operation[]) => {
+export const removeOperations = (operationArrayReducer: React.Dispatch<OperationsAction>, operation: Operation[]) => {
   operationArrayReducer({
       type: 'remove',
       payload: operation
