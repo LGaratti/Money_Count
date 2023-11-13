@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { MdClear, MdModeEdit } from "react-icons/md";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import "../style/Operation.css";
-// import "../style/InputField.css";
 import { Operation } from "../interfaces/Operation";
 import { removeOperations, modifyOperations } from "../utils/OperationsUtils";
 import { OperationsAction } from "../interfaces/OperationTypes";

@@ -3,32 +3,8 @@ import { Operation } from "../interfaces/Operation";
 import { OperationsAction } from "../interfaces/OperationTypes";
 import { initOperations } from "./OperationsUtils";
 
-
-// export const refreshOperationsList = (
-//   activeOpArray: Operation[],
-//   inactiveOpArray: Operation[],
-//   dispatch: React.Dispatch<OperationsAction>
-// ) => {
-//   // Filtra le operazioni attive e inattive negli array corretti
-//   let newActiveOpArray = activeOpArray
-//     .filter(operation => operation.active)
-//     .concat(inactiveOpArray.filter(operation => operation.active));
-// 
-//   let newInactiveOpArray = inactiveOpArray
-//     .filter(operation => !operation.active)
-//     .concat(activeOpArray.filter(operation => !operation.active));
-// 
-//   // Ora puoi combinare i due array e inviare l'array aggiornato
-//   const tempOpArray = [...newActiveOpArray, ...newInactiveOpArray];
-//   initOperations(dispatch, tempOpArray);
-// 
-//   return true; // Se necessario, puoi restituire un valore per confermare l'aggiornamento
-// };
-
 export const onDragEnd = (
   dispatch: React.Dispatch<OperationsAction>,
-  dispatchActive: React.Dispatch<OperationsAction>,
-  dispatchInactive: React.Dispatch<OperationsAction>,
   activeOpArray: Operation[],
   inactiveOpArray: Operation[], 
 ) => (result: DropResult) => {
@@ -59,10 +35,4 @@ export const onDragEnd = (
   // Dispatch the new arrays to update the state
   const tempOpArray = [...tempActiveOpArray, ...tempInactiveOpArray];
   initOperations(dispatch,tempOpArray)
-  // initOperations(dispatchActive,tempActiveOpArray);
-  // initOperations(dispatchInactive,tempInactiveOpArray);
-
-  // refreshOperationsList(tempActiveOpArray,tempInactiveOpArray,dispatch);
-  
-  // refreshOperationsList(tempActiveOpArray, tempInactiveOpArray, dispatch);
 };

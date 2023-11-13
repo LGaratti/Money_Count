@@ -9,21 +9,18 @@ export const addOperations = (operationArrayReducer: React.Dispatch<OperationsAc
       payload: operation
   })
 };
-
 export const removeOperations = (operationArrayReducer: React.Dispatch<OperationsAction>, operation: Operation[]) => {
   operationArrayReducer({
       type: 'remove',
       payload: operation
   })
 };
-
 export const modifyOperations = (operationArrayReducer: React.Dispatch<OperationsAction>, updatedOperation: Operation[]) => {
   operationArrayReducer({
     type: 'modify',
     payload: updatedOperation
   })
 };
-
 export const initOperations = (operationArrayReducer: React.Dispatch<OperationsAction>, updatedOperation: Operation[]) => {
   operationArrayReducer({
     type: 'init',
@@ -49,9 +46,6 @@ export function fromJsonToOperations(jsonObj: any): Operation[] {
         opJson.periodic.firstDate = new Date(opJson.periodic.firstDate);
       }
     }
-
-    // Se hai bisogno di altre conversioni, puoi farle qui
-
     return opJson as Operation; // Dichiara che il JSON convertito è di tipo Operation
   });
 }
@@ -65,8 +59,6 @@ export function recvOpArrayFromServer(setServerOpArray: React.Dispatch<React.Set
     const operations = fromJsonToOperations(response.data);
     setServerOpArray(operations);
     initOperations(operationArrayReducer, operations);
-    // initOperations(activeOpsArrayReducer, operations.filter((operation) => operation.active))
-    // initOperations(inactiveOpsArrayReducer, operations.filter((operation) => !operation.active))
     console.log("Operazioni ricevute dal server:", operations);
   })
   .catch((error) => {
