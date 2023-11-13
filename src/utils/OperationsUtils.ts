@@ -1,3 +1,4 @@
+import lodash from "lodash";
 import { Operation } from "../interfaces/Operation";
 import { OperationsAction } from "../interfaces/OperationTypes";
 import axios from 'axios';
@@ -64,8 +65,8 @@ export function recvOpArrayFromServer(setServerOpArray: React.Dispatch<React.Set
     const operations = fromJsonToOperations(response.data);
     setServerOpArray(operations);
     initOperations(operationArrayReducer, operations);
-    initOperations(activeOpsArrayReducer, operations.filter((operation) => operation.active))
-    initOperations(inactiveOpsArrayReducer, operations.filter((operation) => !operation.active))
+    // initOperations(activeOpsArrayReducer, operations.filter((operation) => operation.active))
+    // initOperations(inactiveOpsArrayReducer, operations.filter((operation) => !operation.active))
     console.log("Operazioni ricevute dal server:", operations);
   })
   .catch((error) => {
@@ -74,8 +75,13 @@ export function recvOpArrayFromServer(setServerOpArray: React.Dispatch<React.Set
   });
 }
 
-export function sendOpArrayToServer(operationArray:Operation[]): boolean {
+export function sendOpArrayToServer(operationArray:Operation[], serverOpArray:Operation[]): boolean {
   // Codice per effettuare la chiamata POST al server Node.js
+  if (lodash.isEqual(operationArray, serverOpArray) )
+  {
+    console.log("OperationArray===serverOperationArray")
+    return true;
+  }
   axios.post('/save-operations', { "operations":operationArray})
   .then((response) => {
     // Gestisci la risposta dal server se necessario

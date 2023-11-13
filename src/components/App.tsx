@@ -11,7 +11,7 @@ import { operationArrayReducer } from '../utils/OperationArrayReducer'
 import { addOperations, initOperations, recvOpArrayFromServer, sendOpArrayToServer } from '../utils/OperationsUtils'
 import  InputField from './InputField'
 import { DragDropContext } from 'react-beautiful-dnd'
-import { onDragEnd, refreshOperationsList } from '../utils/AppUtils';
+import { onDragEnd } from '../utils/AppUtils';
 // import { OperationsAction } from '../interfaces/OperationTypes';
 
 
@@ -41,24 +41,24 @@ const App:React.FC = () => {
   useEffect(() => { 
     // const tempOpArray = [...activeOpArray, ...inactiveOpArray];
     // if (!lodash.isEqual(operationArray, tempOpArray) )
-    const dbg1 = operationArray;
-    const dbg2 = serverOpArray; 
-    if (!lodash.isEqual(operationArray, serverOpArray) )
-    {
-      if (sendOpArrayToServer(operationArray)) {
-        setServerOpArray(operationArray);
-        initOperations(dispatchActive, operationArray.filter((operation) => operation.active))
-        initOperations(dispatchInactive, operationArray.filter((operation) => !operation.active))
-      }
+    // const dbg1 = operationArray;
+    // const dbg2 = serverOpArray; 
+    if (sendOpArrayToServer(operationArray,serverOpArray)) {
+      setServerOpArray(operationArray);
+      initOperations(dispatchActive, operationArray.filter((operation) => operation.active));
+      initOperations(dispatchInactive, operationArray.filter((operation) => !operation.active));
     // recvOpArrayFromServer(setServerOpArray, dispatch, dispatchActive, dispatchInactive);
     }
   }, [operationArray]); 
 
    // Hook useEffect per aggiornare operationArray con i due array figli
-   useEffect(() => {
-    // refreshOperationsList(activeOpArray,dispatchActive,inactiveOpArray,dispatchInactive);
-    refreshOperationsList(activeOpArray,inactiveOpArray,dispatch);
-  }, [activeOpArray, inactiveOpArray]); 
+  //  useEffect(() => {
+  //   // refreshOperationsList(activeOpArray,dispatchActive,inactiveOpArray,dispatchInactive);
+  //   // refreshOperationsList(activeOpArray,inactiveOpArray,dispatch);
+  //   const tempOpArray = [...activeOpArray, ...inactiveOpArray];
+  //   if (!lodash.isEqual(operationArray, tempOpArray) )
+  //     initOperations(dispatch,tempOpArray);
+  // }, [activeOpArray, inactiveOpArray]); 
 
   // funzione onSumit del form di aggiunta di una nuova operation.
   const checkAndAddOperation = (e: React.FormEvent) => {  // React.FormEvent è un tipo definito nella libreria React che rappresenta l'evento associato al form.
@@ -78,7 +78,7 @@ const App:React.FC = () => {
         {/* Dichiaro il form di ingresso nome operation  */}
         <InputField operationName={operationName} setOperationName={setOperationName} checkAndAddOperation={checkAndAddOperation} />
         {/* Dichiaro la lista di Operations */}
-        <OperationsList activeOpArray={activeOpArray} activeOpArrayReducer={dispatchActive} inactiveOpArray={inactiveOpArray} inactiveOpArrayReducer={dispatchInactive}/>      
+        <OperationsList activeOpArray={activeOpArray} activeOpArrayReducer={dispatch} inactiveOpArray={inactiveOpArray} inactiveOpArrayReducer={dispatchInactive}/>      
       </div>
     </DragDropContext>
 

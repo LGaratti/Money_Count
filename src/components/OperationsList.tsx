@@ -53,7 +53,7 @@ const OperationsList: React.FC<Props> = ({
                 index={index}
                 key={operation.id}
                 operation={operation}
-                operationArrayReducer={inactiveOpArrayReducer}
+                operationArrayReducer={activeOpArrayReducer}
               />
             ))}
             {provided.placeholder}
