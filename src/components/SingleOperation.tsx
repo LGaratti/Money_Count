@@ -62,8 +62,8 @@ export const SingleOperation = ({ index, operation, operationArrayReducer}: Prop
 
   return (
     <Draggable draggableId={operation.id} index={index}>
-      {(provided) => (
-        <form className="single_operation" onSubmit={(e) => { e.preventDefault(); submitForm();}} 
+      {(provided,snapshot) => (
+        <form className={`single_operation ${snapshot.isDragging ? "drag" : ""}`} onSubmit={(e) => { e.preventDefault(); submitForm();}} 
         {...provided.draggableProps}
         {...provided.dragHandleProps}
         ref={provided.innerRef}>

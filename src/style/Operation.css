@@ -4,7 +4,7 @@
     border-radius: 5px;
     padding: 20px;
     margin-top: 15px;
-    background-color: rgb(223, 164, 97);
+    background-color: rgb(221, 145, 58);
     transition: 0.2s;
 }
 
@@ -24,6 +24,11 @@
     font-size: 25px;
     cursor: pointer;
 }
+
+.drag {
+  box-shadow: 0 0 20px black;
+}
+
 @media (max-width: 940px) {
   .operation__icons {
     display: flex;            /* Use flexbox to layout icons */

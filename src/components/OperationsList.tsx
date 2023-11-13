@@ -29,8 +29,8 @@ const OperationsList: React.FC<Props> = ({
 
     <div className="container">
       <Droppable droppableId="ActiveOpsList">
-        {(provided) => (
-          <div className="active" ref={provided.innerRef} {...provided.droppableProps}> 
+        {(provided,snapshot) => (
+          <div className={`active ${snapshot.isDraggingOver ? "dragactive" : ""}`} ref={provided.innerRef} {...provided.droppableProps}> 
             <span className="active__heading"> Active Operations </span>
             {activeOpArray.map((operation,index) => (
               <SingleOperation
@@ -45,8 +45,8 @@ const OperationsList: React.FC<Props> = ({
         )}
       </Droppable>
       <Droppable droppableId="InactiveOpsList">
-        {(provided) => (
-          <div className="inactive" ref={provided.innerRef} {...provided.droppableProps}> 
+        {(provided,snapshot) => (
+          <div className={`inactive ${snapshot.isDraggingOver ? "draginactive" : ""}`} ref={provided.innerRef} {...provided.droppableProps}> 
             <span className="inactive__heading">Inactive Operations</span>
             {inactiveOpArray.map((operation, index) => (
               <SingleOperation           

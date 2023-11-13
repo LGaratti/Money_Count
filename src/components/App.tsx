@@ -39,7 +39,6 @@ const App:React.FC = () => {
       setServerOpArray(operationArray);
       initOperations(dispatchActive, operationArray.filter((operation) => operation.active));
       initOperations(dispatchInactive, operationArray.filter((operation) => !operation.active));
-    // recvOpArrayFromServer(setServerOpArray, dispatch, dispatchActive, dispatchInactive);
     }
   }, [operationArray]); 
 
