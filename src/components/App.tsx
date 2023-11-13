@@ -39,6 +39,10 @@ const App:React.FC = () => {
 
   // Hook useEffect per inviare operationArray al server
   useEffect(() => { 
+    // const tempOpArray = [...activeOpArray, ...inactiveOpArray];
+    // if (!lodash.isEqual(operationArray, tempOpArray) )
+    const dbg1 = operationArray;
+    const dbg2 = serverOpArray; 
     if (!lodash.isEqual(operationArray, serverOpArray) )
     {
       if (sendOpArrayToServer(operationArray)) {
@@ -48,7 +52,7 @@ const App:React.FC = () => {
       }
     // recvOpArrayFromServer(setServerOpArray, dispatch, dispatchActive, dispatchInactive);
     }
-  }, [operationArray, serverOpArray]); 
+  }, [operationArray]); 
 
    // Hook useEffect per aggiornare operationArray con i due array figli
    useEffect(() => {

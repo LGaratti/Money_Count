@@ -19,7 +19,7 @@
     {
       "id": "1bfdc38e-1a42-4539-9dc7-305912c31fcb",
       "title": "Pippo",
-      "active": true,
+      "active": false,
       "description": "prova",
       "filters": [],
       "amount": 300

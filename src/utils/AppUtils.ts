@@ -13,23 +13,22 @@ export const refreshOperationsList = (activeOpArray:Operation[], inactiveOpArray
   newActiveOpArray = newActiveOpArray.filter(operation => {
     if (!operation.active) {
       newInactiveOpArray.push(operation);
-      return false;
+      // return false;
     }
-    return true;
   });
 
   // Filter out active operations from the inactive operations array
   newInactiveOpArray = newInactiveOpArray.filter(operation => {
     if (operation.active) {
       newActiveOpArray.push(operation);
-      return false;
+      // return false;
     }
-    return true;
   });
 
-  // Dispatch the new arrays to update the state
-  const tempOpArray = [...newActiveOpArray, ...newInactiveOpArray];
-  initOperations(dispatch,tempOpArray)
+  // Ho dovuto commentare sta roba perchè sennò mando un array vuoto
+  // const tempOpArray = [...newActiveOpArray, ...newInactiveOpArray];
+  // initOperations(dispatch,tempOpArray)
+  return true;
 };
 
 export const onDragEnd = (
@@ -61,9 +60,14 @@ export const onDragEnd = (
   } else {
     tempOp.active = false;
     tempInactiveOpArray.splice(destination.index, 0, tempOp);
+  
   }
+  // Dispatch the new arrays to update the state
+  // const tempOpArray = [...tempActiveOpArray, ...tempInactiveOpArray];
+  // initOperations(dispatch,tempOpArray)
   initOperations(dispatchActive,tempActiveOpArray);
   initOperations(dispatchInactive,tempInactiveOpArray);
+  // refreshOperationsList(tempActiveOpArray,tempInactiveOpArray,dispatch);
   
   // refreshOperationsList(tempActiveOpArray, tempInactiveOpArray, dispatch);
 };
