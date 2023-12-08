@@ -1,5 +1,5 @@
-import { Operation } from '../interfaces/Operation';
-import { OperationsAction } from '../interfaces/OperationTypes';
+import { Operation, OperationsAction } from "../interfaces/Operation";
+
 
 export const operationArrayReducer = (state: Operation[], action: OperationsAction): Operation[] => {
   switch (action.type) {
@@ -10,17 +10,17 @@ export const operationArrayReducer = (state: Operation[], action: OperationsActi
       return action.payload;
     
     case "remove":
-      const idsToRemove = new Set(action.payload.map(item => item.id));
-      return state.filter(operation => !idsToRemove.has(operation.id));      
+      const idsToRemove = new Set(action.payload.map(item => item.operation_id));
+      return state.filter(operation => !idsToRemove.has(operation.operation_id));      
   
     case "modify":
       // Il payload è un array di Operation con le modifiche già applicate
-      const updatedOperations = new Map(action.payload.map(operation => [operation.id, operation]));
+      const updatedOperations = new Map(action.payload.map(operation => [operation.operation_id, operation]));
     
       // Mappiamo lo stato corrente per aggiornare solo le Operation che sono cambiate
       return state.map(operation =>
-        updatedOperations.has(operation.id)
-          ? { ...operation, ...updatedOperations.get(operation.id) }
+        updatedOperations.has(operation.operation_id)
+          ? { ...operation, ...updatedOperations.get(operation.operation_id) }
           : operation
       );
     

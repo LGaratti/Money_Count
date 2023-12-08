@@ -1,59 +1,24 @@
-# dependencies
-/node_modules
-/server/node_modules 
-# Ignora la cartella node_modules del server
-
-# yarn
-.yarn/*
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-.pnp.*
-
-# testing
-/coverage
-
-# production
-/build
-# Se il tuo server crea una cartella di build
-/server/build 
-
-# logs
+# Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-/server/*.log 
-# Ignora tutti i file di log nella cartella del server
+pnpm-debug.log*
+lerna-debug.log*
 
-# misc
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
-.env*
-# Se hai un file .env.example che vuoi tenere nel repo
-!.env.example 
-
-# Sistema operativo specifico
-# Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# MacOS
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Linux
-.directory
-
-# File di configurazione dell'editor
-.vscode/
-.idea/
-*.swp
-*.swo
-
-#file per utilizzre node 18 su linux
-.nvmrc
-
-#template di settaggi locali .json
-*_template.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

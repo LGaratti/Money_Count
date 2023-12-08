@@ -1,12 +1,37 @@
-import { PeriodicOperation } from "./OperationTypes";
-
 export interface Operation {
-    id: string;
-    title: string;
-    active: boolean;
+    operation_id: string;
+    name: string;
     description: string;
-    filters: string[];
+    active: boolean;
+    labels: Label[];
     amount: number;
-    periodic?: PeriodicOperation;
-}
-
+    periodical?: Periodical;
+  }
+  
+  export interface Label {
+    label_id: string;
+    name: string;
+    description: string;
+    colorRgb: string; // Formato esadecimale RGB, es: '#FF5733'
+  }
+  
+  export interface Periodical {
+    periodical_id: string;
+    amount: number;
+    unit: TimeUnit;
+    firstDate: Date;
+    lastDate: Date;
+  }
+  
+  export enum TimeUnit {
+    DAY = "day",
+    WEEK = "week",
+    MONTH = "month",
+    YEAR = "year",
+  }
+  
+  export interface OperationsAction {
+    type: 'add' | 'init' | 'remove' | 'modify';
+    payload:  Operation[];
+  }
+  
