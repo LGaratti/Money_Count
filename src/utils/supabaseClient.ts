@@ -42,8 +42,12 @@ export async function getOpsFromServer(operationArrayReducer: React.Dispatch<Ope
       }
     }
   }
-  
-  setServerOpArray(operations!);
-  initOperations(operationArrayReducer, operations!);
+  initOperations(operationArrayReducer, operations);
   console.log("Operazioni ricevute dal server:", operations);
 }
+
+export async function setOpsFromServer(operations: Operation[]) {
+  // TODO
+  console.log("Operazioni inviate al server:", operations);
+}
+

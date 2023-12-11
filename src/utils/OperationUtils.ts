@@ -1,7 +1,7 @@
 
 // import axios from 'axios';
 
-import { Operation, OperationsAction } from "../interfaces/Operation";
+import { Label, Operation, OperationsAction, TimeUnit } from "../interfaces/Operation";
 
 export const addOperations = (operationArrayReducer: React.Dispatch<OperationsAction>, operation: Operation[]) => {
   operationArrayReducer({
@@ -28,24 +28,24 @@ export const initOperations = (operationArrayReducer: React.Dispatch<OperationsA
   })
 };
 
-export function fromJsonToOperations(jsonObj: any): Operation[] {
+export function fromJsonToOperations(jsonObj: unknown): Operation[] {
   if (!jsonObj || !Array.isArray(jsonObj)) {
     throw new Error("JSON object does not have a valid 'operations' property.");
   }
   // TODO altre verifiche
 
-  return jsonObj.map((opJson: any) => {
+  return jsonObj.map((opJson: unknown) => {
     return opJson as Operation; // Dichiara che il JSON convertito è di tipo Operation
   });
 }
 
-export function fromJsonToLabels(jsonObj: any): Label[] {
+export function fromJsonToLabels(jsonObj: unknown): Label[] {
   if (!jsonObj || !Array.isArray(jsonObj)) {
     throw new Error("JSON object does not have a valid 'labels' property.");
   }
   // TODO altre verifiche
 
-  return jsonObj.map((opJson: any) => {
+  return jsonObj.map((opJson: unknown) => {
     return opJson as Label; // Dichiara che il JSON convertito è di tipo Operation
   });
 }
