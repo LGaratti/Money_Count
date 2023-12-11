@@ -1,15 +1,15 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Homepage from "./pages/Homepage";
-import ErrorPage from "./pages/ErrorPage";
-import Components from "./pages/Components";
-import Layout from "./components/layout/Layout";
 import { I18nextProvider } from "react-i18next";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import i18n from "./locales/i18n";
 import { useEffect, useReducer } from "react";
 import { getOpsFromServer } from "./utils/supabaseClient";
 import { operationArrayReducer } from "./utils/OperationArrayReducer";
 // import { OperationsAction } from '../interfaces/OperationTypes';
+import DemoPage from "./pages/DemoPage";
+import ErrorPage from "./pages/ErrorPage";
+import Homepage from "./pages/Homepage";
+import theme from "./styles/theme";
 
 const router = createBrowserRouter([
   {
@@ -19,27 +19,17 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Homepage/>,
+        element: <Homepage />,
       },
       {
-        path: "/components",
-        element: <Components/>,
+        path: "/demo",
+        element: <DemoPage />,
       },
-    ]
+    ],
   },
 ]);
 
-// VERA qua reinderizza alle varie pagine, log ecc+++
 function App() {
-
-  const [operationArray, dispatch] = useReducer(operationArrayReducer, []);
-
-  // Hook per ricevere l'array dal server
-  useEffect(() => { 
-    getOpsFromServer(dispatch);
-    // recvOpArrayFromServer(setServerOpArray, dispatch, dispatchActive, dispatchInactive);
-  },[]);
-
   return (
     <I18nextProvider i18n={i18n}>
       <ChakraProvider>
