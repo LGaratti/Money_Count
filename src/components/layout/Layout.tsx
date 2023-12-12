@@ -8,7 +8,7 @@ function Layout() {
             <Link to='/'>
             <Button variant='text'>Home</Button>
             </Link>
-            <Link to='/components'>
+            <Link to='/demo'>
             <Button variant='text'>Demo</Button>
             </Link>
         </HStack>
