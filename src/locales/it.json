@@ -1,5 +1,6 @@
 {
   "id":"ID",
   "name":"Nome",
-  "population":"Popolazione"
+  "amount":"Importo",
+  "labels":"etichette"
 }
