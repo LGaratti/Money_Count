@@ -7,7 +7,6 @@ import { operationArrayReducer } from "../utils/OperationArrayReducer";
 export default function DemoPage() {
   const [operationArray, dispatch] = useReducer(operationArrayReducer, []);
 
-  // Hook per ricevere l'array dal server
   useEffect(() => { 
     getOpsFromServer(dispatch);
   },[]);

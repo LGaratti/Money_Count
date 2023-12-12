@@ -1,20 +1,14 @@
-import { VStack, HStack, Button } from '@chakra-ui/react'
-import { Link, Outlet } from 'react-router-dom'
+import { VStack } from "@chakra-ui/react";
+import { Outlet } from "react-router-dom";
+import { TopBar } from "./TopBar";
 
 function Layout() {
   return (
-    <VStack w='100vw' >
-        <HStack w='full' >
-            <Link to='/'>
-            <Button variant='text'>Home</Button>
-            </Link>
-            <Link to='/demo'>
-            <Button variant='text'>Demo</Button>
-            </Link>
-        </HStack>
+    <VStack w="100vw" spacing={0}>
+      <TopBar />
       <Outlet />
     </VStack>
-  )
+  );
 }
 
-export default Layout
+export default Layout;
