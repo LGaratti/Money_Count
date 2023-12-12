@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { Label, Operation, OperationsAction } from "../interfaces/Operation";
-import { fromJsonToLabels, fromJsonToOperations, initOperations } from "./OperationUtils";
+import { initOperations } from "./OperationUtils";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
