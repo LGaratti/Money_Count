@@ -20,9 +20,9 @@ interface OperationCardProps extends TableProps {
   };
 
   const printWithSign = (amount:number) => {
-    if (amount > 0 ) return "+"+amount;
-    else if (amount < 0 ) return "-"+amount;
-    return amount;
+    if (amount > 0 ) return "+"+amount+" €";
+    else if (amount < 0 ) return "-"+amount+" €";
+    return amount+" €";
   }
 
   const printLabels = (labels:Label[]) => {
