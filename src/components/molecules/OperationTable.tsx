@@ -1,11 +1,8 @@
-import { Table, TableContainer, TableProps, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
+import { HStack, Table, TableContainer, TableProps, Tag, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
 import { Label, Operation } from '../../interfaces/Operation';
 
-// interface Props {
-//   operations: Operation[];
-// }
 interface OperationCardProps extends TableProps {
   operations?: Operation[];
 }
@@ -21,7 +18,7 @@ interface OperationCardProps extends TableProps {
 
   const printWithSign = (amount:number) => {
     if (amount > 0 ) return "+"+amount+" €";
-    else if (amount < 0 ) return "-"+amount+" €";
+    else if (amount < 0 ) return amount+" €";
     return amount+" €";
   }
 
@@ -48,7 +45,11 @@ interface OperationCardProps extends TableProps {
             <Tr key = {operation.operation_id}>
               <Td>{operation?.name}</Td>
               <Td color={amountColor(operation?.amount)}>{printWithSign(operation?.amount)}</Td>
-              <Td>{printLabels(operation?.labels)}</Td>
+              <Td>
+              <HStack spacing={2}>
+                {operation?.labels.map((label) => (<Tag key={label?.label_id} bg={label?.colorRgb+".100"}>{label.name}</Tag>))}
+              </HStack>
+              </Td>
             </Tr>
           ))}
         </Tbody>
