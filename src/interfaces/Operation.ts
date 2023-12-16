@@ -12,7 +12,7 @@ export interface Operation {
     label_id: string;
     name: string;
     description: string;
-    colorRgb: string; // Formato esadecimale RGB, es: '#FF5733'
+    color_rgb: string; // Formato esadecimale RGB, es: '#FF5733'
   }
   
   export interface Periodical {

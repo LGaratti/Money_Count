@@ -29,6 +29,7 @@ interface OperationCardProps extends TableProps {
     ))
     return stringa;
   }
+  
   return (
     <>
       <TableContainer>
@@ -47,7 +48,7 @@ interface OperationCardProps extends TableProps {
               <Td color={amountColor(operation?.amount)}>{printWithSign(operation?.amount)}</Td>
               <Td>
               <HStack spacing={2}>
-                {operation?.labels.map((label) => (<Tag key={label?.label_id} bg={label?.colorRgb+".100"}>{label.name}</Tag>))}
+                {operation?.labels.map((label) => (<Tag key={label?.label_id} bg={label?.color_rgb+'.100'}>{label.name}</Tag>))}
               </HStack>
               </Td>
             </Tr>
