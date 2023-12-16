@@ -21,14 +21,6 @@ interface OperationCardProps extends TableProps {
     else if (amount < 0 ) return amount+" €";
     return amount+" €";
   }
-
-  const printLabels = (labels:Label[]) => {
-    let stringa:string= ""; 
-    labels.map((label) => (
-      stringa += label.name+" "
-    ))
-    return stringa;
-  }
   
   return (
     <>
