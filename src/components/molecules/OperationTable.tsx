@@ -1,7 +1,7 @@
 import { HStack, Table, TableContainer, TableProps, Tag, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
-import { Label, Operation } from '../../interfaces/Operation';
+import { Operation } from '../../interfaces/Operation';
 
 interface OperationCardProps extends TableProps {
   operations?: Operation[];
