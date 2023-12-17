@@ -11,17 +11,6 @@ interface OperationCardProps extends TableProps {
   export const OperationCard = ({operations,...props}: OperationCardProps) => {
   const {t} = useTranslation('ns1',{ i18n } );
 
-  const amountColor = (amount: number) => {
-    if (amount > 0) return 'green.500';
-    if (amount < 0) return 'red.500';
-  };
-
-  const printWithSign = (amount:number) => {
-    if (amount > 0 ) return "+"+amount+" €";
-    else if (amount < 0 ) return amount+" €";
-    return amount+" €";
-  };
-  
   return (
     <>
       <TableContainer>
@@ -37,7 +26,9 @@ interface OperationCardProps extends TableProps {
           {operations?.map((operation) => (
             <Tr key = {operation.operation_id}>
               <Td>{operation?.name}</Td>
-              <Td color={amountColor(operation?.amount)}>{printWithSign(operation?.amount)}</Td>
+              <Td color={ operation?.amount >= 0 ? 'green' : 'red'}> {
+                ( operation?.amount >= 0 ? '+': '') + operation.amount + ' €'
+              }</Td>
               <Td>
               <HStack spacing={2}>
                 {operation?.labels.map((label) => (<Tag key={label?.label_id} color={'#1a202c'} bg={label?.color_rgb+'.100'}>{label.name}</Tag>))}
