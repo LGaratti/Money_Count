@@ -7,6 +7,7 @@ import DemoPage from "./pages/DemoPage";
 import ErrorPage from "./pages/ErrorPage";
 import Homepage from "./pages/Homepage";
 import theme from "./styles/theme";
+import '@fontsource-variable/outfit';
 
 const router = createBrowserRouter([
   {

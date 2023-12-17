@@ -13,6 +13,10 @@ export default extendTheme(
   {
     ...theme,
     config,
+    fonts: {
+      heading: `'Outfit Variable', sans-serif`,
+      body: `'Outfit Variable', sans-serif`,
+    },
     colors: {
       primary: {
         15: "#F3F3D7",
