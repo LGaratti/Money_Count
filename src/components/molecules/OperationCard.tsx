@@ -7,8 +7,8 @@ interface OperationCardProps extends TableProps {
   operations?: Operation[];
 }
 
-// const OperationTable = ({operations}: Props) => {
-  export const OperationTable = ({operations,...props}: OperationCardProps) => {
+// const OperationCard = ({operations}: Props) => {
+  export const OperationCard = ({operations,...props}: OperationCardProps) => {
   const {t} = useTranslation('ns1',{ i18n } );
 
   const amountColor = (amount: number) => {
@@ -20,7 +20,7 @@ interface OperationCardProps extends TableProps {
     if (amount > 0 ) return "+"+amount+" €";
     else if (amount < 0 ) return amount+" €";
     return amount+" €";
-  }
+  };
   
   return (
     <>
@@ -40,7 +40,7 @@ interface OperationCardProps extends TableProps {
               <Td color={amountColor(operation?.amount)}>{printWithSign(operation?.amount)}</Td>
               <Td>
               <HStack spacing={2}>
-                {operation?.labels.map((label) => (<Tag key={label?.label_id} bg={label?.color_rgb+'.100'}>{label.name}</Tag>))}
+                {operation?.labels.map((label) => (<Tag key={label?.label_id} color={'#1a202c'} bg={label?.color_rgb+'.100'}>{label.name}</Tag>))}
               </HStack>
               </Td>
             </Tr>
@@ -52,4 +52,4 @@ interface OperationCardProps extends TableProps {
   )
 }
 
-export default OperationTable
+export default OperationCard

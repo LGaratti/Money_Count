@@ -20,7 +20,7 @@ export default extendTheme(
       global: {
         body: {
           background: `pageBackground1`,
-          color: "label",
+          // color: "label",
           userSelect: "none",
           WebkitUserSelect: "none",
           MozUserSelect: "none",
@@ -66,7 +66,7 @@ export default extendTheme(
       colors: {
         secondary: "#781cca",
         pageBackground1: `${COLOR_THEME}.100`,
-        label: "#00140a",
+        // label: "#00140a",
       },
     },
   },

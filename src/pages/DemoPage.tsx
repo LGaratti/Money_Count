@@ -1,5 +1,5 @@
 import { Heading, VStack, } from "@chakra-ui/react";
-import OperationTable from "../components/molecules/OperationTable";
+import OperationCard from "../components/molecules/OperationCard";
 import { useEffect, useReducer } from "react";
 import { getOpsFromServer } from "../utils/supabaseClient";
 import { operationArrayReducer } from "../utils/OperationArrayReducer";
@@ -14,7 +14,7 @@ export default function DemoPage() {
   return (
     <VStack>
       <Heading>Demo Page</Heading>
-      <OperationTable operations={operationArray}/>
+      <OperationCard operations={operationArray}/>
     </VStack>
   );
 }
