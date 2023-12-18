@@ -22,15 +22,14 @@ export const TopBar = () => {
         <Switch 
           isChecked={colorMode === 'dark'} 
           onChange={toggleColorMode} 
-          colorScheme={colorMode === 'light' ? 'white' : 'primary.900'} 
+          colorScheme={colorMode === 'light' ? 'white' : 'black'} 
           size='lg'
         />
         <Icon
           as={colorMode === 'light' ? FaSun : FaMoon}
           position="absolute"
-          color={colorMode === 'light' ? 'yellow' : 'navy'}
-          marginLeft={colorMode === 'light' ? '2' : 'calc(100% - 2rem)'} // Adjust as necessary
-          size="24px" // Adjust icon size as necessary
+          color={colorMode === 'light' ? 'white' : 'white'}
+          marginLeft={colorMode === 'light' ? '1.5' : '7'}
         />
       </HStack>
     </HStack>

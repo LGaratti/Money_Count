@@ -18,17 +18,20 @@ const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpe
 
 const switchStyles = definePartsStyle({
   container: {
-    position: 'relative', // Essenziale per il posizionamento assoluto dell'icona
+    position: 'relative',
   },
   thumb: {
-    _before: { // Assicurati che il contenuto sia vuoto per non sovrapporre elementi
+    bg: 'primary.500',
+    _before: {
       content: '""',
     },
-    // Aggiungi stili per posizionare l'icona se necessario
+    _checked: {
+      bg: 'primary.800',
+    }
   },
   track: {
     _checked: {
-      // Stili per lo stato checked
+      bg: 'primary.200'
     }
   },
 });
