@@ -3,7 +3,9 @@ import {
   theme,
   withDefaultColorScheme,
   type ThemeConfig,
+  createMultiStyleConfigHelpers
 } from "@chakra-ui/react";
+import { switchAnatomy } from '@chakra-ui/anatomy';
 
 export const COLOR_THEME = "primary";
 
@@ -12,10 +14,36 @@ const config: ThemeConfig = {
   useSystemColorMode: false,
 };
 
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(switchAnatomy.keys);
+
+const switchStyles = definePartsStyle({
+  container: {
+    position: 'relative', // Essenziale per il posizionamento assoluto dell'icona
+  },
+  thumb: {
+    _before: { // Assicurati che il contenuto sia vuoto per non sovrapporre elementi
+      content: '""',
+    },
+    // Aggiungi stili per posizionare l'icona se necessario
+  },
+  track: {
+    _checked: {
+      // Stili per lo stato checked
+    }
+  },
+});
+
+const switchTheme = defineMultiStyleConfig({
+  baseStyle: switchStyles
+});
+
 export default extendTheme(
   {
     ...theme,
     config,
+    components: {
+      Switch: switchTheme
+    },
     styles: {
       global: {
         body: {
@@ -70,5 +98,11 @@ export default extendTheme(
       },
     },
   },
-);
-withDefaultColorScheme({ colorScheme: `${COLOR_THEME}` })
+)
+
+withDefaultColorScheme({
+  colorScheme: COLOR_THEME,
+  components: ['Switch']
+})(theme)
+
+

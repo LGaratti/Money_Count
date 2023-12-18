@@ -2,6 +2,8 @@ import { useColorMode, Switch, HStack, Spacer, Icon, Button } from "@chakra-ui/r
 import { Link } from "react-router-dom";
 import { FaMoon, FaSun } from "react-icons/fa";
 
+
+
 export const TopBar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -17,11 +19,18 @@ export const TopBar = () => {
       </HStack>
       <Spacer />
       <HStack>
-        <Icon as={colorMode === 'light' ? FaSun : FaMoon} />
         <Switch 
           isChecked={colorMode === 'dark'} 
           onChange={toggleColorMode} 
           colorScheme={colorMode === 'light' ? 'white' : 'primary.900'} 
+          size='lg'
+        />
+        <Icon
+          as={colorMode === 'light' ? FaSun : FaMoon}
+          position="absolute"
+          color={colorMode === 'light' ? 'yellow' : 'navy'}
+          marginLeft={colorMode === 'light' ? '2' : 'calc(100% - 2rem)'} // Adjust as necessary
+          size="24px" // Adjust icon size as necessary
         />
       </HStack>
     </HStack>
