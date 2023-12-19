@@ -19,7 +19,7 @@ export const TopBar = () => {
       </HStack>
       <Spacer />
       <HStack>
-        <Switch 
+        <Switch variant={'switchTheme'}
           isChecked={colorMode === 'dark'} 
           onChange={toggleColorMode} 
           colorScheme={colorMode === 'light' ? 'white' : 'black'} 
@@ -28,8 +28,9 @@ export const TopBar = () => {
         <Icon
           as={colorMode === 'light' ? FaSun : FaMoon}
           position="absolute"
-          color={colorMode === 'light' ? 'white' : 'white'}
+          color='white'
           marginLeft={colorMode === 'light' ? '1.5' : '7'}
+          pointerEvents="none"
         />
       </HStack>
     </HStack>
