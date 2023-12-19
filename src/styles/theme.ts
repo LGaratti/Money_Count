@@ -16,28 +16,27 @@ const config: ThemeConfig = {
 
 const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(switchAnatomy.keys);
 
-const switchStyles = definePartsStyle({
+const switchTheme = definePartsStyle({
   container: {
     position: 'relative',
   },
   thumb: {
-    bg: 'primary.500',
     _before: {
       content: '""',
     },
-    _checked: {
-      bg: 'primary.800',
-    }
   },
   track: {
+    bg: 'primary.500',
     _checked: {
-      bg: 'primary.200'
+      bg: 'primary.900'
     }
   },
 });
 
-const switchTheme = defineMultiStyleConfig({
-  baseStyle: switchStyles
+const switchStyles = defineMultiStyleConfig({
+  variants: {
+    switchTheme:switchTheme
+  }
 });
 
 export default extendTheme(
@@ -45,13 +44,12 @@ export default extendTheme(
     ...theme,
     config,
     components: {
-      Switch: switchTheme
+      Switch: switchStyles
     },
     styles: {
       global: {
         body: {
           background: `pageBackground1`,
-          // color: "label",
           userSelect: "none",
           WebkitUserSelect: "none",
           MozUserSelect: "none",
@@ -97,7 +95,6 @@ export default extendTheme(
       colors: {
         secondary: "#781cca",
         pageBackground1: `${COLOR_THEME}.100`,
-        // label: "#00140a",
       },
     },
   },
