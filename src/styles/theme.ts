@@ -16,22 +16,20 @@ const config: ThemeConfig = {
 
 const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(switchAnatomy.keys);
 
+
 const switchTheme = definePartsStyle({
   container: {
     position: 'relative',
   },
   thumb: {
-    bg: 'primary.500',
     _before: {
       content: '""',
     },
-    _checked: {
-      bg: 'primary.800',
-    }
   },
   track: {
+    bg: 'primary.500',
     _checked: {
-      bg: 'primary.300'
+      bg: 'primary.900'
     }
   },
 });
