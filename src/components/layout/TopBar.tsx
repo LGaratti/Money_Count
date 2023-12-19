@@ -4,9 +4,6 @@ import { FaMoon, FaSun } from "react-icons/fa";
 
 export const TopBar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
-  const handleChangeTheme = () => {
-    setTimeout(toggleColorMode,150);
-  };
   return (
     <HStack w="full" p={2} justify="space-between">
       <HStack spacing={4}>
@@ -20,9 +17,9 @@ export const TopBar = () => {
       <Spacer />
       <HStack>
         <Switch variant={'switchTheme'}
-          // isChecked={pippo === 'dark' ? true : false}
-          defaultChecked = {colorMode === 'light' ? false : true } 
-          onChange={handleChangeTheme} 
+          isChecked={colorMode === 'dark'}
+          defaultChecked = {colorMode === 'dark'}
+          onChange={toggleColorMode} 
           colorScheme={colorMode === 'light' ? 'white' : 'black'} 
           size='lg'
         />
