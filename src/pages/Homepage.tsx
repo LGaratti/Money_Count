@@ -12,7 +12,7 @@ export default function Homepage() {
     setIsLoading(false);
   },[]);
   return (
-    <HStack spacing={10}>
+    <HStack spacing={10} alignItems={'stretch'}>
       <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
         <OperationsCard operations={operationArray} cardTitle="latest operations"/>
       </Skeleton>
