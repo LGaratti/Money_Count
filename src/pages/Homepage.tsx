@@ -1,20 +1,33 @@
-import { Heading, VStack } from "@chakra-ui/react";
+import { HStack, Skeleton } from "@chakra-ui/react";
+import { useEffect, useReducer, useState } from "react";
+import { getOpsFromServer } from "../utils/supabaseClient";
+import { operationArrayReducer } from "../utils/OperationArrayReducer";
+import OperationsCard from "../components/molecules/OperationsCard";
 
 export default function Homepage() {
-//   const [countries, setCountries] = useState<Country[]>([]);
-// 
-//   useEffect(() => {
-//     getCountries();
-//   }, []);
-// 
-//   async function getCountries() {
-//     const { data } = await supabase.from("countries").select();
-//     setCountries(data || []);
-  // }
-
+  const [operationArray, dispatch] = useReducer(operationArrayReducer, []);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => { 
+    getOpsFromServer(dispatch);
+    setIsLoading(false);
+  },[]);
   return (
-    <VStack>
-      <Heading>Money Count</Heading>
-    </VStack>
+    <HStack spacing={10}>
+      <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
+        <OperationsCard operations={operationArray} cardTitle="latest operations"/>
+      </Skeleton>
+      <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
+        <OperationsCard cardTitle="income operations" operations = { operationArray.filter( operation => {
+          if (operation?.amount >= 0) {
+            return operation
+          }})}/>
+      </Skeleton>
+      <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
+        <OperationsCard cardTitle="outcome operations" operations = { operationArray.filter( operation => {
+          if (operation?.amount < 0) {
+            return operation
+          }})}/>
+      </Skeleton>
+    </HStack>
   );
 }

@@ -2,5 +2,8 @@
   "id":"ID",
   "name":"Nome",
   "amount":"Importo",
-  "labels":"etichette"
+  "labels":"Etichette",
+  "latest operations":"Ultime operazioni",
+  "income operations":"Operazioni in ingresso",
+  "outcome operations":"Operazioni in uscita"
 }
