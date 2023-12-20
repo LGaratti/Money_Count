@@ -2,5 +2,8 @@
   "id":"ID",
   "name":"Name",
   "amount":"Amount",
-  "labels":"Labels"
+  "labels":"Labels",
+  "latest operations":"Latest operations",
+  "income operations":"Income operations",
+  "outcome operations":"Outcome operations"
 }
