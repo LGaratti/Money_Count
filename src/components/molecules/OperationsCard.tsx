@@ -1,9 +1,9 @@
-import { HStack, Card, CardBody, Heading, Table, TableContainer, TableProps, Tag, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
+import { HStack, Card, CardBody, Heading, Table, TableContainer, CardProps, Tag, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
 import { Operation } from '../../interfaces/Operation';
 
-interface OperationsCardProps extends TableProps {
+interface OperationsCardProps extends CardProps {
   operations?: Operation[];
   cardTitle: string;
 }
