@@ -1,4 +1,4 @@
-import { Heading, AbsoluteCenter, useColorMode, Switch, HStack, Spacer, Icon, Button } from "@chakra-ui/react";
+import { Heading, AbsoluteCenter, useColorMode, Switch, HStack, Spacer, Icon, Button, Wrap } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { FaMoon, FaSun } from "react-icons/fa";
 
@@ -6,14 +6,14 @@ export const TopBar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   return (
     <HStack w="full" p={2} justify="space-between">
-      <HStack spacing={4}>
+      <Wrap spacing={4}>
         <Link to="/">
           <Button>Home</Button>
         </Link>
         <Link to="/demo">
           <Button>Demo</Button>
         </Link>
-      </HStack>
+      </Wrap>
       <HStack >
         <AbsoluteCenter axis='horizontal'>
           <Heading size={'2xl'}>

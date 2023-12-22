@@ -1,30 +1,52 @@
 import { 
-  Card, CardBody, Heading, BoxProps, CardHeader, FormControl,
-  FormLabel, Input, Button, HStack, NumberInput, NumberInputField,
+  Card, CardBody, Heading, CardHeader, FormControl,
+  FormLabel, Input, Button, NumberInput, NumberInputField,
   NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper,
-  Spacer, VStack, Tag, Wrap, WrapItem} from '@chakra-ui/react'
-import {  useState } from 'react';
-// import { useTranslation } from 'react-i18next';
-// import i18n from '../../locales/i18n';
+  Wrap, WrapItem, Switch, FormErrorMessage} from '@chakra-ui/react'
+import {  useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { Label, Operation } from '../../interfaces/Operation';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../locales/i18n';
+import LabelsComponent from '../molecules/LabelsComponent';
+import { getLabelsFromServer } from '../../utils/supabaseClient';
 // import { Operation } from '../../interfaces/Operation';
 
-export const AddOperationBox = ({...props}: BoxProps) => {
-  // const {t} = useTranslation('ns1',{ i18n } );
-  // const formatAmount = (val: string) => val+' €'; 
-  // const parseAmount = (val: string) => val.replace(/^€/, '');
+export const AddOperationCard = ({...props}) => {
+  const {t} = useTranslation('ns1',{ i18n } );
+  
+  const [serverLabels, setServerLabels] = useState<Label[]>([]);
+  useEffect(() => { 
+    getLabelsFromServer(setServerLabels);
+  },[]);
 
-  const [_, setAmount] = useState(0);
+  useEffect(() => {
+    console.log('Labels stato aggiornato:', serverLabels);
+  }, [serverLabels]);
+  
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm<Operation>();
+
+  const onSubmit: SubmitHandler<Operation> = (data) => {
+    // Qui puoi inserire il codice per l'invio dei dati al server Supabase
+    console.log(data);
+  };
+  const [amount, setAmount] = useState(0);
   const handleAmountChange = (_: string, valueAsNumber: number) => {
     setAmount(valueAsNumber);
   };
-//DA SCOMMENTARE
-  // const [labels, setLabels] = useState([]);
 
-  // useEffect(() => { 
-  //   if (amount < 0) {
-  //     setLabels()
-  //   }
-  // }, [amount]);
+// DA SCOMMENTARE
+  // const [serverLabels, setLabels] = useState([]);
+  useEffect(() => { 
+    if (amount < 0) {
+      // setLabels()
+    }
+  }, [amount]);
 
   // const { colorMode } = useColorMode();
   return (
@@ -34,40 +56,71 @@ export const AddOperationBox = ({...props}: BoxProps) => {
           <Heading>Add Operation</Heading>
         </CardHeader>
         <CardBody>
-          <FormControl>
-            <VStack>
-              <HStack>
-                <FormLabel>Name</FormLabel>
-                <Input size={'sm'} type="text" placeholder="Inserisci il nome" />
-                <FormLabel>Description</FormLabel>
-                <Input type="text" placeholder="Descrizione" />
-              </HStack>
-              <Spacer/>            
-              <HStack>
-                <FormLabel>Labels</FormLabel>
-                <Wrap>
-                  {[...Array(6)].map((_, index) => (
-                    <WrapItem key={index}>
-                      <Tag>Pippo</Tag>
-                    </WrapItem>
-                  ))}
-                </Wrap>
-                <FormLabel>Amount</FormLabel>
-                <NumberInput precision={2} onChange={handleAmountChange}>
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-              </HStack>
-            </VStack>
-            <Button colorScheme="green" mt={4}>Aggiungi</Button>
-          </FormControl>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Wrap>
+              <WrapItem>
+                <FormControl isInvalid={!!errors.name}>
+                  <FormLabel htmlFor='name'>{t('name')}</FormLabel>
+                  <Input id='name' {...register('name', { required: 'This is required' })} />
+                  <FormErrorMessage>
+                    {errors.name && errors.name.message}
+                  </FormErrorMessage>
+                </FormControl>
+              </WrapItem>
+              <WrapItem>
+                <FormControl isInvalid={!!errors.amount}>
+                  <FormLabel htmlFor='amount'>{t('amount')}</FormLabel>
+                  <NumberInput id='amount' precision={2} onChange={handleAmountChange}>
+                    <NumberInputField {...register('amount', {
+                      valueAsNumber: true,
+                      required: 'This is required'
+                    })} />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                  <FormErrorMessage>
+                    {errors.amount && errors.amount.message}
+                  </FormErrorMessage>
+                </FormControl>
+              </WrapItem>
+              <WrapItem>
+                <FormControl display="flex" alignItems="center">
+                  <FormLabel htmlFor='active' mb="0">
+                    Active
+                  </FormLabel>
+                  <Switch defaultChecked={true} id='active' {...register('active')} />
+                </FormControl>
+              </WrapItem>
+              
+            </Wrap>
+            <Wrap>
+              <WrapItem>
+              <FormControl>
+              <FormLabel>Labels</FormLabel>
+              <LabelsComponent serverLabels={serverLabels} setServerLabels={setServerLabels}/>
+              </FormControl>
+              </WrapItem>
+
+              <WrapItem>
+                <FormControl isInvalid={!!errors.description}>
+                  <FormLabel htmlFor='description'>{t('description')}</FormLabel>
+                  <Input id='description' {...register('description')} />
+                  <FormErrorMessage>
+                    {errors.description && errors.description.message}
+                  </FormErrorMessage>
+                </FormControl>
+              </WrapItem>
+            </Wrap>    
+            <Button mt={4} colorScheme='teal' isLoading={isSubmitting} type='submit'>
+              Submit
+            </Button>
+          </form>
         </CardBody>
       </Card>
     </>
-  )
+  );
 }
 
-export default AddOperationBox
+export default AddOperationCard

@@ -1,4 +1,4 @@
-import { HStack, Skeleton, Wrap } from "@chakra-ui/react";
+import { Skeleton, Wrap } from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
 import { getOpsFromServer } from "../utils/supabaseClient";
 import { operationArrayReducer } from "../utils/OperationArrayReducer";

@@ -3,6 +3,7 @@
   "name":"Name",
   "amount":"Amount",
   "labels":"Labels",
+  "description":"Description",
   "latest operations":"Latest operations",
   "income operations":"Income operations",
   "outcome operations":"Outcome operations"

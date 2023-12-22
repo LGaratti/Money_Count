@@ -3,6 +3,7 @@
   "name":"Nome",
   "amount":"Importo",
   "labels":"Etichette",
+  "description":"Descrizione",
   "latest operations":"Ultime operazioni",
   "income operations":"Operazioni in ingresso",
   "outcome operations":"Operazioni in uscita"
