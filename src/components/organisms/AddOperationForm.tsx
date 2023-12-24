@@ -2,7 +2,7 @@ import {
   Card, CardBody, Heading, CardHeader, FormControl,
   FormLabel, Input, Button, NumberInput, NumberInputField,
   NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper,
-  Wrap, WrapItem, FormErrorMessage} from '@chakra-ui/react'
+  Wrap, WrapItem, FormErrorMessage, Textarea} from '@chakra-ui/react'
 import {  useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Label, Operation } from '../../interfaces/Operation';
@@ -108,7 +108,7 @@ export const AddOperationCard = ({...props}) => {
               <WrapItem>
                 <FormControl isInvalid={!!errors.description}>
                   <FormLabel htmlFor='description'>{t('description')}</FormLabel>
-                  <Input id='description' {...register('description')} />
+                  <Textarea id='description' {...register('description')}></Textarea>
                   <FormErrorMessage>
                     {errors.description && errors.description.message}
                   </FormErrorMessage>
