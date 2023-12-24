@@ -2,7 +2,7 @@ import {
   Card, CardBody, Heading, CardHeader, FormControl,
   FormLabel, Input, Button, NumberInput, NumberInputField,
   NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper,
-  Wrap, WrapItem, FormErrorMessage, Textarea} from '@chakra-ui/react'
+  Wrap, WrapItem, FormErrorMessage, Textarea, TableContainer, Table, Tbody, Tr, Td} from '@chakra-ui/react'
 import {  useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Label, Operation } from '../../interfaces/Operation';
@@ -68,53 +68,60 @@ export const AddOperationCard = ({...props}) => {
         </CardHeader>
         <CardBody>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Wrap>
-              <WrapItem>
-                <FormControl isInvalid={!!errors.name}>
-                  <FormLabel htmlFor='name'>{t('name')}</FormLabel>
-                  <Input id='name' {...register('name', { required: 'This is required' })} />
-                  <FormErrorMessage>
-                    {errors.name && errors.name.message}
-                  </FormErrorMessage>
-                </FormControl>
-              </WrapItem>
-              <WrapItem>
-                <FormControl isInvalid={!!errors.amount}>
-                  <FormLabel htmlFor='amount'>{t('amount')}</FormLabel>
-                  <NumberInput defaultValue={0} id='amount' precision={2} onChange={handleAmountChange}>
-                    <NumberInputField {...register('amount', {
-                      valueAsNumber: true,
-                      required: 'This is required'
-                    })} />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
-                  <FormErrorMessage>
-                    {errors.amount && errors.amount.message}
-                  </FormErrorMessage>
-                </FormControl>
-              </WrapItem>
-            </Wrap>
-            <Wrap>
-              <WrapItem>
-              <FormControl>
-                <FormLabel>Labels</FormLabel>
-                <LabelsComponent serverLabels={serverLabels} setServerLabels={setServerLabels} labels={labels} setLabels={setLabels}/>
-              </FormControl>
-              </WrapItem>
 
-              <WrapItem>
-                <FormControl isInvalid={!!errors.description}>
-                  <FormLabel htmlFor='description'>{t('description')}</FormLabel>
-                  <Textarea id='description' {...register('description')}></Textarea>
-                  <FormErrorMessage>
-                    {errors.description && errors.description.message}
-                  </FormErrorMessage>
-                </FormControl>
-              </WrapItem>
-            </Wrap>    
+            <TableContainer>
+              <Table>
+                <Tbody>
+                  <Tr>
+                    <Td>
+                    <FormControl isInvalid={!!errors.name}>
+                      <FormLabel htmlFor='name'>{t('name')}</FormLabel>
+                      <Input id='name' {...register('name', { required: 'This is required' })} />
+                      <FormErrorMessage>
+                        {errors.name && errors.name.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                    </Td>
+                    <Td>
+                      <FormControl isInvalid={!!errors.amount}>
+                        <FormLabel htmlFor='amount'>{t('amount')}</FormLabel>
+                        <NumberInput defaultValue={0} id='amount' precision={2} onChange={handleAmountChange}>
+                          <NumberInputField {...register('amount', {
+                            valueAsNumber: true,
+                            required: 'This is required'
+                          })} />
+                          <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                          </NumberInputStepper>
+                        </NumberInput>
+                        <FormErrorMessage>
+                          {errors.amount && errors.amount.message}
+                        </FormErrorMessage>
+                      </FormControl>
+                    </Td>
+                    <Td>
+                    <FormControl>
+                      <FormLabel>Labels</FormLabel>
+                      <LabelsComponent serverLabels={serverLabels} setServerLabels={setServerLabels} labels={labels} setLabels={setLabels}/>
+                    </FormControl>
+                    </Td>
+
+                  </Tr>
+                  <Tr>
+                  <Td>
+                    <FormControl isInvalid={!!errors.description}>
+                      <FormLabel htmlFor='description'>{t('description')}</FormLabel>
+                      <Textarea id='description' {...register('description')}></Textarea>
+                      <FormErrorMessage>
+                        {errors.description && errors.description.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </TableContainer>   
             <Button mt={4} colorScheme='teal' isLoading={isSubmitting} type='submit'>
               Submit
             </Button>
