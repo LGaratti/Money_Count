@@ -2,7 +2,7 @@ import {
   Card, CardBody, Heading, CardHeader, FormControl,
   FormLabel, Input, Button, NumberInput, NumberInputField,
   NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper,
-  Wrap, WrapItem, Switch, FormErrorMessage} from '@chakra-ui/react'
+  Wrap, WrapItem, FormErrorMessage} from '@chakra-ui/react'
 import {  useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Label, Operation } from '../../interfaces/Operation';
@@ -20,10 +20,7 @@ export const AddOperationCard = ({...props}) => {
     getLabelsFromServer(setServerLabels);
   },[]);
 
-  useEffect(() => {
-    console.log('Labels stato aggiornato:', serverLabels);
-  }, [serverLabels]);
-  
+  const [labels, setLabels] = useState<Label[]>([]);
 
   const {
     handleSubmit,
@@ -35,6 +32,7 @@ export const AddOperationCard = ({...props}) => {
     // Qui puoi inserire il codice per l'invio dei dati al server Supabase
     console.log(data);
   };
+
   const [amount, setAmount] = useState(0);
   const handleAmountChange = (_: string, valueAsNumber: number) => {
     setAmount(valueAsNumber);
@@ -42,10 +40,23 @@ export const AddOperationCard = ({...props}) => {
 
 // DA SCOMMENTARE
   // const [serverLabels, setLabels] = useState([]);
-  useEffect(() => { 
+  useEffect(() => {
+    let tempLabels = labels.filter(label => amount < 0 ? label.name !== 'gain' : label.name !== 'loss');
+
     if (amount < 0) {
-      // setLabels()
+      const lossLabel = serverLabels.find(label => label.name === 'loss');
+      if (lossLabel && !tempLabels.some(label => label.name === 'loss')) {
+        tempLabels.push(lossLabel);
+      }
     }
+    else {
+      const gainLabel = serverLabels.find(label => label.name === 'gain');
+      if (gainLabel && !tempLabels.some(label => label.name === 'gain')) {
+        tempLabels.push(gainLabel);
+      } 
+    }
+
+    setLabels(tempLabels);
   }, [amount]);
 
   // const { colorMode } = useColorMode();
@@ -70,7 +81,7 @@ export const AddOperationCard = ({...props}) => {
               <WrapItem>
                 <FormControl isInvalid={!!errors.amount}>
                   <FormLabel htmlFor='amount'>{t('amount')}</FormLabel>
-                  <NumberInput id='amount' precision={2} onChange={handleAmountChange}>
+                  <NumberInput defaultValue={0} id='amount' precision={2} onChange={handleAmountChange}>
                     <NumberInputField {...register('amount', {
                       valueAsNumber: true,
                       required: 'This is required'
@@ -85,21 +96,12 @@ export const AddOperationCard = ({...props}) => {
                   </FormErrorMessage>
                 </FormControl>
               </WrapItem>
-              <WrapItem>
-                <FormControl display="flex" alignItems="center">
-                  <FormLabel htmlFor='active' mb="0">
-                    Active
-                  </FormLabel>
-                  <Switch defaultChecked={true} id='active' {...register('active')} />
-                </FormControl>
-              </WrapItem>
-              
             </Wrap>
             <Wrap>
               <WrapItem>
               <FormControl>
-              <FormLabel>Labels</FormLabel>
-              <LabelsComponent serverLabels={serverLabels} setServerLabels={setServerLabels}/>
+                <FormLabel>Labels</FormLabel>
+                <LabelsComponent serverLabels={serverLabels} setServerLabels={setServerLabels} labels={labels} setLabels={setLabels}/>
               </FormControl>
               </WrapItem>
 
