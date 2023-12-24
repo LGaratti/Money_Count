@@ -22,7 +22,7 @@ export async function getOpsFromServer(operationArrayReducer: Dispatch<Operation
   const { data , error } = await supabase
   .from('operations_labels')
   .select(`
-    operation:operations (operation_id,name,active,description,amount,periodical:periodicals (periodical_id, amount, unit, last_timestamp, first_timestamp)),
+    operation:operations (operation_id,name,description,amount,first_date,periodic_count,periodic_unit,last_date),
     label:labels (label_id, name, description, color_rgb)
   `)
   .returns<OperationLabel[]>();
