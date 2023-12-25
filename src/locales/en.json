@@ -4,6 +4,13 @@
   "amount":"Amount",
   "labels":"Labels",
   "description":"Description",
+  "date":"Date",
+  "recurrence":"Recurrence",
+  "none":"Never",
+  "dayly":"Dayly",
+  "weekly":"Weekly",
+  "monthly":"Monhtly",
+  "yearly":"Yearly",
   "latest operations":"Latest operations",
   "income operations":"Income operations",
   "outcome operations":"Outcome operations"

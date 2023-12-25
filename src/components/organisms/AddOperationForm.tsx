@@ -2,7 +2,7 @@ import {
   Card, CardBody, Heading, CardHeader, FormControl,
   FormLabel, Input, Button, NumberInput, NumberInputField,
   NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper,
-  Wrap, WrapItem, FormErrorMessage, Textarea, TableContainer, Table, Tbody, Tr, Td} from '@chakra-ui/react'
+   FormErrorMessage, Textarea, TableContainer, Table, Tbody, Tr, Td, Select} from '@chakra-ui/react'
 import {  useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Label, Operation } from '../../interfaces/Operation';
@@ -102,7 +102,7 @@ export const AddOperationCard = ({...props}) => {
                     </Td>
                     <Td>
                     <FormControl>
-                      <FormLabel>Labels</FormLabel>
+                      <FormLabel>{t('labels')}</FormLabel>
                       <LabelsComponent serverLabels={serverLabels} setServerLabels={setServerLabels} labels={labels} setLabels={setLabels}/>
                     </FormControl>
                     </Td>
@@ -118,12 +118,41 @@ export const AddOperationCard = ({...props}) => {
                       </FormErrorMessage>
                     </FormControl>
                   </Td>
+                  <Td>
+                    <FormControl isInvalid={!!errors.first_date}>
+                      <FormLabel htmlFor='first_date'>{t('date')}</FormLabel>
+                      <Input
+                      id='first_date'
+                      placeholder="Select Date and Time"
+                      size="md"
+                      type="datetime-local"
+                      />
+                      <FormErrorMessage>
+                        {errors.description && errors.description.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </Td>
+                  <Td>
+                    <FormControl isInvalid={!!errors.periodic_unit}>
+                      <FormLabel htmlFor='periodic_unit'>{t('recurrence')}</FormLabel>
+                      <Select id='periodic_unit'>
+                        <option value='none'>{t('none')}</option>
+                        <option value='day'>{t('dayly')}</option>
+                        <option value='week'>{t('weekly')}</option>
+                        <option value='month'>{t('monthly')}</option>
+                        <option value='year'>{t('yearly')}</option>
+                      </Select>
+                      <FormErrorMessage>
+                        {errors.description && errors.description.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </Td>
                   </Tr>
                 </Tbody>
               </Table>
             </TableContainer>   
             <Button mt={4} colorScheme='teal' isLoading={isSubmitting} type='submit'>
-              Submit
+              Add
             </Button>
           </form>
         </CardBody>

@@ -4,6 +4,13 @@
   "amount":"Importo",
   "labels":"Etichette",
   "description":"Descrizione",
+  "date":"Data",
+  "recurrence":"Ricorrenza",
+  "none":"Nessuna",
+  "dayly":"Giornaliera",
+  "weekly":"Settimanale",
+  "monthly":"Mensile",
+  "yearly":"Aunnuale",
   "latest operations":"Ultime operazioni",
   "income operations":"Operazioni in ingresso",
   "outcome operations":"Operazioni in uscita"

@@ -1,4 +1,4 @@
-import { Tag, TagLabel, TagCloseButton, IconButton, useDisclosure, Wrap, WrapItem, useColorMode, Textarea, Box } from '@chakra-ui/react';
+import { Tag, TagLabel, TagCloseButton, IconButton, useDisclosure, Wrap, WrapItem, Box } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import { Label } from '../../interfaces/Operation'; // Assicurati di importare le interfacce corrette
 import { Dispatch, SetStateAction } from 'react';
