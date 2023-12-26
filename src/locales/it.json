@@ -11,6 +11,8 @@
   "weekly":"Settimanale",
   "monthly":"Mensile",
   "yearly":"Aunnuale",
+  "recurrence count":"Numero di ricorrenze",
+  "infinite":"Infinite",
   "latest operations":"Ultime operazioni",
   "income operations":"Operazioni in ingresso",
   "outcome operations":"Operazioni in uscita"

@@ -11,6 +11,8 @@
   "weekly":"Weekly",
   "monthly":"Monhtly",
   "yearly":"Yearly",
+  "recurrence count":"Recurrence count",
+  "infinite":"Infinite",
   "latest operations":"Latest operations",
   "income operations":"Income operations",
   "outcome operations":"Outcome operations"
