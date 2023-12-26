@@ -14,10 +14,11 @@ export interface Operation {
     label_id: string;
     name: string;
     description: string;
-    color_rgb: string; // Formato esadecimale RGB, es: '#FF5733'
+    color_rgb: string;
   }
   
   export enum TimeUnit {
+    NONE = "none",
     DAY = "day",
     WEEK = "week",
     MONTH = "month",
