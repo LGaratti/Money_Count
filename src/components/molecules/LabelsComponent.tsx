@@ -39,7 +39,9 @@ export const LabelsComponent = ({ serverLabels, setServerLabels, labels, setLabe
     onClick={handleClickOnBox} 
     borderWidth='1px' 
     borderRadius='lg' 
-    overflow='hidden'>
+    overflow='hidden'
+    // minH="20"
+    resize="none">
       <Wrap>
         {labels.map((label) => (
           <WrapItem key={label.label_id}>

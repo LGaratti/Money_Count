@@ -70,33 +70,23 @@ export const AddOperationCard = ({...props}) => {
         <CardBody>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid
-              // h='200px'
-              templateRows='repeat(4, 1fr)'
+              templateRows='repeat(2, 1fr)'
               templateColumns='repeat(3, 1fr)'
               gap={4}
             >
-              <GridItem>
+              <GridItem >
                 <FormControl isInvalid={!!errors.name}>
                   <FormLabel htmlFor='name'>{t('name')}</FormLabel>
-                  <Input id='name' {...register('name', { required: 'This is required' })} />
+                  <Input size={'sm'} id='name' {...register('name', { required: 'This is required' })} />
                   <FormErrorMessage>
                     {errors.name && errors.name.message}
                   </FormErrorMessage>
                 </FormControl>
               </GridItem>
-              <GridItem colStart={3} >
-                <FormControl isInvalid={!!errors.description}>
-                  <FormLabel htmlFor='description'>{t('description')}</FormLabel>
-                  <Textarea id='description' {...register('description')}></Textarea>
-                  <FormErrorMessage>
-                    {errors.description && errors.description.message}
-                  </FormErrorMessage>
-                </FormControl>
-              </GridItem>
               <GridItem>
-                <FormControl isInvalid={!!errors.amount}>
+              <FormControl isInvalid={!!errors.amount}>
                   <FormLabel htmlFor='amount'>{t('amount')}</FormLabel>
-                  <NumberInput defaultValue={0} id='amount' precision={2} onChange={handleAmountChange}>
+                  <NumberInput size={'sm'} defaultValue={0} id='amount' precision={2} onChange={handleAmountChange}>
                     <NumberInputField {...register('amount', {
                       valueAsNumber: true,
                       required: 'This is required'
@@ -112,29 +102,34 @@ export const AddOperationCard = ({...props}) => {
                 </FormControl>
               </GridItem>
               <GridItem>
-                <FormControl>
+              <FormControl>
                   <FormLabel>{t('labels')}</FormLabel>
                   <LabelsComponent serverLabels={serverLabels} setServerLabels={setServerLabels} labels={labels} setLabels={setLabels}/>
                 </FormControl>
               </GridItem>
+
               <GridItem>
-                <FormControl isInvalid={!!errors.first_date}>
+              <FormControl isInvalid={!!errors.first_date}>
                   <FormLabel htmlFor='first_date'>{t('date')}</FormLabel>
                   <Input
                   id='first_date'
                   placeholder="Select Date and Time"
-                  size="md"
+                  size={'sm'}
                   type="datetime-local"
                   />
                   <FormErrorMessage>
                     {errors.first_date && errors.first_date.message}
                   </FormErrorMessage>
-                </FormControl>
+              </FormControl>
+              
+
+                
+                
               </GridItem>
               <GridItem>
-                <FormControl isInvalid={!!errors.periodic_unit}>
+              <FormControl isInvalid={!!errors.periodic_unit}>
                     <FormLabel htmlFor='periodic_unit'>{t('recurrence')}</FormLabel>
-                    <Select id='periodic_unit' onChange={handlePeriodicUnitChange}>
+                    <Select size={'sm'} id='periodic_unit' onChange={handlePeriodicUnitChange}>
                       <option value='none'>{t('none')}</option>
                       <option value='day'>{t('dayly')}</option>
                       <option value='week'>{t('weekly')}</option>
@@ -144,13 +139,13 @@ export const AddOperationCard = ({...props}) => {
                     <FormErrorMessage>
                       {errors.periodic_unit && errors.periodic_unit.message}
                     </FormErrorMessage>
-                  </FormControl>
+              </FormControl>
               </GridItem>
-              {periodic_unit && periodic_unit !== 'none' && (
-                <GridItem>
+              <GridItem>
+                  {periodic_unit && periodic_unit !== 'none' && (
                     <FormControl isInvalid={!!errors.periodic_count}>
-                  <FormLabel htmlFor='periodic_count'>{t('periodic_count')}</FormLabel>
-                  <NumberInput defaultValue={0} id='periodic_count'>
+                  <FormLabel htmlFor='periodic_count'>{t('recurrence count')}</FormLabel>
+                  <NumberInput defaultValue={0} id='periodic_count' size={'sm'}>
                     <NumberInputField {...register('periodic_count', {
                       valueAsNumber: true,
                       required: 'This is required'
@@ -165,15 +160,20 @@ export const AddOperationCard = ({...props}) => {
                   </FormErrorMessage>
 
                   </FormControl>
-                </GridItem>
               )}
-              <GridItem colSpan={3} rowStart={4}> {/* Aggiusta rowStart basandoti sul numero di righe */}
+              </GridItem>
+              </Grid>
+              
+              <FormControl isInvalid={!!errors.description}>
+                  <FormLabel htmlFor='description'>{t('description')}</FormLabel>
+                  <Textarea id='description' {...register('description')}></Textarea>
+                  <FormErrorMessage>
+                    {errors.description && errors.description.message}
+                  </FormErrorMessage>
+                </FormControl>
                 <Button mt={4} colorScheme='teal' isLoading={isSubmitting} type='submit'>
                   Add
                 </Button>
-              </GridItem>
-
-            </Grid>
           </form>
         </CardBody>
       </Card>
