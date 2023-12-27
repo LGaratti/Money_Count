@@ -57,11 +57,11 @@ export async function setOpsFromServer(operations: Operation[]) {
 
 export async function getLabelsFromServer( setLabel: Dispatch<SetStateAction<Label[]>>) {
   const { data , error } = await supabase
-  .from('operations_labels')
+  .from('labels')
   .select(`
-    label:labels (label_id, name, description, color_rgb)
+    label_id, name, description, color_rgb
   `)
-  .returns<LabelFromServer[]>();
+  .returns<Label[]>();
 
   if (error)
     throw error;
@@ -71,8 +71,8 @@ export async function getLabelsFromServer( setLabel: Dispatch<SetStateAction<Lab
     const tempLabels: Label[] = [];
 
   data.forEach((labelFromServer) => {
-    const foundLabel = tempLabels.find(label => label.label_id === labelFromServer.label.label_id);
-    if (!foundLabel)  tempLabels.push(labelFromServer.label);
+    const foundLabel = tempLabels.find(label => label.label_id === labelFromServer.label_id);
+    if (!foundLabel)  tempLabels.push(labelFromServer);
   });
 
   setLabel(tempLabels);
