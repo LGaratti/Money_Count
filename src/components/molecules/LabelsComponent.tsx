@@ -12,8 +12,7 @@ export interface LabelsComponentProps {
 
 export const LabelsComponent = ({
   serverLabels,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setServerLabels,
+  //  setServerLabels, //TOADD
   labels,
   setLabels,
 }: LabelsComponentProps) => {
