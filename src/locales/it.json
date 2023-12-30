@@ -5,6 +5,7 @@
   "labels":"Etichette",
   "description":"Descrizione",
   "date":"Data",
+  "required field": "Campo richiesto",
   "recurrence":"Ricorrenza",
   "none":"Nessuna",
   "dayly":"Giornaliera",

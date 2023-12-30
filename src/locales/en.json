@@ -5,6 +5,7 @@
   "labels":"Labels",
   "description":"Description",
   "date":"Date",
+  "required field": "Required Field",
   "recurrence":"Recurrence",
   "none":"Never",
   "dayly":"Dayly",
