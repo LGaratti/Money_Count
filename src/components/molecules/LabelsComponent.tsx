@@ -1,6 +1,6 @@
 import { Button, Grid, GridItem, Input, Menu, MenuButton, MenuItemOption, MenuList, MenuOptionGroup, Tag } from "@chakra-ui/react";
 import { Label } from "../../interfaces/Operation"; // Assicurati di importare le interfacce corrette
-import { ChangeEvent, Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, KeyboardEvent, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import { CheckIcon } from "@chakra-ui/icons";
 
 export interface LabelsComponentProps {
@@ -34,6 +34,16 @@ export const LabelsComponent = ({ serverLabels,//  setServerLabels, // TOADD
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue,serverLabels]);
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      const matchingLabel = displayedLabels.find(label => label.name === inputValue);
+      if (matchingLabel) {
+        handleSelectLabel(matchingLabel.label_id);
+      }
+      // Gestisci qui la creazione di una nuova etichetta, se necessario
+    }
+  };  
+
   const handleChangeInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     if (e.target.value !== "") {
@@ -63,19 +73,15 @@ export const LabelsComponent = ({ serverLabels,//  setServerLabels, // TOADD
         <GridItem>
           <Menu isOpen={menuIsOpen} closeOnBlur={true} initialFocusRef={inputRef} placement="bottom-start">
             <MenuButton as={Button} variant={'text'} cursor={'text'} p={0} m={0} h={8} w={'full'} onClick={() => inputRef.current?.focus()}>
-            <Input ref={inputRef} value={inputValue} onChange={handleChangeInput} onClick={() => setMenuIsOpen(!menuIsOpen)} size="sm"/>
+            <Input ref={inputRef} value={inputValue} onKeyDown={handleKeyDown} onChange={handleChangeInput} onClick={() => setMenuIsOpen(!menuIsOpen)} size="sm"/>
             </MenuButton>
             <MenuList>
               <MenuOptionGroup type="checkbox">
                 {displayedLabels.map(
                   (label) =>
-                  <MenuItemOption
-                    value={label?.name}
-                    key={label?.label_id}
-                    onClick={() => handleSelectLabel(label.label_id)}
-                    cursor="pointer"
-                    icon={ labels.some((labelT) => labelT?.label_id === label?.label_id) ? (<CheckIcon/>) : null }>
-                      <Tag key={label?.label_id} color={"#1a202c"} bg={label?.color_rgb + ".100"}> {label?.name} </Tag>
+                  <MenuItemOption value={label?.name} key={label?.label_id} onClick={() => handleSelectLabel(label.label_id)} cursor="pointer"
+                    icon={ labels.some((labelT) => labelT?.label_id === label?.label_id) ? (<CheckIcon/>) : null } >
+                    <Tag key={label?.label_id} color={"#1a202c"} bg={label?.color_rgb + ".100"}> {label?.name} </Tag>
                   </MenuItemOption>    
                 )}
               </MenuOptionGroup>
