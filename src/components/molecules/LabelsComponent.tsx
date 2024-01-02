@@ -10,12 +10,8 @@ export interface LabelsComponentProps {
   setLabels: Dispatch<SetStateAction<Label[]>>;
 }
 
-export const LabelsComponent = ({
-  serverLabels,
-  //  setServerLabels, // TOADD
-  labels,
-  setLabels,
-}: LabelsComponentProps) => {
+export const LabelsComponent = ({ serverLabels,//  setServerLabels, // TOADD
+  labels,  setLabels,}: LabelsComponentProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState("");
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -40,7 +36,6 @@ export const LabelsComponent = ({
 
   const handleChangeInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
-    // Aggiungi logica per gestire l'apertura del menu qui se necessario
     if (e.target.value !== "") {
       setMenuIsOpen(true);
     } else {
@@ -48,52 +43,27 @@ export const LabelsComponent = ({
     }
   }, []);
 
-  // function handleDelLabel(label_id: string) {
-  //   setLabels(
-  //     labels.filter((label) => label.label_id !== label_id)
-  //   );
-  // }
-
   function handleSelectLabel(selectedLabelId: string) {
     if (labels.find((label) => label.label_id === selectedLabelId)) {
-      // Se l'etichetta è già selezionata, rimuovila
       setLabels(
         labels.filter((label) => label.label_id !== selectedLabelId)
       );
     } else {
-      // Altrimenti, aggiungi l'etichetta selezionata all'array
       const temp = displayedLabels.find((label) => label.label_id === selectedLabelId);
       if(temp)
         setLabels([...labels, temp]);
     }
     setInputValue("");
-    setMenuIsOpen(false); // Chiudi i suggerimenti dopo la selezione
+    setMenuIsOpen(false);
   }
 
   return (
     <>
       <Grid gap={2}>
         <GridItem>
-          
-          <Menu
-            isOpen={menuIsOpen}
-            closeOnBlur={true}
-            // onClose={() => setMenuIsOpen(false)}
-            initialFocusRef={inputRef}
-            placement="bottom-start"
-          >
-            <MenuButton as={Button} variant={'text'} cursor={'text'} p={0} m={0} h={8} w={'full'} onClick={() => inputRef.current?.focus()}
-            
-              // onSubmit={() => handleSelectLabel(inputValue)}
-              >
-            <Input
-              ref={inputRef}
-              value={inputValue}
-              onChange={handleChangeInput}
-              onClick={() => setMenuIsOpen(!menuIsOpen)}
-              // onSubmit={() => handleSelectLabel(inputValue)}
-              size="sm"
-            />
+          <Menu isOpen={menuIsOpen} closeOnBlur={true} initialFocusRef={inputRef} placement="bottom-start">
+            <MenuButton as={Button} variant={'text'} cursor={'text'} p={0} m={0} h={8} w={'full'} onClick={() => inputRef.current?.focus()}>
+            <Input ref={inputRef} value={inputValue} onChange={handleChangeInput} onClick={() => setMenuIsOpen(!menuIsOpen)} size="sm"/>
             </MenuButton>
             <MenuList>
               <MenuOptionGroup type="checkbox">
@@ -105,35 +75,15 @@ export const LabelsComponent = ({
                     onClick={() => handleSelectLabel(label.label_id)}
                     cursor="pointer"
                     icon={ labels.some((labelT) => labelT?.label_id === label?.label_id) ? (<CheckIcon/>) : null }>
-                    <Tag
-                      key={label?.label_id}
-                      color={"#1a202c"}
-                      bg={label?.color_rgb + ".100"}
-                    >
-                      {label?.name}
-                    </Tag>
+                      <Tag key={label?.label_id} color={"#1a202c"} bg={label?.color_rgb + ".100"}> {label?.name} </Tag>
                   </MenuItemOption>    
                 )}
               </MenuOptionGroup>
             </MenuList>
           </Menu>
-          {/* </Box> */}
         </GridItem>
         <GridItem>
-          {labels.map((label) => (
-            <Tag
-              key={label?.label_id}
-              color={"#1a202c"}
-              bg={label?.color_rgb + ".100"}
-            >
-              {label?.name}
-              {/* {label?.name !== "gain" && label?.name !== "loss" && (
-                <TagCloseButton
-                  onClick={() => handleDelLabel(label?.label_id)}
-                />
-              )} */}
-            </Tag>
-          ))}
+          {labels.map((label) => ( <Tag key={label?.label_id} color={"#1a202c"} bg={label?.color_rgb + ".100"}> {label?.name} </Tag> ))}
         </GridItem>
       </Grid>
     </>
