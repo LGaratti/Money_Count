@@ -1,9 +1,9 @@
-import { HStack, Card, CardBody, Heading, Table, TableContainer, TableProps, Tag, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
+import { Card, CardBody, Heading, Table, TableContainer, CardProps, Tag, Tbody, Td, Th, Thead, Tr, Wrap} from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
 import { Operation } from '../../interfaces/Operation';
 
-interface OperationsCardProps extends TableProps {
+interface OperationsCardProps extends CardProps {
   operations?: Operation[];
   cardTitle: string;
 }
@@ -33,9 +33,9 @@ export const OperationsCard = ({operations, cardTitle, ...props}: OperationsCard
                     ( operation?.amount >= 0 ? '+': '') + operation.amount + ' €'
                   }</Td>
                   <Td>
-                  <HStack spacing={2}>
+                  <Wrap spacing={2}>
                     {operation?.labels.map((label) => (<Tag key={label?.label_id} color={'#1a202c'} bg={label?.color_rgb+'.100'}>{label.name}</Tag>))}
-                  </HStack>
+                  </Wrap>
                   </Td>
                 </Tr>
               ))}

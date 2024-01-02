@@ -1,4 +1,4 @@
-import { HStack, Skeleton } from "@chakra-ui/react";
+import { Skeleton, Wrap } from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
 import { getOpsFromServer } from "../utils/supabaseClient";
 import { operationArrayReducer } from "../utils/OperationArrayReducer";
@@ -12,7 +12,7 @@ export default function Homepage() {
     setIsLoading(false);
   },[]);
   return (
-    <HStack spacing={10}>
+    <Wrap spacing={10} alignItems={'stretch'}>
       <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
         <OperationsCard operations={operationArray} cardTitle="latest operations"/>
       </Skeleton>
@@ -28,6 +28,6 @@ export default function Homepage() {
             return operation
           }})}/>
       </Skeleton>
-    </HStack>
+    </Wrap>
   );
 }
