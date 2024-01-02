@@ -34,7 +34,16 @@ export const AddOperationCard = ({...props}) => {
         tempLabels.push(gainLabel);
       } 
     }
-    setLabels(tempLabels);
+    const sortedLabels: Label[] = tempLabels.sort((n1,n2) => {
+      if(n1.label_id > n2.label_id){
+        return 1;
+      }
+      if(n1.label_id < n2.label_id){
+        return -1;
+      }
+      return 0;
+    });
+    setLabels(sortedLabels);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount]);
 

@@ -12,7 +12,7 @@ export interface LabelsComponentProps {
 
 export const LabelsComponent = ({
   serverLabels,
-  //  setServerLabels, //TOADD
+  //  setServerLabels, // TOADD
   labels,
   setLabels,
 }: LabelsComponentProps) => {
@@ -22,17 +22,15 @@ export const LabelsComponent = ({
   const [displayedLabels, setDisplayedLabels] = useState<Label[]>([]);
 
   useEffect(() => {
-    setDisplayedLabels(serverLabels);
+    const tempLabels: Label[] = serverLabels.filter(label => label.name !== "gain" && label.name !== "loss");
+    setDisplayedLabels(tempLabels);
   }, [serverLabels]);
 
   useEffect(() => {
-    const tempLabels = serverLabels.filter((label) =>
+    let tempLabels = serverLabels.filter((label) =>
       label.name.toLowerCase().includes(inputValue.toLowerCase())
     );
-    // if(inputValue !== "")
-    //   setMenuIsOpen(true);
-    // else
-    //   setMenuIsOpen(false);
+    tempLabels = tempLabels.filter(label => label.name !== "gain" && label.name !== "loss");
 
     //TODO logica visualizzazione Labels se tempLabels non vuoto sennò creazione ed invio al server la nuova label ed aspetto aggiornamento dal server per aggiugnerla
     if(tempLabels !== displayedLabels)
@@ -101,23 +99,20 @@ export const LabelsComponent = ({
               <MenuOptionGroup type="checkbox">
                 {displayedLabels.map(
                   (label) =>
-                    label?.name !== "gain" &&
-                    label?.name !== "loss" && (
-                      <MenuItemOption
-                        value={label?.name}
-                        key={label?.label_id}
-                        onClick={() => handleSelectLabel(label.label_id)}
-                        cursor="pointer"
-                        icon={ labels.some((labelT) => labelT?.label_id === label?.label_id) ? (<CheckIcon/>) : null }>
-                        <Tag
-                          key={label?.label_id}
-                          color={"#1a202c"}
-                          bg={label?.color_rgb + ".100"}
-                        >
-                          {label?.name}
-                        </Tag>
-                      </MenuItemOption>
-                    )
+                  <MenuItemOption
+                    value={label?.name}
+                    key={label?.label_id}
+                    onClick={() => handleSelectLabel(label.label_id)}
+                    cursor="pointer"
+                    icon={ labels.some((labelT) => labelT?.label_id === label?.label_id) ? (<CheckIcon/>) : null }>
+                    <Tag
+                      key={label?.label_id}
+                      color={"#1a202c"}
+                      bg={label?.color_rgb + ".100"}
+                    >
+                      {label?.name}
+                    </Tag>
+                  </MenuItemOption>    
                 )}
               </MenuOptionGroup>
             </MenuList>
