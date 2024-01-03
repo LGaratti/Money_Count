@@ -1,6 +1,6 @@
 import { Skeleton, Wrap } from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
-import { getOpsFromServer } from "../utils/supabaseClient";
+import { fetchOpsLabelsFromServer } from "../utils/supabaseClient";
 import { operationArrayReducer } from "../utils/OperationArrayReducer";
 import OperationsCard from "../components/molecules/OperationsCard";
 
@@ -8,7 +8,7 @@ export default function Homepage() {
   const [operationArray, dispatch] = useReducer(operationArrayReducer, []);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => { 
-    getOpsFromServer(dispatch);
+    fetchOpsLabelsFromServer(dispatch);
     setIsLoading(false);
   },[]);
   return (

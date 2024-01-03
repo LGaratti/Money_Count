@@ -6,7 +6,7 @@ import { Label, Operation, TimeUnit } from '../../interfaces/Operation';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
 import LabelsComponent from '../molecules/LabelsComponent';
-import { getLabelsFromServer } from '../../utils/supabaseClient';
+import { InsertOpFromServer, fetchLabelsFromServer } from '../../utils/supabaseClient';
 
 export const AddOperationCard = ({...props}) => {
   const {t} = useTranslation('ns1',{ i18n } );
@@ -43,7 +43,7 @@ export const AddOperationCard = ({...props}) => {
   }, [amount]);
 
   useEffect(() => { 
-    getLabelsFromServer(setServerLabels);
+    fetchLabelsFromServer(setServerLabels);
   },[]);
 
   const {
@@ -54,8 +54,8 @@ export const AddOperationCard = ({...props}) => {
 
   const onSubmit: SubmitHandler<Operation> = (data) => {
     data.labels = labels;
-    data.first_date 
-    console.log(data);
+    data.first_date;
+    InsertOpFromServer(data);
   };
 
   const handlePeriodicUnitChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

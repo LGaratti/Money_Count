@@ -18,7 +18,7 @@ export interface LabelFromServer {
   label:Label
 }
 
-export async function getOpsFromServer(operationArrayReducer: Dispatch<OperationsAction>) {
+export async function fetchOpsLabelsFromServer(operationArrayReducer: Dispatch<OperationsAction>) {
   const { data , error } = await supabase
   .from('operations_labels')
   .select(`
@@ -50,12 +50,7 @@ export async function getOpsFromServer(operationArrayReducer: Dispatch<Operation
   console.log("Operazioni ricevute dal server:", tempOperations);
 }
 
-export async function setOpsFromServer(operations: Operation[]) {
-  // TODO
-  console.log("Operazioni inviate al server:", operations);
-}
-
-export async function getLabelsFromServer( setLabel: Dispatch<SetStateAction<Label[]>>) {
+export async function fetchLabelsFromServer( setLabel: Dispatch<SetStateAction<Label[]>>) {
   const { data , error } = await supabase
   .from('labels')
   .select(`
@@ -68,8 +63,7 @@ export async function getLabelsFromServer( setLabel: Dispatch<SetStateAction<Lab
   if(!data)
     throw new Error("empty response from server");
 
-    const tempLabels: Label[] = [];
-
+  const tempLabels: Label[] = [];
   data.forEach((labelFromServer) => {
     const foundLabel = tempLabels.find(label => label.label_id === labelFromServer.label_id);
     if (!foundLabel)  tempLabels.push(labelFromServer);
@@ -80,3 +74,21 @@ export async function getLabelsFromServer( setLabel: Dispatch<SetStateAction<Lab
   console.log("Labels ricevute dal server:", tempLabels);
 }
 
+export async function InsertOpFromServer(operation: Operation) {
+  // Transform operation into operationLabel
+  const operationLabelToSend: OperationLabel[] = [];
+  operation?.labels.map((label) => (
+    operationLabelToSend.push({operation,label})
+  ))
+
+  const { data, error } = await supabase
+  .from('operations_labels')
+  .insert({operationLabelToSend})
+  .select()
+  if (error)
+    throw error;
+  if(!data)
+    throw new Error("empty response from server");
+
+  console.log("Operazione inviata al server: ", data);
+}
