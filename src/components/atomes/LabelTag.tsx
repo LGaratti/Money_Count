@@ -10,8 +10,8 @@ export const LabelTag = ({ label, ...props }: LabelTagsProps) => {
   return (
     <Tag 
       key={label?.label_id} 
-      color={"#1a202c"} 
-      bg={ colorMode === 'dark' ? label?.color_rgb + ".400" : label?.color_rgb + ".100"} 
+      color={ colorMode === 'dark' ? 'chakra-body-text' : '#1a202c' } 
+      bg={ colorMode === 'dark' ? label?.color_rgb + ".300" : label?.color_rgb + ".100"} 
       {...props}> 
       {label?.name} 
     </Tag>
