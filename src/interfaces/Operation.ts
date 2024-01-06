@@ -7,7 +7,7 @@ export interface Operation {
     last_date?: Date;
     periodic_count?: number;
     periodic_unit?: TimeUnit;
-    payday?: PayDay;
+    payday?: PayDay[];
     labels: Label[];
   }
   

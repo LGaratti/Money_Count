@@ -75,20 +75,22 @@ export async function fetchLabelsFromServer( setLabel: Dispatch<SetStateAction<L
 }
 
 export async function InsertOpFromServer(operation: Operation) {
-  // Transform operation into operationLabel
-  const operationLabelToSend: OperationLabel[] = [];
-  operation?.labels.map((label) => (
-    operationLabelToSend.push({operation,label})
-  ))
-
-  const { data, error } = await supabase
-  .from('operations_labels')
-  .insert({operationLabelToSend})
-  .select()
+  const operationsData = [{
+    operation: {
+      name: operation.name,
+      description: operation.description,
+      amount: operation.amount,
+      first_date: operation.first_date,
+      last_date: operation.last_date,
+      periodic_count: operation.periodic_count,
+      periodic_unit: operation.periodic_unit,
+      payday: operation.payday,
+      labels: operation.labels // Assicurati che questo sia un array anche se c'è una sola label
+    }
+  }];
+  const { error } = await supabase
+  .rpc('insert_operation_with_labels', {operation_data: operationsData})
   if (error)
     throw error;
-  if(!data)
-    throw new Error("empty response from server");
-
-  console.log("Operazione inviata al server: ", data);
+  console.log("Operazione inviata al server: ", operationsData);
 }
