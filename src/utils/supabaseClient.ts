@@ -75,6 +75,8 @@ export async function fetchLabelsFromServer( setLabel: Dispatch<SetStateAction<L
 }
 
 export async function InsertOpFromServer(operation: Operation) {
+  if(!operation)
+    throw new Error("trying to send an empty operation")
   const operationsData = [{
     operation: {
       name: operation.name,

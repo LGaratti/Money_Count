@@ -1,7 +1,8 @@
-import { Card, CardBody, Heading, Table, TableContainer, CardProps, Tag, Tbody, Td, Th, Thead, Tr, Wrap} from '@chakra-ui/react'
+import { Card, CardBody, Heading, Table, TableContainer, CardProps, Tbody, Td, Th, Thead, Tr, Wrap} from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
 import { Operation } from '../../interfaces/Operation';
+import LabelTag from '../atomes/LabelTag';
 
 interface OperationsCardProps extends CardProps {
   operations?: Operation[];
@@ -34,7 +35,7 @@ export const OperationsCard = ({operations, cardTitle, ...props}: OperationsCard
                   }</Td>
                   <Td>
                   <Wrap spacing={2}>
-                    {operation?.labels.map((label) => (<Tag key={label?.label_id} color={'#1a202c'} bg={label?.color_rgb+'.100'}>{label.name}</Tag>))}
+                    {operation?.labels.map((label) => (<LabelTag label={label} />))}
                   </Wrap>
                   </Td>
                 </Tr>
