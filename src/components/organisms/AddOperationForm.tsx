@@ -1,5 +1,5 @@
 import { Card, CardBody, Heading, CardHeader, FormControl, FormLabel, Input, Button, NumberInput, NumberInputField,
-  NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, FormErrorMessage, Textarea, Select, Grid, GridItem} from '@chakra-ui/react'
+  NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, FormErrorMessage, Textarea, Select, Grid, GridItem } from '@chakra-ui/react'
 import {  useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Label, Operation, TimeUnit } from '../../interfaces/Operation';
@@ -7,38 +7,37 @@ import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
 import LabelsComponent from '../molecules/LabelsComponent';
 import { InsertOpFromServer, fetchLabelsFromServer } from '../../utils/supabaseClient';
+import { FaEuroSign } from 'react-icons/fa';
 
 export const AddOperationCard = ({...props}) => {
   const {t} = useTranslation('ns1',{ i18n } );
   const [serverLabels, setServerLabels] = useState<Label[]>([]);
   const [labels, setLabels] = useState<Label[]>([]);
-  const [amount, setAmount] = useState('0');
+  const [amount, setAmount] = useState(0);
   const [periodic_unit, setPeriodic_unit] = useState<TimeUnit>();
+
   useEffect(() => {
-    const tempLabels = labels.filter(label => Number(amount) ? label.name !== 'gain' : label.name !== 'loss');
+    let tempLabels = [...labels];
+    tempLabels = tempLabels.filter(label => label.name !== 'gain' && label.name !== 'loss');
+  
     if (Number(amount) < 0) {
+      // Aggiungi 'loss' se non è già presente
       const lossLabel = serverLabels.find(label => label.name === 'loss');
-      if (lossLabel && !tempLabels.some(label => label.name === 'loss')) {
+      if (lossLabel) {
         tempLabels.push(lossLabel);
       }
-    }
-    else {
-      const gainLabel = serverLabels.find(label => label.name === 'gain');
-      if (gainLabel && !tempLabels.some(label => label.name === 'gain')) {
-        tempLabels.push(gainLabel);
-      } 
-    }
-    const sortedLabels: Label[] = tempLabels.sort((n1,n2) => {
-      if(n1.label_id > n2.label_id){
-        return 1;
+    } else {
+      // Aggiungi 'gain' se non è già presente e l'importo non è zero
+      if(Number(amount) > 0) {
+        const gainLabel = serverLabels.find(label => label.name === 'gain');
+        if (gainLabel) {
+          tempLabels.push(gainLabel);
+        }
       }
-      if(n1.label_id < n2.label_id){
-        return -1;
-      }
-      return 0;
-    });
+    }
+    const sortedLabels = tempLabels.sort((n1, n2) => Number(n1.label_id) - Number(n2.label_id));
     setLabels(sortedLabels);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount]);
 
   useEffect(() => { 
@@ -54,6 +53,8 @@ export const AddOperationCard = ({...props}) => {
   const onSubmit: SubmitHandler<Operation> = (data) => {
     data.labels = labels;
     data.first_date;
+    if(data?.periodic_unit === 'none')
+      data.periodic_unit = undefined;
     InsertOpFromServer(data);
   };
 
@@ -62,12 +63,10 @@ export const AddOperationCard = ({...props}) => {
     setPeriodic_unit(value);
   };
 
-  const handleAmountChange = (valueAsString: string) => {
-    setAmount(parse(valueAsString));
+  const handleAmountChange = (_: string, valueAsNumber: number) => {
+    setAmount(valueAsNumber);
   };
 
-  const format = (val: string) => val + ' $'
-  const parse = (val:string) => val.replace(/^\$/, '')
   return (
     <> 
       <Card {...props}>
@@ -89,13 +88,16 @@ export const AddOperationCard = ({...props}) => {
               <GridItem>
                 <FormControl isInvalid={!!errors.amount}>
                   <FormLabel htmlFor='amount'>{t('amount')}</FormLabel>
-                  <NumberInput size={'sm'} id='amount' precision={2} min={-9999.99} max={9999.99} onChange={handleAmountChange} value={format(amount)}>
-                    <NumberInputField pattern="(-)?[0-9]*(.[0-9]+)?" {...register('amount', {
-                      // valueAsNumber: true,
-                      required: t('required field'),
-                      validate: value => value !== 0 || t('amount equal to 0')
-                    })} />
-                  </NumberInput>
+                    <NumberInput size={'sm'} id='amount' precision={2} min={-9999.99} max={9999.99} onChange={handleAmountChange}>
+                      <NumberInputField pattern="(-)?[0-9]*(.[0-9]+)?" {...register('amount', {
+                        valueAsNumber: true,
+                        required: t('required field'),
+                        validate: value => value !== 0 || t('amount equal to 0')
+                      })} />
+                      <NumberInputStepper top={'calc(100% - 1.5rem )'}>
+                        <FaEuroSign/>
+                      </NumberInputStepper>
+                    </NumberInput>
                   <FormErrorMessage>
                     {errors.amount && errors.amount.message}
                   </FormErrorMessage>
