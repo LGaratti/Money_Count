@@ -12,12 +12,11 @@ export const AddOperationCard = ({...props}) => {
   const {t} = useTranslation('ns1',{ i18n } );
   const [serverLabels, setServerLabels] = useState<Label[]>([]);
   const [labels, setLabels] = useState<Label[]>([]);
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState('0');
   const [periodic_unit, setPeriodic_unit] = useState<TimeUnit>();
-
   useEffect(() => {
-    const tempLabels = labels.filter(label => amount < 0 ? label.name !== 'gain' : label.name !== 'loss');
-    if (amount < 0) {
+    const tempLabels = labels.filter(label => Number(amount) ? label.name !== 'gain' : label.name !== 'loss');
+    if (Number(amount) < 0) {
       const lossLabel = serverLabels.find(label => label.name === 'loss');
       if (lossLabel && !tempLabels.some(label => label.name === 'loss')) {
         tempLabels.push(lossLabel);
@@ -63,10 +62,12 @@ export const AddOperationCard = ({...props}) => {
     setPeriodic_unit(value);
   };
 
-  const handleAmountChange = (_: string, valueAsNumber: number) => {
-    setAmount(valueAsNumber);
+  const handleAmountChange = (valueAsString: string) => {
+    setAmount(parse(valueAsString));
   };
 
+  const format = (val: string) => val + ' $'
+  const parse = (val:string) => val.replace(/^\$/, '')
   return (
     <> 
       <Card {...props}>
@@ -88,15 +89,12 @@ export const AddOperationCard = ({...props}) => {
               <GridItem>
                 <FormControl isInvalid={!!errors.amount}>
                   <FormLabel htmlFor='amount'>{t('amount')}</FormLabel>
-                  <NumberInput size={'sm'} defaultValue={0} id='amount' precision={2} min={-9999.99} max={9999.99} onChange={handleAmountChange}>
-                    <NumberInputField  pattern="(-)?[0-9]*(.[0-9]+)?" {...register('amount', {
-                      valueAsNumber: true,
-                      required: t('required field')
+                  <NumberInput size={'sm'} id='amount' precision={2} min={-9999.99} max={9999.99} onChange={handleAmountChange} value={format(amount)}>
+                    <NumberInputField pattern="(-)?[0-9]*(.[0-9]+)?" {...register('amount', {
+                      // valueAsNumber: true,
+                      required: t('required field'),
+                      validate: value => value !== 0 || t('amount equal to 0')
                     })} />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
                   </NumberInput>
                   <FormErrorMessage>
                     {errors.amount && errors.amount.message}
