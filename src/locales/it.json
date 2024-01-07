@@ -6,6 +6,7 @@
   "description":"Descrizione",
   "date":"Data",
   "required field": "Campo richiesto",
+  "amount equal to 0": "Importo uguale a 0",
   "recurrence":"Ricorrenza",
   "none":"Nessuna",
   "dayly":"Giornaliera",

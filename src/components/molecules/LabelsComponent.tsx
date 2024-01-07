@@ -1,7 +1,8 @@
-import { Button, Grid, GridItem, Input, Menu, MenuButton, MenuItemOption, MenuList, MenuOptionGroup, Tag } from "@chakra-ui/react";
-import { Label } from "../../interfaces/Operation"; // Assicurati di importare le interfacce corrette
+import { Button, Grid, GridItem, Input, Menu, MenuButton, MenuItemOption, MenuList, MenuOptionGroup } from "@chakra-ui/react";
+import { Label } from "../../interfaces/Operation";
 import { ChangeEvent, Dispatch, KeyboardEvent, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import { CheckIcon } from "@chakra-ui/icons";
+import LabelTag from "../atoms/LabelTag";
 
 export interface LabelsComponentProps {
   serverLabels: Label[];
@@ -81,7 +82,7 @@ export const LabelsComponent = ({ serverLabels,//  setServerLabels, // TOADD
                   (label) =>
                   <MenuItemOption value={label?.name} key={label?.label_id} onClick={() => handleSelectLabel(label.label_id)} cursor="pointer"
                     icon={ labels.some((labelT) => labelT?.label_id === label?.label_id) ? (<CheckIcon/>) : null } >
-                    <Tag key={label?.label_id} color={"#1a202c"} bg={label?.color_rgb + ".100"}> {label?.name} </Tag>
+                    <LabelTag label={label} />
                   </MenuItemOption>    
                 )}
               </MenuOptionGroup>
@@ -89,7 +90,7 @@ export const LabelsComponent = ({ serverLabels,//  setServerLabels, // TOADD
           </Menu>
         </GridItem>
         <GridItem>
-          {labels.map((label) => ( <Tag key={label?.label_id} color={"#1a202c"} bg={label?.color_rgb + ".100"}> {label?.name} </Tag> ))}
+          {labels.map((label) => ( <LabelTag label={label} /> ))}
         </GridItem>
       </Grid>
     </>

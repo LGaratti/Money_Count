@@ -18,7 +18,7 @@ export interface LabelFromServer {
   label:Label
 }
 
-export async function getOpsFromServer(operationArrayReducer: Dispatch<OperationsAction>) {
+export async function fetchOpsLabelsFromServer(operationArrayReducer: Dispatch<OperationsAction>) {
   const { data , error } = await supabase
   .from('operations_labels')
   .select(`
@@ -50,12 +50,7 @@ export async function getOpsFromServer(operationArrayReducer: Dispatch<Operation
   console.log("Operazioni ricevute dal server:", tempOperations);
 }
 
-export async function setOpsFromServer(operations: Operation[]) {
-  // TODO
-  console.log("Operazioni inviate al server:", operations);
-}
-
-export async function getLabelsFromServer( setLabel: Dispatch<SetStateAction<Label[]>>) {
+export async function fetchLabelsFromServer( setLabel: Dispatch<SetStateAction<Label[]>>) {
   const { data , error } = await supabase
   .from('labels')
   .select(`
@@ -68,8 +63,7 @@ export async function getLabelsFromServer( setLabel: Dispatch<SetStateAction<Lab
   if(!data)
     throw new Error("empty response from server");
 
-    const tempLabels: Label[] = [];
-
+  const tempLabels: Label[] = [];
   data.forEach((labelFromServer) => {
     const foundLabel = tempLabels.find(label => label.label_id === labelFromServer.label_id);
     if (!foundLabel)  tempLabels.push(labelFromServer);
@@ -80,3 +74,25 @@ export async function getLabelsFromServer( setLabel: Dispatch<SetStateAction<Lab
   console.log("Labels ricevute dal server:", tempLabels);
 }
 
+export async function InsertOpFromServer(operation: Operation) {
+  if(!operation)
+    throw new Error("trying to send an empty operation")
+  const operationsData = [{
+    operation: {
+      name: operation.name,
+      description: operation.description,
+      amount: operation.amount,
+      first_date: operation.first_date,
+      last_date: operation.last_date,
+      periodic_count: operation.periodic_count,
+      periodic_unit: operation.periodic_unit,
+      payday: operation.payday,
+      labels: operation.labels // Assicurati che questo sia un array anche se c'è una sola label
+    }
+  }];
+  const { error } = await supabase
+  .rpc('insert_operation_with_labels', {operation_data: operationsData})
+  if (error)
+    throw error;
+  console.log("Operazione inviata al server: ", operationsData);
+}

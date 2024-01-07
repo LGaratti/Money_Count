@@ -6,6 +6,7 @@
   "description":"Description",
   "date":"Date",
   "required field": "Required Field",
+  "amount equal to 0": "Amount equal to 0",
   "recurrence":"Recurrence",
   "none":"Never",
   "dayly":"Dayly",
