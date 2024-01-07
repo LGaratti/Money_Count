@@ -2,7 +2,7 @@ import { Button, Grid, GridItem, Input, Menu, MenuButton, MenuItemOption, MenuLi
 import { Label } from "../../interfaces/Operation";
 import { ChangeEvent, Dispatch, KeyboardEvent, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import { CheckIcon } from "@chakra-ui/icons";
-import LabelTag from "../atomes/LabelTag";
+import LabelTag from "../atoms/LabelTag";
 
 export interface LabelsComponentProps {
   serverLabels: Label[];
