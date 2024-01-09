@@ -71,7 +71,7 @@ export const AddOperationCard = ({...props}) => {
     <> 
       <Card {...props}>
         <CardHeader>
-          <Heading>Add Operation</Heading>
+          <Heading>{t('add operation')}</Heading>
         </CardHeader>
         <CardBody>
           <form onSubmit={handleSubmit(onSubmit)}>
