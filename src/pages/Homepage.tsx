@@ -1,8 +1,8 @@
-import { Skeleton, SimpleGrid } from "@chakra-ui/react";
+import { Skeleton, Grid, GridItem, Card} from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
 import { fetchOpsLabelsFromServer } from "../utils/supabaseClient";
 import { operationArrayReducer } from "../utils/OperationArrayReducer";
-import OperationsCard from "../components/molecules/OperationsCard";
+import LastOperationsCard from "../components/molecules/LastOperationsCard";
 
 export default function Homepage() {
   const [operationArray, dispatch] = useReducer(operationArrayReducer, []);
@@ -12,22 +12,27 @@ export default function Homepage() {
     setIsLoading(false);
   },[]);
   return (
-    <SimpleGrid columns={3} spacing={4}>
+    <Grid templateRows='repeat(2, 1fr)' templateColumns='repeat(2, 1fr)'gap={4}>
+      <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}> 
-          <OperationsCard operations={operationArray} cardTitle="latest operations"/>
+          <LastOperationsCard operations={operationArray} cardTitle="latest operations"/>
         </Skeleton>
+      </GridItem>
+      <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <OperationsCard cardTitle="income operations" operations = { operationArray.filter( operation => {
-            if (operation?.amount >= 0) {
-              return operation
-            }})}/>
+        <Card>Template</Card>
         </Skeleton>
+      </GridItem>
+      <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <OperationsCard cardTitle="outcome operations" operations = { operationArray.filter( operation => {
-            if (operation?.amount < 0) {
-              return operation
-            }})}/>
+          <Card>Template</Card>
         </Skeleton>
-    </SimpleGrid>
+      </GridItem>
+      <GridItem>
+        <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
+          <Card>Template</Card>
+        </Skeleton>
+      </GridItem>
+    </Grid>
   );
 }
