@@ -36,8 +36,8 @@ export const LastOperationsCard = ({operations, cardTitle, ...props}: LastOperat
   const OperationsTable = ({ operations, title, titleColor }: { operations: Operation[], title: string, titleColor: string }) => (
       
       
-      <Box>
-        <Heading color={titleColor} size={'sm'}>{t(title)}</Heading>
+      <Box borderRadius={'base'} bgColor={titleColor+'.200'}>
+        <Heading size={'sm'}>{t(title)}</Heading>
         <TableContainer>
           <Table variant='simple' size={'sm'}>
             <Thead>
@@ -55,13 +55,15 @@ export const LastOperationsCard = ({operations, cardTitle, ...props}: LastOperat
                   <Td color={operation.amount >= 0 ? 'green' : 'red'}>
                     {(operation.amount >= 0 ? '+' : '') + operation.amount + ' €'}
                   </Td>
-                  <Td>
-                    <Wrap spacing={2}>
-                      {labelsWithoutGainAndLoss(operation.labels).map((label, index) => (
-                        <LabelTag key={index} label={label} />
-                      ))}
-                    </Wrap>
-                  </Td>
+                  {atLeastOneLabel(operations) &&
+                    <Td>
+                      <Wrap spacing={2}>
+                        {labelsWithoutGainAndLoss(operation.labels).map((label, index) => (
+                          <LabelTag key={index} label={label} />
+                        ))}
+                      </Wrap>
+                    </Td>
+                  }
                 </Tr>
               ))}
             </Tbody>
@@ -75,7 +77,7 @@ export const LastOperationsCard = ({operations, cardTitle, ...props}: LastOperat
     <Card {...props}>
       <CardBody>
       <Heading size={'md'}>{t(cardTitle)}</Heading>
-      <Grid templateRows='repeat(1, 1fr)' templateColumns='repeat(2, 1fr)' gap={1} border={'3px'}>
+      <Grid alignContent={'stretch'} templateRows='repeat(1, 1fr)' templateColumns='repeat(2, 1fr)' gap={1} border={'3px'}>
         <GridItem>
       <OperationsTable operations={gains} title='In ingresso' titleColor='green' />
 
