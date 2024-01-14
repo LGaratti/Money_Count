@@ -1,4 +1,4 @@
-import { Card, CardBody, Heading, Table, TableContainer, CardProps, Tbody, Td, Th, Thead, Tr, Wrap, Grid, Box, GridItem} from '@chakra-ui/react'
+import { Card, CardBody, Heading, Table, TableContainer, CardProps, Tbody, Td, Th, Thead, Tr, Wrap, Grid, Box, GridItem, useColorMode} from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
 import { Label, Operation } from '../../interfaces/Operation';
@@ -10,6 +10,7 @@ interface LastOperationsCardProps extends CardProps {
 }
 
 export const LastOperationsCard = ({operations, cardTitle, ...props}: LastOperationsCardProps) => {
+  const { colorMode } = useColorMode();
   const {t} = useTranslation('ns1',{ i18n } );
 
  // Filter operations into gains and losses
@@ -32,62 +33,56 @@ export const LastOperationsCard = ({operations, cardTitle, ...props}: LastOperat
     return atLeastOne;
   }
 
-  // Table component for operations
-  const OperationsTable = ({ operations, title, titleColor }: { operations: Operation[], title: string, titleColor: string }) => (
-      
-      
-      <Box borderRadius={'base'} bgColor={titleColor+'.200'}>
-        <Heading size={'sm'}>{t(title)}</Heading>
-        <TableContainer>
-          <Table variant='simple' size={'sm'}>
-            <Thead>
-              <Tr>
-                {/* TODO ADD Date */}
-                <Th>{t('name')}</Th>
-                <Th>{t('amount')}</Th>
-                {atLeastOneLabel(operations) && <Th>{t('labels')}</Th>}
-              </Tr>
-            </Thead>
-            <Tbody>
-              {operations.map((operation) => (
-                <Tr key={operation.operation_id}>
-                  <Td>{operation.name}</Td>
-                  <Td color={operation.amount >= 0 ? 'green' : 'red'}>
-                    {(operation.amount >= 0 ? '+' : '') + operation.amount + ' €'}
+  const OperationsTable = ({ operations, title, color}: { operations: Operation[], title: string, color: string}) => (
+    <Box>
+      <Heading size={'sm'} textAlign="center" m={2} color={ colorMode === 'light' && color+'.500' || color+'.600'}>{t(title)}</Heading>
+      <TableContainer>
+        <Table variant='simple' size={'sm'} >
+          <Thead>
+            <Tr>
+              {/* TODO ADD Date */}
+              <Th>{t('name')}</Th>
+              <Th>{t('amount')}</Th>
+              {atLeastOneLabel(operations) && <Th>{t('labels')}</Th>}
+            </Tr>
+          </Thead>
+          <Tbody>
+            {operations.map((operation) => (
+              <Tr key={operation.operation_id}>
+                <Td>{operation.name}</Td>
+                <Td >
+                  {operation.amount + ' €'}
+                </Td>
+                {atLeastOneLabel(operations) &&
+                  <Td>
+                    <Wrap spacing={2}>
+                      {labelsWithoutGainAndLoss(operation.labels).map((label, index) => (
+                        <LabelTag key={index} label={label} />
+                      ))}
+                    </Wrap>
                   </Td>
-                  {atLeastOneLabel(operations) &&
-                    <Td>
-                      <Wrap spacing={2}>
-                        {labelsWithoutGainAndLoss(operation.labels).map((label, index) => (
-                          <LabelTag key={index} label={label} />
-                        ))}
-                      </Wrap>
-                    </Td>
-                  }
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
-      </Box>
+                }
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 
   return (
     <>
     <Card {...props}>
       <CardBody>
-      <Heading size={'md'}>{t(cardTitle)}</Heading>
-      <Grid alignContent={'stretch'} templateRows='repeat(1, 1fr)' templateColumns='repeat(2, 1fr)' gap={1} border={'3px'}>
-        <GridItem>
-      <OperationsTable operations={gains} title='In ingresso' titleColor='green' />
-
-        </GridItem>
-        <GridItem>
-      <OperationsTable operations={losses} title='In uscita' titleColor='red' />
-          
-        </GridItem>
-      </Grid>
-        {/* <Heading size={'sm'} mb={4}>{t(title)}</Heading> */}
+      <Heading size={'md'} m={1}>{t(cardTitle)}</Heading>
+        <Grid templateRows='repeat(1, 1fr)' templateColumns='repeat(2, 1fr)' gap={1}>
+          <GridItem > 
+            <OperationsTable operations={gains} title='In ingresso' color='green'/>
+          </GridItem>
+          <GridItem>
+            <OperationsTable operations={losses} title='In uscita' color='red'/>
+          </GridItem>
+        </Grid>
       </CardBody>
     </Card>
     </>
