@@ -6,10 +6,9 @@ import LabelTag from '../atoms/LabelTag';
 
 interface LastOperationsCardProps extends CardProps {
   operations?: Operation[];
-  cardTitle: string;
 }
 
-export const LastOperationsCard = ({operations, cardTitle, ...props}: LastOperationsCardProps) => {
+export const LastOperationsCard = ({operations, ...props}: LastOperationsCardProps) => {
   const { colorMode } = useColorMode();
   const {t} = useTranslation('ns1',{ i18n } );
 
@@ -74,7 +73,7 @@ export const LastOperationsCard = ({operations, cardTitle, ...props}: LastOperat
     <>
     <Card {...props}>
       <CardBody>
-      <Heading size={'md'} m={1}>{t(cardTitle)}</Heading>
+      <Heading size={'md'} m={1}>{t('latest operations')}</Heading>
         <Grid templateRows='repeat(1, 1fr)' templateColumns='repeat(2, 1fr)' gap={1}>
           <GridItem > 
             <OperationsTable operations={gains} title='In ingresso' color='green'/>

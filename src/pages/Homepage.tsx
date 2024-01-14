@@ -3,6 +3,7 @@ import { useEffect, useReducer, useState } from "react";
 import { fetchOpsLabelsFromServer } from "../utils/supabaseClient";
 import { operationArrayReducer } from "../utils/OperationArrayReducer";
 import LastOperationsCard from "../components/molecules/LastOperationsCard";
+import PortfolioSummCard from "../components/molecules/PortfolioSummCard";
 
 export default function Homepage() {
   const [operationArray, dispatch] = useReducer(operationArrayReducer, []);
@@ -15,12 +16,12 @@ export default function Homepage() {
     <Grid templateRows='repeat(2, 1fr)' templateColumns='repeat(2, 1fr)'gap={4}>
       <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}> 
-          <LastOperationsCard operations={operationArray} cardTitle="latest operations"/>
+          <LastOperationsCard operations={operationArray}/>
         </Skeleton>
       </GridItem>
       <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-        <Card>Template</Card>
+          <PortfolioSummCard operations={operationArray}/>
         </Skeleton>
       </GridItem>
       <GridItem>

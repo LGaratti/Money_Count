@@ -5,18 +5,25 @@
   "labels":"Etichette",
   "description":"Descrizione",
   "date":"Data",
+
   "required field": "Campo richiesto",
   "amount equal to 0": "Importo uguale a 0",
   "recurrence":"Ricorrenza",
+
   "none":"Nessuna",
   "dayly":"Giornaliera",
   "weekly":"Settimanale",
   "monthly":"Mensile",
   "yearly":"Aunnuale",
+
   "add operation":"Aggiungi operazione",
+
   "recurrence count":"Numero di ricorrenze",
   "infinite":"Infinite",
+
   "latest operations":"Ultime operazioni",
+  "portfolio summary":"Riepilogo portafoglio",
+
   "income operations":"Operazioni in ingresso",
   "outcome operations":"Operazioni in uscita"
 }

@@ -5,18 +5,26 @@
   "labels":"Labels",
   "description":"Description",
   "date":"Date",
+
   "required field": "Required Field",
   "amount equal to 0": "Amount equal to 0",
   "recurrence":"Recurrence",
+
   "none":"Never",
   "dayly":"Dayly",
   "weekly":"Weekly",
   "monthly":"Monhtly",
   "yearly":"Yearly",
+
   "add operation":"Add operation",
+
   "recurrence count":"Recurrence count",
   "infinite":"Infinite",
+
   "latest operations":"Latest operations",
+  "portfolio summary":" Portfolio summary",
+
   "income operations":"Income operations",
   "outcome operations":"Outcome operations"
+  
 }
