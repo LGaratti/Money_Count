@@ -42,13 +42,12 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
     ]  
     setOpsForInOutPie(tempOperationToPie);
     
-    // labels?.forEach(label => {
-    //   const tempOperationsFilteredForLabel = operations?.se( operation => ( ))
-    //     
-    // })
-    // const tempLabelsList : OperationsToPie[] = [
-    //   
-    // ]
+    // TODO da scommentare
+    // const operationsCountForLabels = labels?.map(label => {
+    //   const count = operations?.filter(operation => operation.labels.includes(label)).length || 0;
+    //   return { name: label, value: count };
+    // });
+    // setOpsForLabelsPie(operationsCountForLabels);
 
     // console.log(tempOperationToPie);
   },[operations, labels]);
