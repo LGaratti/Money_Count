@@ -22,8 +22,13 @@
   "infinite":"Infinite",
 
   "latest operations":"Ultime operazioni",
-  "portfolio summary":"Riepilogo portafoglio",
-
   "income operations":"Operazioni in ingresso",
-  "outcome operations":"Operazioni in uscita"
+  "outcome operations":"Operazioni in uscita",
+  
+  "portfolio summary":"Riepilogo portafoglio",
+  "gain/loss summary":"Riepilogo ingressi/uscite",
+  "labels summary":"Riepilogo etichette",
+
+  "gain": "Ingressi",
+  "loss": "Uscite"
 }

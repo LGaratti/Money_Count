@@ -22,9 +22,13 @@
   "infinite":"Infinite",
 
   "latest operations":"Latest operations",
-  "portfolio summary":" Portfolio summary",
-
   "income operations":"Income operations",
-  "outcome operations":"Outcome operations"
+  "outcome operations":"Outcome operations",
   
+  "portfolio summary":" Portfolio summary",
+  "gain/loss summary":"Gain/Loss summary",
+  "labels summary":"Labels summary",
+
+  "gain": "Gain",
+  "loss": "Loss"
 }
