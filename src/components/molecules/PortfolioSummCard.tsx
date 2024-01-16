@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, CardProps, Grid, GridItem, Heading } from "@chakra-ui/react";
+import { Badge, Box, Card, CardBody, CardProps, Grid, GridItem, Heading } from "@chakra-ui/react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
@@ -11,7 +11,7 @@ export interface PortfolioSummCardProps extends CardProps {
   labels?: Label[],
 }
 
-interface OperationsToDataPie {
+interface DataPie {
   name?:string,
   value?:number,
   label?:Label
@@ -20,8 +20,8 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
   // const { colorMode } = useColorMode();
   const {t} = useTranslation('ns1',{ i18n } );
 
-  const [dataInOutPie, setDataInOutPie] = useState<OperationsToDataPie[]>([]);
-  const [dataForLabelsPie, setDataForLabelsPie] = useState<OperationsToDataPie[]>([]);
+  const [dataInOutPie, setDataInOutPie] = useState<DataPie[]>([]);
+  const [dataForLabelsPie, setDataForLabelsPie] = useState<DataPie[]>([]);
 
   useEffect(() => {
     let sumGainOps = 0;
@@ -34,7 +34,7 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
         sumLossOps = sumLossOps + (-1 * operation.amount);
       }
     })
-    const tempOperationToPie: OperationsToDataPie[] = [
+    const tempOperationToPie: DataPie[] = [
       {name: 'gain', value:sumGainOps},
       {name: 'loss', value:sumLossOps},
     ]  
@@ -42,7 +42,7 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
     
     let tempLabels = labels || [];
     tempLabels = tempLabels.filter(label => label.name !== "gain" && label.name !== "loss");
-    const tempOperationsLabelsPie: OperationsToDataPie[] = tempLabels?.map(label => {
+    const tempOperationsLabelsPie: DataPie[] = tempLabels?.map(label => {
       const count = operations?.filter(operation => operation.labels.some(opLabel => opLabel.label_id === label.label_id)).length || 0;
       return { name: label.name, value: count, label: label };
     }) || [];
@@ -55,6 +55,7 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
       <Heading size={'md'} m={1}>{t('portfolio summary')}</Heading>
       <Grid templateRows='repeat(1, 1fr)' templateColumns='repeat(2, 1fr)' gap={1}>
         <GridItem>
+          <Heading size={'sm'} textAlign="center" m={2} >{t('gain/loss summary')}</Heading>
           <Box height={200}>
             <ResponsiveContainer>
             <PieChart>
@@ -66,8 +67,8 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
               paddingAngle={5}
               dataKey="value"
             >
-              {dataInOutPie.map((op, index) => (
-                op.name === 'gain' &&
+              {dataInOutPie.map((data, index) => (
+                data.name === 'gain' &&
                 <Cell key={`cell-${index}`} fill={'green'} />
                 ||
                 <Cell key={`cell-${index}`} fill={'red'} />
@@ -76,8 +77,15 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
             </PieChart>
             </ResponsiveContainer>
           </Box>
+          <Box display="flex" justifyContent="space-evenly">
+            {labels?.map( label => {
+              if (label.name === "gain" || label.name === 'loss')
+                return <><Badge colorScheme={label.color_rgb}>{t(label.name)}</Badge></>
+            })}
+          </Box>
         </GridItem>
         <GridItem>
+          <Heading size={'sm'} textAlign="center" m={2} >{t('labels summary')}</Heading>
           <Box height={200}>
             <ResponsiveContainer>
             <PieChart>
@@ -95,6 +103,12 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
             </Pie>
             </PieChart>
             </ResponsiveContainer>
+          </Box>
+          <Box display="flex" justifyContent="space-evenly">
+            {labels?.map( label => {
+              if (label.name !== "gain" && label.name !== 'loss')
+                return <><Badge colorScheme={label.color_rgb}>{label.name}</Badge></>
+            })}
           </Box>
         </GridItem>
       </Grid>
