@@ -1,9 +1,10 @@
-import { Badge, Box, Card, CardBody, CardProps, Grid, GridItem, Heading } from "@chakra-ui/react";
+import { Box, Card, CardBody, CardProps, Grid, GridItem, Heading } from "@chakra-ui/react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
 import { Label, Operation } from "../../interfaces/Operation";
 import { useEffect, useState } from "react";
+import LabelTag from "../atoms/LabelTag";
 
 
 export interface PortfolioSummCardProps extends CardProps {
@@ -80,7 +81,7 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
           <Box display="flex" justifyContent="space-evenly">
             {labels?.map( label => {
               if (label.name === "gain" || label.name === 'loss')
-                return <><Badge colorScheme={label.color_rgb}>{t(label.name)}</Badge></>
+                return <><LabelTag label={label}/></>
             })}
           </Box>
         </GridItem>
@@ -107,7 +108,7 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
           <Box display="flex" justifyContent="space-evenly">
             {labels?.map( label => {
               if (label.name !== "gain" && label.name !== 'loss')
-                return <><Badge colorScheme={label.color_rgb}>{label.name}</Badge></>
+                return <><LabelTag label={label}/></>
             })}
           </Box>
         </GridItem>
