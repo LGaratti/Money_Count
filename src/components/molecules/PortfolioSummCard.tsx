@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, CardProps, Heading } from "@chakra-ui/react";
+import { Box, Card, CardBody, CardProps, Grid, GridItem, Heading } from "@chakra-ui/react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
@@ -11,122 +11,93 @@ export interface PortfolioSummCardProps extends CardProps {
   labels?: Label[],
 }
 
-interface OperationsToPie {
+interface OperationsToDataPie {
   name?:string,
-  value?:number
+  value?:number,
+  label?:Label
 }
 export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSummCardProps) => {
   // const { colorMode } = useColorMode();
   const {t} = useTranslation('ns1',{ i18n } );
 
-  const [opsForInOutPie, setOpsForInOutPie] = useState<OperationsToPie[]>([]);
-  // const [opsForLabelsPie, setOpsForLabelsPie] = useState<OperationsToPie[]>([]);
+  const [dataInOutPie, setDataInOutPie] = useState<OperationsToDataPie[]>([]);
+  const [dataForLabelsPie, setDataForLabelsPie] = useState<OperationsToDataPie[]>([]);
 
   useEffect(() => {
     let sumGainOps = 0;
     let sumLossOps = 0;
-
-  
     operations?.forEach( operation => {
       if (operation.amount >= 0) {
         sumGainOps += operation.amount;
       }
       else {
-        sumLossOps += operation.amount;
+        sumLossOps = sumLossOps + (-1 * operation.amount);
       }
     })
-    const tempOperationToPie: OperationsToPie[] = [
-      // TOMODIFY Bisogna fare la media
+    const tempOperationToPie: OperationsToDataPie[] = [
       {name: 'gain', value:sumGainOps},
       {name: 'loss', value:sumLossOps},
     ]  
-    setOpsForInOutPie(tempOperationToPie);
+    setDataInOutPie(tempOperationToPie);
     
-    // TODO da scommentare
-    // const operationsCountForLabels = labels?.map(label => {
-    //   const count = operations?.filter(operation => operation.labels.includes(label)).length || 0;
-    //   return { name: label, value: count };
-    // });
-    // setOpsForLabelsPie(operationsCountForLabels);
-
-    // console.log(tempOperationToPie);
+    let tempLabels = labels || [];
+    tempLabels = tempLabels.filter(label => label.name !== "gain" && label.name !== "loss");
+    const tempOperationsLabelsPie: OperationsToDataPie[] = tempLabels?.map(label => {
+      const count = operations?.filter(operation => operation.labels.some(opLabel => opLabel.label_id === label.label_id)).length || 0;
+      return { name: label.name, value: count, label: label };
+    }) || [];
+    setDataForLabelsPie(tempOperationsLabelsPie);
   },[operations, labels]);
-
-  useEffect(() => {
-    console.log(opsForInOutPie);
-  },[opsForInOutPie]);
-
-  
   
   return (
     <Card {...props}>
-
       <CardBody>
       <Heading size={'md'} m={1}>{t('portfolio summary')}</Heading>
-      {/* <Grid templateRows='repeat(1, 1fr)' templateColumns='repeat(2, 1fr)' gap={1}>
-          <GridItem>
-            <Box height={200}>
-              <ResponsiveContainer>
-              <PieChart>
-              <Pie
-                data={opsForInOutPie}
-                innerRadius={60}
-                outerRadius={80}
-                fill={'green'}
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {opsForInOutPie.map((op, index) => (
-                  op.name === 'gain' &&
-                  <Cell key={`cell-${index}`} fill={'green'} />
-                  ||
-                  <Cell key={`cell-${index}`} fill={'red'} />
-                ))}
-              </Pie>
-              </PieChart>
-              </ResponsiveContainer>
-            </Box> 
-          </GridItem>
-          <GridItem>
-            
-          </GridItem>
-        </Grid> */}
-            <Box height={200}>
-              <ResponsiveContainer>
-              <PieChart>
-              <Pie
-                data={opsForInOutPie}
-                innerRadius={60}
-                outerRadius={80}
-                fill={'green'}
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {opsForInOutPie.map((op, index) => (
-                  op.name === 'gain' &&
-                  <Cell key={`cell-${index}`} fill={'green'} />
-                  ||
-                  <Cell key={`cell-${index}`} fill={'red'} />
-                ))}
-              </Pie>
-              <Pie
-                data={opsForInOutPie}
-                innerRadius={60}
-                outerRadius={80}
-                fill={'green'}
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {opsForInOutPie.map((op, index) => (
-                  op.name === 'gain' &&
-                  <Cell key={`cell-${index}`} fill={'green'} />
-                  ||
-                  <Cell key={`cell-${index}`} fill={'red'} />
-                ))}
-              </Pie>
-              </PieChart>
-              </ResponsiveContainer>
-            </Box>
+      <Grid templateRows='repeat(1, 1fr)' templateColumns='repeat(2, 1fr)' gap={1}>
+        <GridItem>
+          <Box height={200}>
+            <ResponsiveContainer>
+            <PieChart>
+            <Pie
+              data={dataInOutPie}
+              innerRadius={60}
+              outerRadius={80}
+              fill="#8884d8"
+              paddingAngle={5}
+              dataKey="value"
+            >
+              {dataInOutPie.map((op, index) => (
+                op.name === 'gain' &&
+                <Cell key={`cell-${index}`} fill={'green'} />
+                ||
+                <Cell key={`cell-${index}`} fill={'red'} />
+              ))}
+            </Pie>
+            </PieChart>
+            </ResponsiveContainer>
+          </Box>
+        </GridItem>
+        <GridItem>
+          <Box height={200}>
+            <ResponsiveContainer>
+            <PieChart>
+            <Pie
+              data={dataForLabelsPie}
+              innerRadius={60}
+              outerRadius={80}
+              fill="#8884d8"
+              paddingAngle={5}
+              dataKey="value"
+            >
+              {dataForLabelsPie.map((labelName, index) => (
+                <Cell key={`cell-${index}`} fill={labelName.label?.color_rgb} /> 
+              ))}
+            </Pie>
+            </PieChart>
+            </ResponsiveContainer>
+          </Box>
+        </GridItem>
+      </Grid>
       </CardBody>
     </Card>
   );
