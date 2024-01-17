@@ -29,12 +29,12 @@ export default function Homepage() {
       </GridItem>
       <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <Card>Template</Card>
+          <Card>balance trend</Card>
         </Skeleton>
       </GridItem>
       <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <Card>Template</Card>
+          <Card>next payments</Card>
         </Skeleton>
       </GridItem>
     </Grid>
