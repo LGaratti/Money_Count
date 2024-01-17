@@ -1,28 +1,48 @@
 import { Box, Card, CardBody, CardProps, Grid, GridItem, Heading } from "@chakra-ui/react";
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Label  } from 'recharts';
 import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
-import { Label, Operation } from "../../interfaces/Operation";
+import { Label as LabelOp, Operation } from "../../interfaces/Operation";
 import { useEffect, useState } from "react";
 import LabelTag from "../atoms/LabelTag";
+import { useTheme } from "@chakra-ui/react";
 
-
-export interface PortfolioSummCardProps extends CardProps {
+interface PortfolioSummCardProps extends CardProps {
   operations?: Operation[],
-  labels?: Label[],
+  labels?: LabelOp[],
 }
 
 interface DataPie {
   name?:string,
   value?:number,
-  label?:Label
+  label?:LabelOp
 }
+
+// interface CustomLabelProps {
+//   viewBox: {
+//     cx: number;
+//     cy: number;
+//   };
+//   value: number; // o string, a seconda di cosa intendi visualizzare
+// }
+
+// const CustomLabel: React.FC<CustomLabelProps> = ({ viewBox, value }) => {
+//   const { cx, cy } = viewBox;
+//   return (
+//     <text x={cx} y={cy} textAnchor="middle" dominantBaseline="central" fontWeight="bold">
+//       {value}
+//     </text>
+//   );
+// };
+
 export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSummCardProps) => {
   // const { colorMode } = useColorMode();
   const {t} = useTranslation('ns1',{ i18n } );
+  const theme = useTheme();
 
   const [dataInOutPie, setDataInOutPie] = useState<DataPie[]>([]);
   const [dataForLabelsPie, setDataForLabelsPie] = useState<DataPie[]>([]);
+  const [balance,setBalance] = useState<number>(0);
 
   useEffect(() => {
     let sumGainOps = 0;
@@ -40,6 +60,7 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
       {name: 'loss', value:sumLossOps},
     ]  
     setDataInOutPie(tempOperationToPie);
+    setBalance(sumGainOps - sumLossOps);
     
     let tempLabels = labels || [];
     tempLabels = tempLabels.filter(label => label.name !== "gain" && label.name !== "loss");
@@ -50,6 +71,10 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
     setDataForLabelsPie(tempOperationsLabelsPie);
   },[operations, labels]);
   
+  // useEffect(() => {
+  //   console.log('pie 1:',dataInOutPie,'pie 2:',dataForLabelsPie);
+  // }),[dataInOutPie,dataForLabelsPie]
+
   return (
     <Card {...props}>
       <CardBody>
@@ -67,14 +92,19 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
               fill="#8884d8"
               paddingAngle={5}
               dataKey="value"
+              isAnimationActive={true}
+              // label
+              // label={({ viewBox }) => <CustomLabel viewBox={viewBox} value={balance} />}
             >
               {dataInOutPie.map((data, index) => (
                 data.name === 'gain' &&
-                <Cell key={`cell-${index}`} fill={'green'} />
+                <Cell key={`cell-${index}`} fill={theme.colors.green[300]} />
                 ||
-                <Cell key={`cell-${index}`} fill={'red'} />
+                <Cell key={`cell-${index}`} fill={theme.colors.red[400]} />
               ))}
             </Pie>
+            <Tooltip />
+            <Label value={balance} width={30} position="center" />
             </PieChart>
             </ResponsiveContainer>
           </Box>
@@ -97,11 +127,14 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
               fill="#8884d8"
               paddingAngle={5}
               dataKey="value"
+              isAnimationActive={true}
+              label
             >
               {dataForLabelsPie.map((labelName, index) => (
-                <Cell key={`cell-${index}`} fill={labelName.label?.color_rgb} /> 
+                <Cell key={`cell-${index}`} fill={theme.colors[labelName.label?.color_rgb || "grey"][500]} /> 
               ))}
             </Pie>
+            <Tooltip />
             </PieChart>
             </ResponsiveContainer>
           </Box>
