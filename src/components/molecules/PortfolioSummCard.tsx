@@ -106,7 +106,7 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
             </Pie>
             <Tooltip />
             {/* <LabelList content={<CustomLabel value={balance} viewBox={{cx: 0,cy: 0}} />} /> // IS NOT WORKING*/}
-            <Label content={<CustomLabel value={balance} viewBox={{cx: 0,cy: 0}} />} /> // IS NOT WORKING
+            <Label content={<CustomLabel value={balance} viewBox={{cx: 0,cy: 0}} />} /> {/* // IS NOT WORKING */}
             {/* <Label value={balance} width={30} position="center" >PIPPO</Label> // IS NOT WORKING */}
             {/* <CustomLabel value={balance} viewBox={{cx: 0,cy: 0}} /> // IS NOT WORKING */}
             </PieChart>
