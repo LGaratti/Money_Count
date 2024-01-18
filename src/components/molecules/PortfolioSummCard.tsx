@@ -18,22 +18,23 @@ interface DataPie {
   label?:LabelOp
 }
 
-// interface CustomLabelProps {
-//   viewBox: {
-//     cx: number;
-//     cy: number;
-//   };
-//   value: number; // o string, a seconda di cosa intendi visualizzare
-// }
+interface CustomLabelProps {
+  viewBox: {
+    cx: number;
+    cy: number;
+  };
+  value: number; // o string, a seconda di cosa intendi visualizzare
+}
 
-// const CustomLabel: React.FC<CustomLabelProps> = ({ viewBox, value }) => {
-//   const { cx, cy } = viewBox;
-//   return (
-//     <text x={cx} y={cy} textAnchor="middle" dominantBaseline="central" fontWeight="bold">
-//       {value}
-//     </text>
-//   );
-// };
+const CustomLabel: React.FC<CustomLabelProps> = ({ viewBox, value }) => {
+  const { cx, cy } = viewBox;
+  return (
+    <text x={cx} y={cy} textAnchor="middle" dominantBaseline="central" fontWeight="bold">
+      {value}
+    </text>
+  );
+};
+
 
 export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSummCardProps) => {
   // const { colorMode } = useColorMode();
@@ -93,8 +94,8 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
               paddingAngle={5}
               dataKey="value"
               isAnimationActive={true}
-              // label
-              // label={({ viewBox }) => <CustomLabel viewBox={viewBox} value={balance} />}
+              label 
+              // label={( viewBox ) => <CustomLabel viewBox={viewBox} value={balance} />} IS WORKING
             >
               {dataInOutPie.map((data, index) => (
                 data.name === 'gain' &&
@@ -104,7 +105,10 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
               ))}
             </Pie>
             <Tooltip />
-            <Label value={balance} width={30} position="center" />
+            {/* <LabelList content={<CustomLabel value={balance} viewBox={{cx: 0,cy: 0}} />} /> // IS NOT WORKING*/}
+            <Label content={<CustomLabel value={balance} viewBox={{cx: 0,cy: 0}} />} /> // IS NOT WORKING
+            {/* <Label value={balance} width={30} position="center" >PIPPO</Label> // IS NOT WORKING */}
+            {/* <CustomLabel value={balance} viewBox={{cx: 0,cy: 0}} /> // IS NOT WORKING */}
             </PieChart>
             </ResponsiveContainer>
           </Box>
