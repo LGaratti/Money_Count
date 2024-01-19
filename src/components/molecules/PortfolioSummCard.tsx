@@ -58,10 +58,10 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
     let sumLossOps = 0;
     operations?.forEach( operation => {
       if (operation.amount >= 0) {
-        sumGainOps += operation.amount;
+        sumGainOps += Math.abs(operation.amount);
       }
       else {
-        sumLossOps = sumLossOps + (-1 * operation.amount);
+        sumLossOps += Math.abs(operation.amount);
       }
     })
     const tempOperationToPie: DataPie[] = [
@@ -76,7 +76,7 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
     const tempOperationsLabelsPie: DataPie[] = tempLabels?.map(label => {
       const tempOperations: Operation[] = operations?.filter(operation => operation.labels.some(opLabel => opLabel.label_id === label.label_id)) || [];
       let sum = 0; 
-      tempOperations.forEach(operation => { sum = operation.amount }); // TODO Da modificare con amount negativi
+      tempOperations.forEach(operation => { sum = sum + Math.abs(operation.amount) });
       return { name: label.name, value: sum, label: label };
     }) || [];
     setDataForLabelsPie(tempOperationsLabelsPie);
@@ -117,7 +117,7 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
           <Box display="flex" justifyContent="space-evenly">
             {labels?.map( label => {
               if (label.name === "gain" || label.name === 'loss')
-                return <><LabelTag label={label}/></>
+                return <><LabelTag key={label.label_id} label={label}/></>
             })}
           </Box>
         </GridItem>
@@ -147,7 +147,7 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
           <Box display="flex" justifyContent="space-evenly">
             {labels?.map( label => {
               if (label.name !== "gain" && label.name !== 'loss')
-                return <><LabelTag label={label}/></>
+                return <><LabelTag key={label.label_id} label={label}/></>
             })}
           </Box>
         </GridItem>
