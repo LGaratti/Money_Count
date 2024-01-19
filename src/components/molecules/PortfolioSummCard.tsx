@@ -27,17 +27,22 @@ interface CustomLabelProps {
 }
 
 const CustomLabel: React.FC<CustomLabelProps> = ({ value }) => {
+  const theme = useTheme();
   const isPositive = () => {
-    if (value > 0) return true;
+    if (value >= 0) return true;
     else return false;
   }
   return (
-    <text x='50%' y='50%' textAnchor="middle" dominantBaseline="central" fontWeight="bold">
-      {isPositive() && '+ '+value || '- '+value}
+    <text x='50%' y='50%' textAnchor="middle" dominantBaseline="central" fontWeight="bold" 
+    fill= {
+      isPositive() && 
+      theme.colors.green[500] || 
+      theme.colors.red[500]
+    }>
+      {isPositive() && '+ ' + value + '€' || value + '€'}
     </text>
   );
 };
-
 
 export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSummCardProps) => {
   // const { colorMode } = useColorMode();
@@ -69,15 +74,13 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
     let tempLabels = labels || [];
     tempLabels = tempLabels.filter(label => label.name !== "gain" && label.name !== "loss");
     const tempOperationsLabelsPie: DataPie[] = tempLabels?.map(label => {
-      const count = operations?.filter(operation => operation.labels.some(opLabel => opLabel.label_id === label.label_id)).length || 0;
-      return { name: label.name, value: count, label: label };
+      const tempOperations: Operation[] = operations?.filter(operation => operation.labels.some(opLabel => opLabel.label_id === label.label_id)) || [];
+      let sum = 0; 
+      tempOperations.forEach(operation => { sum = operation.amount }); // TODO Da modificare con amount negativi
+      return { name: label.name, value: sum, label: label };
     }) || [];
     setDataForLabelsPie(tempOperationsLabelsPie);
   },[operations, labels]);
-  
-  // useEffect(() => {
-  //   console.log('pie 1:',dataInOutPie,'pie 2:',dataForLabelsPie);
-  // }),[dataInOutPie,dataForLabelsPie]
 
   return (
     <Card {...props}>
