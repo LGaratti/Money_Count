@@ -18,6 +18,11 @@ export default function Homepage() {
     fetchLabelsFromServer(setLabelsArray);
     setIsLoading(false);
   },[]);
+
+  useEffect(() => {
+    console.log(operationArray.length)
+    fetchOpsIdToDateMap('', Date(), -1, true, [], operationArray, setOperationIdToDateMap); // TODO sarà da modificare
+  },[operationArray])
   return (
     <Grid templateRows='repeat(2, 1fr)' templateColumns='repeat(2, 1fr)'gap={4}>
       <GridItem>
