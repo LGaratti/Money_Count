@@ -28,7 +28,6 @@ export const LastOperationsCard = ({operations, ...props}: LastOperationsCardPro
       if( labels.length > 0 )
         atLeastOne = true;
     })
-    console.log(atLeastOne);
     return atLeastOne;
   }
 
