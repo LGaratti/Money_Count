@@ -4,11 +4,14 @@ import { fetchLabelsFromServer, fetchOpsLabelsFromServer } from "../utils/supaba
 import { operationArrayReducer } from "../utils/OperationArrayReducer";
 import LastOperationsCard from "../components/molecules/LastOperationsCard";
 import PortfolioSummCard from "../components/molecules/PortfolioSummCard";
-import { Label } from "../interfaces/Operation";
+import { Label, OperationDates } from "../interfaces/Operation";
+import BalanceTrendCard from "../components/molecules/BalanceTrendCard";
+import { fetchOpsIdToDateMap } from "../utils/OperationUtils";
 
 export default function Homepage() {
   const [operationArray, dispatch] = useReducer(operationArrayReducer, []);
   const [labelsArray, setLabelsArray] = useState<Label[]>([]);
+  const [operationIdToDateMap, setOperationIdToDateMap] = useState<OperationDates[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => { 
     fetchOpsLabelsFromServer(dispatch);
@@ -29,7 +32,7 @@ export default function Homepage() {
       </GridItem>
       <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <Card>balance trend</Card>
+          <BalanceTrendCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap} />
         </Skeleton>
       </GridItem>
       <GridItem>
