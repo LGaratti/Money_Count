@@ -112,25 +112,35 @@ export function fetchOpsIdToDateMap(startDate:string, endDate:string, numberOfOp
           if (operation?.last_date) {
             weekCount = Math.min(weekCount, Math.round((operation.last_date.getTime() - operation.first_date.getTime()) / (1000 * 60 * 60 * 24 * 7)));
           }
-        
+          
           // Calcola e aggiungi le date
           const count: number = (operation.periodic_count || 1) * 7; // Moltiplica per 7 per convertire in giorni
           for (let i = 0; i <= weekCount; i += count) {
-            // eslint-disable-next-line prefer-const
-            let newDate = new Date(operation.first_date);
-            newDate.setDate(newDate.getDate() + i);
-            // Se payday è definito, regola newDate per cadere su uno dei payday validi
-            if (operation.payday && operation.payday.length > 0) { 
-              while (!operation.payday.includes(dayOfWeekMap[newDate.getDay().toString()])) { //DA MODIFICARE NELLA SETTIMANA DI PAGA CONTABILIZZO TUTTI I GIORNI PRESENTI NELLA SETTIMANA CONTINUARE DA QUI <----------------------
-                newDate.setDate(newDate.getDate() + 1);  // Vai al prossimo giorno
+            let weekStartDate = new Date(operation.first_date);
+            weekStartDate.setDate(weekStartDate.getDate() + i);
+            
+            // Se payday è definito, aggiungi una data per ogni payday valido in quella settimana
+            if (operation.payday && operation.payday.length > 0) {
+              operation.payday.forEach(payday => {
+                let paydayDate = new Date(weekStartDate);
+                // Trova il giorno della settimana per payday
+                while (dayOfWeekMap[paydayDate.getDay().toString()] !== payday) {
+                  paydayDate.setDate(paydayDate.getDate() + 1);
+                }
+                // Aggiungi la data calcolata (che cade su un payday valido) a tempOperationsDates
+                if (paydayDate.getTime() >= startDateDate.getTime() && paydayDate.getTime() <= endDateDate.getTime()) {
+                  tempOperationsDates.push({ operation_id: operation.operation_id, date: [paydayDate] });
+                }
+              });
+            } else {
+              // Se non ci sono payday definiti, aggiungi solo la data di inizio settimana
+              if (weekStartDate >= startDateDate && weekStartDate <= endDateDate) {
+                tempOperationsDates.push({ operation_id: operation.operation_id, date: [weekStartDate] });
               }
             }
-            // Aggiungi la data calcolata (che cade su un payday valido se definito) a tempOperationsDates
-            if (newDate >= startDateDate && newDate <= endDateDate)
-              tempOperationsDates.push({ operation_id: operation.operation_id, date: [newDate] });
           }
           break;
-        }
+        }        
         
 
         case TimeUnit.MONTH :
