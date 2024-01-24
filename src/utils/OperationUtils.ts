@@ -50,6 +50,10 @@ export function fromJsonToLabels(jsonObj: unknown): Label[] {
   });
 }
 
+function isLeapYear(year: number): boolean {
+  return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
+}
+
 export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: number, priorityStartDate: boolean, filteredLabels: Label[], operations: Operation[], setOperationsDates: React.Dispatch<SetStateAction<OperationDates[]>>) {
 
 
@@ -186,9 +190,46 @@ export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: n
           break;
         }        
 
-        case TimeUnit.YEAR :
-            //TODO
+        case TimeUnit.YEAR: {
+          // Calcola il numero di anni tra first_date e la data finale (endDate o last_date)
+          let yearCount = endDate.getFullYear() - operation.first_date.getFullYear();
+          
+          // Limita il conteggio degli anni se c'è un last_date definito
+          if (operation?.last_date) {
+            const maxYearCount = operation.last_date.getFullYear() - operation.first_date.getFullYear();
+            yearCount = Math.min(yearCount, maxYearCount);
+          }
+        
+          // Calcola e aggiungi le date
+          const count: number = operation.periodic_count || 1;
+          for (let i = 0; i <= yearCount; i += count) {
+            let newDate = new Date(operation.first_date);
+            newDate.setFullYear(newDate.getFullYear() + i);
+        
+            // Gestisci il caso di anni bisestili se il mese è febbraio e il giorno è 29
+            if (newDate.getMonth() === 1 && newDate.getDate() === 29 && !isLeapYear(newDate.getFullYear())) {
+              newDate.setDate(28);  // Imposta al 28 febbraio se l'anno non è bisestile
+            }
+        
+            // Se payday è definito, regola newDate per cadere su uno dei payday validi
+            if (operation.payday && operation.payday.length > 0) {
+              while (!operation.payday.includes(dayOfWeekMap[newDate.getDay().toString()])) {
+                newDate.setDate(newDate.getDate() + 1);  // Vai al prossimo giorno
+              }
+            }
+        
+            // Aggiungi la data calcolata (che cade su un payday valido se definito) a tempOperationsDates
+            if (newDate >= startDate && newDate <= endDate) {
+              const indexOps: number = tempOperationsDates.findIndex(opDate => (opDate.operation_id === operation.operation_id));
+              const tempOpDate = { operation_id: operation.operation_id, date: [newDate] };
+              if(indexOps < 0)
+                tempOperationsDates.push(tempOpDate);
+              else
+                tempOperationsDates.at(indexOps)?.date.push(newDate)
+            }
+          }
           break;
+        }
       
         default:
           break;

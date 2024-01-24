@@ -20,7 +20,6 @@ export default function Homepage() {
   },[]);
 
   useEffect(() => {
-    console.log(operationArray)
     const endDate = new Date(); // Supponiamo che tu abbia già endDate inizializzato con una data
     const startDate = new Date(endDate); // Clona la data di endDate
     startDate.setDate(endDate.getDate() - 30); // Sottrai 30 giorni a startDate
