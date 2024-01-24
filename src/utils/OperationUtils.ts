@@ -1,7 +1,7 @@
 // import axios from 'axios';
 
 import { SetStateAction } from "react";
-import { OperationDates, Label, Operation, OperationsAction, TimeUnit, dayOfWeekMap } from "../interfaces/Operation";
+import { OperationsForDate, Label, Operation, OperationsAction, TimeUnit, dayOfWeekMap } from "../interfaces/Operation";
 
 export const addOperations = (operationArrayReducer: React.Dispatch<OperationsAction>, operation: Operation[]) => {
   operationArrayReducer({
@@ -54,11 +54,11 @@ function isLeapYear(year: number): boolean {
   return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
 }
 
-export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: number, priorityStartDate: boolean, filteredLabels: Label[], operations: Operation[], setOperationsDates: React.Dispatch<SetStateAction<OperationDates[]>>) {
+export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: number, priorityStartDate: boolean, filteredLabels: Label[], operations: Operation[], setOperationsDates: React.Dispatch<SetStateAction<OperationsForDate[]>>) {
 
 
   // eslint-disable-next-line prefer-const
-  let tempOperationsDates: OperationDates[] = [];
+  let operationsForDates: OperationsForDate[] = [];
 
   // operations.forEach(operation => {
   for (const operation of operations) {
@@ -80,6 +80,15 @@ export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: n
       // Not periodical calculation
       if (operation?.last_date && operation?.last_date < startDate) continue;
 
+      const addDateToOperations = (date: Date) => {
+        let opForDate = operationsForDates.find(opDate => opDate.date.toDateString() === date.toDateString());
+        if (!opForDate) {
+          opForDate = { date: date, operations_id: [] };
+          operationsForDates.push(opForDate);
+        }
+        opForDate.operations_id.push(operation.operation_id);
+      };
+
       switch (operation.periodic_unit) {
         case TimeUnit.DAY: {
           // Calcola il numero di giorni tra first_date e la data finale (endDate o last_date)
@@ -91,141 +100,106 @@ export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: n
 
           // Calcola e aggiungi le date
           const count: number = operation.periodic_count || 1;
-          for (let i = 0; i <= dayCount; i+=count) {
+          for (let i = 0; i <= dayCount; i += count) {
             // eslint-disable-next-line prefer-const
             let newDate = new Date(operation.first_date);
             newDate.setDate(newDate.getDate() + i);
-            // Se payday è definito, regola newDate per cadere su uno dei payday validi
             if (operation.payday && operation.payday.length > 0) {
               while (!operation.payday.includes(dayOfWeekMap[newDate.getDay().toString()])) {
                 newDate.setDate(newDate.getDate() + 1);  // Vai al prossimo giorno
               }
             }
-            // Aggiungi la data calcolata (che cade su un payday valido se definito) a tempOperationsDates
-            if (newDate >= startDate && newDate <= endDate)
-              tempOperationsDates.push({ operation_id: operation.operation_id, date: [newDate] });
+            if (newDate >= startDate && newDate <= endDate) {
+              addDateToOperations(newDate);
+            }
           }
           break;
         }
         
         case TimeUnit.WEEK: {
-          // Calcola il numero di settimane tra first_date e la data finale (endDate o last_date)
           let weekCount = Math.round((endDate.getTime() - operation.first_date.getTime()) / (1000 * 60 * 60 * 24 * 7));
-          // Limita il conteggio delle settimane se c'è un last_date definito
           if (operation?.last_date) {
             weekCount = Math.min(weekCount, Math.round((operation.last_date.getTime() - operation.first_date.getTime()) / (1000 * 60 * 60 * 24 * 7)));
           }
           
-          // Calcola e aggiungi le date
-          const count: number = (operation.periodic_count || 1) * 7; // Moltiplica per 7 per convertire in giorni
+          const count: number = (operation.periodic_count || 1) * 7;
           for (let i = 0; i <= weekCount; i += count) {
             // eslint-disable-next-line prefer-const
             let weekStartDate = new Date(operation.first_date);
             weekStartDate.setDate(weekStartDate.getDate() + i);
             
-            // Se payday è definito, aggiungi una data per ogni payday valido in quella settimana
             if (operation.payday && operation.payday.length > 0) {
               operation.payday.forEach(payday => {
                 // eslint-disable-next-line prefer-const
                 let paydayDate = new Date(weekStartDate);
-                // Trova il giorno della settimana per payday
                 while (dayOfWeekMap[paydayDate.getDay().toString()] !== payday) {
                   paydayDate.setDate(paydayDate.getDate() + 1);
                 }
-                // Aggiungi la data calcolata (che cade su un payday valido) a tempOperationsDates
                 if (paydayDate.getTime() >= startDate.getTime() && paydayDate.getTime() <= endDate.getTime()) {
-                  tempOperationsDates.push({ operation_id: operation.operation_id, date: [paydayDate] });
+                  addDateToOperations(paydayDate);
                 }
               });
             } else {
-              // Se non ci sono payday definiti, aggiungi solo la data di inizio settimana
               if (weekStartDate >= startDate && weekStartDate <= endDate) {
-                tempOperationsDates.push({ operation_id: operation.operation_id, date: [weekStartDate] });
+                addDateToOperations(weekStartDate);
               }
             }
           }
           break;
-        }        
-        
+        }      
 
         case TimeUnit.MONTH: {
-          // Calcola il numero di mesi tra first_date e la data finale (endDate o last_date)
           let monthCount = (endDate.getFullYear() - operation.first_date.getFullYear()) * 12 + endDate.getMonth() - operation.first_date.getMonth();
-          
-          // Limita il conteggio dei mesi se c'è un last_date definito
           if (operation?.last_date) {
             const maxMonthCount = (operation.last_date.getFullYear() - operation.first_date.getFullYear()) * 12 + operation.last_date.getMonth() - operation.first_date.getMonth();
             monthCount = Math.min(monthCount, maxMonthCount);
           }
         
-          // Calcola e aggiungi le date
           const count: number = operation.periodic_count || 1;
           for (let i = 0; i <= monthCount; i += count) {
             let newDate = new Date(operation.first_date);
             newDate.setMonth(newDate.getMonth() + i);
-        
-            // Gestisci il caso in cui il giorno non è presente nel mese (ad esempio, 31 aprile diventa 1 maggio)
-            // Se la data supera il mese atteso, imposta il giorno all'ultimo del mese precedente
             if (newDate.getDate() != operation.first_date.getDate()) {
-              newDate = new Date(newDate.getFullYear(), newDate.getMonth(), 0); // 0 qui restituisce l'ultimo giorno del mese precedente
+              newDate = new Date(newDate.getFullYear(), newDate.getMonth(), 0); // Ultimo giorno del mese precedente
             }
-        
-            // Se payday è definito, regola newDate per cadere su uno dei payday validi
+            
             if (operation.payday && operation.payday.length > 0) {
               while (!operation.payday.includes(dayOfWeekMap[newDate.getDay().toString()])) {
-                newDate.setDate(newDate.getDate() + 1);  // Vai al prossimo giorno
+                newDate.setDate(newDate.getDate() + 1);
               }
             }
-        
-            // Aggiungi la data calcolata (che cade su un payday valido se definito) a tempOperationsDates
+            
             if (newDate >= startDate && newDate <= endDate) {
-              const indexOps: number = tempOperationsDates.findIndex(opDate => (opDate.operation_id === operation.operation_id));
-              const tempOpDate = { operation_id: operation.operation_id, date: [newDate] };
-              if(indexOps < 0)
-                tempOperationsDates.push(tempOpDate);
-              else
-                tempOperationsDates.at(indexOps)?.date.push(newDate)
+              addDateToOperations(newDate);
             }
           }
           break;
-        }        
+        }     
 
         case TimeUnit.YEAR: {
-          // Calcola il numero di anni tra first_date e la data finale (endDate o last_date)
           let yearCount = endDate.getFullYear() - operation.first_date.getFullYear();
-          
-          // Limita il conteggio degli anni se c'è un last_date definito
           if (operation?.last_date) {
             const maxYearCount = operation.last_date.getFullYear() - operation.first_date.getFullYear();
             yearCount = Math.min(yearCount, maxYearCount);
           }
         
-          // Calcola e aggiungi le date
           const count: number = operation.periodic_count || 1;
           for (let i = 0; i <= yearCount; i += count) {
+            // eslint-disable-next-line prefer-const
             let newDate = new Date(operation.first_date);
             newDate.setFullYear(newDate.getFullYear() + i);
-        
-            // Gestisci il caso di anni bisestili se il mese è febbraio e il giorno è 29
             if (newDate.getMonth() === 1 && newDate.getDate() === 29 && !isLeapYear(newDate.getFullYear())) {
-              newDate.setDate(28);  // Imposta al 28 febbraio se l'anno non è bisestile
+              newDate.setDate(28);
             }
-        
-            // Se payday è definito, regola newDate per cadere su uno dei payday validi
+            
             if (operation.payday && operation.payday.length > 0) {
               while (!operation.payday.includes(dayOfWeekMap[newDate.getDay().toString()])) {
-                newDate.setDate(newDate.getDate() + 1);  // Vai al prossimo giorno
+                newDate.setDate(newDate.getDate() + 1);
               }
             }
-        
-            // Aggiungi la data calcolata (che cade su un payday valido se definito) a tempOperationsDates
+            
             if (newDate >= startDate && newDate <= endDate) {
-              const indexOps: number = tempOperationsDates.findIndex(opDate => (opDate.operation_id === operation.operation_id));
-              const tempOpDate = { operation_id: operation.operation_id, date: [newDate] };
-              if(indexOps < 0)
-                tempOperationsDates.push(tempOpDate);
-              else
-                tempOperationsDates.at(indexOps)?.date.push(newDate)
+              addDateToOperations(newDate);
             }
           }
           break;
@@ -234,11 +208,17 @@ export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: n
         default:
           break;
       }
+    }else if (operation.first_date >= startDate && operation.first_date <= endDate) {
+      let opForDate = operationsForDates.find(opDate => opDate.date.toDateString() === operation.first_date.toDateString());
+      if (!opForDate) {
+        opForDate = { date: operation.first_date, operations_id: [operation.operation_id] };
+        operationsForDates.push(opForDate);
+      } else {
+        opForDate.operations_id.push(operation.operation_id);
+      }
     }
-    else if (operation.first_date < startDate || operation.first_date > endDate) continue;
-    else tempOperationsDates.push({operation_id:operation.operation_id,date:[operation.first_date]})
   }
   // TODO utilizzo dei parametri numberOfOps e priorityStartDate per filtrare l'output (es. casi come ultime operazioni)
-  setOperationsDates(tempOperationsDates);
-  console.log('tempOperationsDates: ',tempOperationsDates,numberOfOps,priorityStartDate)
+  setOperationsDates(operationsForDates);
+  console.log('tempOperationsDates: ',operationsForDates,numberOfOps,priorityStartDate)
 }

@@ -4,14 +4,14 @@ import { fetchLabelsFromServer, fetchOpsLabelsFromServer } from "../utils/supaba
 import { operationArrayReducer } from "../utils/OperationArrayReducer";
 import LastOperationsCard from "../components/molecules/LastOperationsCard";
 import PortfolioSummCard from "../components/molecules/PortfolioSummCard";
-import { Label, OperationDates } from "../interfaces/Operation";
+import { Label, OperationsForDate } from "../interfaces/Operation";
 import BalanceTrendCard from "../components/molecules/BalanceTrendCard";
 import { fetchOpsIdToDateMap } from "../utils/OperationUtils";
 
 export default function Homepage() {
   const [operationArray, dispatch] = useReducer(operationArrayReducer, []);
   const [labelsArray, setLabelsArray] = useState<Label[]>([]);
-  const [operationIdToDateMap, setOperationIdToDateMap] = useState<OperationDates[]>([]);
+  const [operationIdToDateMap, setOperationIdToDateMap] = useState<OperationsForDate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => { 
     fetchOpsLabelsFromServer(dispatch);

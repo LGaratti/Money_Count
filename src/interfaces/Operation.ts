@@ -18,9 +18,9 @@ export interface Label {
   color_rgb: string;
 }
 
-export interface OperationDates {
-  date: Date[];
-  operation_id: string;
+export interface OperationsForDate {
+  date: Date;
+  operations_id: string[];
 }
 
 export enum TimeUnit {
