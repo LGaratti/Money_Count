@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, CardHeader, CardProps, Heading } from "@chakra-ui/react";
+import { Box, Card, CardBody, CardHeader, CardProps, Heading, useTheme } from "@chakra-ui/react";
 // import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Customized  } from 'recharts';
 import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
@@ -21,6 +21,8 @@ interface BalanceTrendCardProps extends CardProps {
 
 export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...props} : BalanceTrendCardProps) => {
   const {t} = useTranslation('ns1',{ i18n } );
+  const theme = useTheme();
+  
   const [barChartData, setBarChartData] = useState<BarChartData[]>([]);
 
   useEffect(() => {
@@ -53,17 +55,25 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
       })
 
       // Convertire l'oggetto in un array per il grafico
-      const newBarChartData: BarChartData[] = Object.keys(dateAmounts).map(date => ({
+      let newBarChartData: BarChartData[] = Object.keys(dateAmounts).map(date => ({
         name: date,
         gain: dateAmounts[date].gain,
         loss: dateAmounts[date].loss,
       }));
 
+      newBarChartData = newBarChartData.sort((a, b) => {
+        const dateA = new Date(a.name);
+        const dateB = new Date(b.name);
+        return dateA.getTime() - dateB.getTime();
+      });
       setBarChartData(newBarChartData);
-      // console.log(barChartData)
     }
   }, [operationIdToDateMap, operations]);
 
+  useEffect(() => {
+    console.log(barChartData);
+  }, [barChartData]);
+  
   return (
     <Card {...props}>
       <CardHeader>
@@ -90,8 +100,8 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
               <Tooltip />
               <Legend />
               {/* TODO vedere se c'è il modo di attribuire un dataKey ma mostrare un  */}
-              <Bar dataKey='gain' fill={'green'} /> 
-              <Bar dataKey='loss' fill={'red'} />
+              <Bar dataKey='gain' fill={theme.colors.green[400]} /> 
+              <Bar dataKey='loss' fill={theme.colors.red[500]} />
             </BarChart>
           </ResponsiveContainer>
         </Box> 
