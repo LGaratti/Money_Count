@@ -26,9 +26,10 @@
   "outcome operations":"Operazioni in uscita",
   
   "portfolio summary":"Riepilogo portafoglio",
-  "gain/loss summary":"Riepilogo ingressi/uscite",
+  "gain/loss summary":"Riepilogo entrate/uscite",
   "labels summary":"Riepilogo etichette",
+  "budget chart":"Grafico di bilancio",
 
-  "gain": "Ingressi",
+  "gain": "Entrate",
   "loss": "Uscite"
 }

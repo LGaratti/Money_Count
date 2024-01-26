@@ -7,10 +7,10 @@ import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 interface BarChartData {
+  [x: string]: string | number; //gain and loss, declared in this way to allow translaction
   name: string;
-  // operations: Operation[]                                                                       //TODO <----------------------------------------------------------Partire da qui
-  gain: number;                                                                                    // Necessario aggiungere l'array di operazione per poi mostrare nel tooltip che customizzeremo le varie operazioni che compongono la bar
-  loss: number;
+  // operations: Operation[]                                                                       //TODO 
+  // Necessario aggiungere l'array di operazione per poi mostrare nel tooltip che customizzeremo le varie operazioni che compongono la bar
 } 
 
 interface BalanceTrendCardProps extends CardProps {
@@ -55,10 +55,12 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
       })
 
       // Convertire l'oggetto in un array per il grafico
-      let newBarChartData: BarChartData[] = Object.keys(dateAmounts).map(date => ({
+      const gainNameTransl = t('gain');
+      const lossNameTransl = t('loss');
+      let newBarChartData = Object.keys(dateAmounts).map(date => ({
         name: date,
-        gain: dateAmounts[date].gain,
-        loss: dateAmounts[date].loss,
+        [gainNameTransl]: dateAmounts[date].gain,
+        [lossNameTransl]: dateAmounts[date].loss,
       }));
 
       newBarChartData = newBarChartData.sort((a, b) => {
@@ -77,10 +79,9 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
   return (
     <Card {...props}>
       <CardHeader>
-        
+        <Heading size={'md'} m={1}>{t('budget chart')}</Heading>
       </CardHeader>
       <CardBody>
-        <Heading size={'md'} m={1}>{t('balance trend')}</Heading>
         <Box height={200}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
@@ -100,8 +101,8 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
               <Tooltip />
               <Legend />
               {/* TODO vedere se c'è il modo di attribuire un dataKey ma mostrare un  */}
-              <Bar dataKey='gain' fill={theme.colors.green[400]} /> 
-              <Bar dataKey='loss' fill={theme.colors.red[500]} />
+              <Bar dataKey={t('gain')} fill={theme.colors.green[400]} /> 
+              <Bar dataKey={t('loss')} fill={theme.colors.red[500]} />
             </BarChart>
           </ResponsiveContainer>
         </Box> 
