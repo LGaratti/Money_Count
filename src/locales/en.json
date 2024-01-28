@@ -1,4 +1,11 @@
 {
+
+  "current month":"Current Month",
+  "custom range":"Custom Range",
+  "week":"Week",
+  "month":"Month",
+  "year":"Year",
+
   "id":"ID",
   "name":"Name",
   "amount":"Amount",

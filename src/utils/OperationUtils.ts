@@ -1,7 +1,8 @@
 // import axios from 'axios';
 
 import { SetStateAction } from "react";
-import { OperationsForDate, Label, Operation, OperationsAction, TimeUnit, dayOfWeekMap } from "../interfaces/Operation";
+import { OperationsForDate, Label, Operation, OperationsAction, } from "../interfaces/Operation";
+import { TimeUnit, dayOfWeekMap } from "../interfaces/Date";
 
 export const addOperations = (operationArrayReducer: React.Dispatch<OperationsAction>, operation: Operation[]) => {
   operationArrayReducer({

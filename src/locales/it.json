@@ -1,4 +1,11 @@
 {
+
+  "current month":"Mese Corrente",
+  "custom range":"Intervallo",
+  "week":"Settimana",
+  "month":"Mese",
+  "year":"Anno",
+  
   "id":"ID",
   "name":"Nome",
   "amount":"Importo",

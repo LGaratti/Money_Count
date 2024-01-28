@@ -2,12 +2,13 @@ import { Card, CardBody, Heading, CardHeader, FormControl, FormLabel, Input, But
   NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, FormErrorMessage, Textarea, Select, Grid, GridItem } from '@chakra-ui/react'
 import {  useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Label, Operation, TimeUnit } from '../../interfaces/Operation';
+import { Label, Operation } from '../../interfaces/Operation';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
 import LabelsComponent from '../molecules/LabelsComponent';
 import { InsertOpFromServer, fetchLabelsFromServer } from '../../utils/supabaseClient';
 import { FaEuroSign } from 'react-icons/fa';
+import { TimeUnit } from '../../interfaces/Date';
 
 export const AddOperationCard = ({...props}) => {
   const {t} = useTranslation('ns1',{ i18n } );

@@ -70,7 +70,7 @@ export const LastOperationsCard = ({operations, ...props}: LastOperationsCardPro
 
   return (
     <>
-    <Card {...props}>
+    <Card {...props} minH={'330px'}>
       <CardBody>
       <Heading size={'md'} m={1}>{t('latest operations')}</Heading>
         <Grid templateRows='repeat(1, 1fr)' templateColumns='repeat(2, 1fr)' gap={1}>

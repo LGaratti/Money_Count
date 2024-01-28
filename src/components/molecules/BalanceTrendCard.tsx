@@ -4,8 +4,9 @@ import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
 import { Label as LabelOp, Operation, OperationsForDate } from "../../interfaces/Operation";
 import { useEffect, useState } from "react";
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { format } from 'date-fns';
+import LabelTag from "../atoms/LabelTag";
 
 interface BarChartData {
   [x: string]: string | number; //gain and loss, declared in this way to allow translaction
@@ -72,7 +73,7 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
   }, [operationIdToDateMap, operations]);
   
   return (
-    <Card {...props}>
+    <Card {...props} minH={'330px'}>
       <CardHeader>
         <Heading size={'md'} m={1}>{t('budget chart')}</Heading>
       </CardHeader>
@@ -94,17 +95,18 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
               <XAxis dataKey="name" />{/* <XAxis dataKey="name" ticks={weekLabels} /> */}
               <YAxis />
               <Tooltip />
-              <Legend />
-              {/* TODO vedere se c'è il modo di attribuire un dataKey ma mostrare un  */}
+              {/* <Legend /> */}
               <Bar dataKey={t('gain')} fill={theme.colors.green[400]} /> 
               <Bar dataKey={t('loss')} fill={theme.colors.red[500]} />
             </BarChart>
           </ResponsiveContainer>
         </Box> 
-        {operations?.length}-
-        {labels?.length}-
-        {operationIdToDateMap?.length}
-        
+        <Box display="flex" justifyContent="space-evenly">
+            {labels?.map( label => {
+              if (label.name === "gain" || label.name === 'loss')
+                return <><LabelTag key={label.label_id} label={label}/></>
+            })}
+        </Box>        
       </CardBody>
     </Card>
   );
