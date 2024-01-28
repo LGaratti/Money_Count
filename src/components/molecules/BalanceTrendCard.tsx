@@ -5,7 +5,7 @@ import i18n from "../../locales/i18n";
 import { Label as LabelOp, Operation, OperationsForDate } from "../../interfaces/Operation";
 import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-// import { parse, format } from 'date-fns';
+import { format } from 'date-fns';
 
 interface BarChartData {
   [x: string]: string | number; //gain and loss, declared in this way to allow translaction
@@ -31,8 +31,7 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
       // Creare un oggetto per tenere traccia dei guadagni e delle perdite per ogni data
       const dateAmounts: Record<string, { gain: number; loss: number; }> = {};
 
-
-      //TODO Da modificare in base al range di date selezionate. fare n segmenti guidati per rendere comprensibile il grafico.
+      //TODO Da modificare in base al range di date selezionate. fare n segmenti  per rendere comprensibile il grafico.
 
       operationIdToDateMap.forEach(opDate => {
         // const date = opDate.date;
@@ -41,7 +40,7 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
           if(operation)
           {
             const amount = operation ? operation.amount : 0;
-            const dateString = opDate.date.toLocaleDateString();
+            const dateString = format(opDate.date, 'd/M/yy');
             // Inizializzare i valori se non esistono già per quella data
             if (!dateAmounts[dateString]) {
               dateAmounts[dateString] = { gain: 0, loss: 0 };
