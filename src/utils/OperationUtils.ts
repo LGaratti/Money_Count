@@ -54,7 +54,7 @@ function isLeapYear(year: number): boolean {
   return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
 }
 
-export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: number, priorityStartDate: boolean, filteredLabels: Label[], operations: Operation[], setOperationsDates: React.Dispatch<SetStateAction<OperationsForDate[]>>) {
+export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: number, descendingOrder: boolean, filteredLabels: Label[], operations: Operation[], setOperationsDates: React.Dispatch<SetStateAction<OperationsForDate[]>>) {
 
 
   // eslint-disable-next-line prefer-const
@@ -208,7 +208,7 @@ export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: n
         default:
           break;
       }
-    }else if (operation.first_date >= startDate && operation.first_date <= endDate) {
+    } else if (operation.first_date >= startDate && operation.first_date <= endDate) {
       let opForDate = operationsForDates.find(opDate => opDate.date.toDateString() === operation.first_date.toDateString());
       if (!opForDate) {
         opForDate = { date: operation.first_date, operations_id: [operation.operation_id] };
@@ -218,7 +218,14 @@ export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: n
       }
     }
   }
-  // TODO utilizzo dei parametri numberOfOps e priorityStartDate per filtrare l'output (es. casi come ultime operazioni)
+  // TODO utilizzo dei parametri numberOfOps e descendingOrder per filtrare l'output (es. casi come ultime operazioni)
+  if(descendingOrder) {
+    operationsForDates.sort((a, b) => b.date.getTime() - a.date.getTime());
+  }
+  else {
+    operationsForDates.sort((a, b) => a.date.getTime() - b.date.getTime());
+  }
+  console.log('tempOperationsDates: ',numberOfOps)
   setOperationsDates(operationsForDates);
-  console.log('tempOperationsDates: ',operationsForDates,numberOfOps,priorityStartDate)
+  
 }

@@ -23,7 +23,7 @@ export default function Homepage() {
     const endDate = new Date(); // Supponiamo che tu abbia già endDate inizializzato con una data
     const startDate = new Date(endDate); // Clona la data di endDate
     startDate.setDate(endDate.getDate() - 30); // Sottrai 30 giorni a startDate
-    fetchOpsIdToDateMap(startDate, endDate, -1, true, [], operationArray, setOperationIdToDateMap); // TODO sarà da modificare
+    fetchOpsIdToDateMap(startDate, endDate, -1, false, [], operationArray, setOperationIdToDateMap); // TODO sarà da modificare
   },[operationArray])
   return (
     <Grid templateRows='repeat(2, 1fr)' templateColumns='repeat(2, 1fr)'gap={4}>

@@ -5,6 +5,7 @@ import i18n from "../../locales/i18n";
 import { Label as LabelOp, Operation, OperationsForDate } from "../../interfaces/Operation";
 import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+// import { parse, format } from 'date-fns';
 
 interface BarChartData {
   [x: string]: string | number; //gain and loss, declared in this way to allow translaction
@@ -30,6 +31,8 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
       // Creare un oggetto per tenere traccia dei guadagni e delle perdite per ogni data
       const dateAmounts: Record<string, { gain: number; loss: number; }> = {};
 
+
+      //TODO Da modificare in base al range di date selezionate. fare n segmenti guidati per rendere comprensibile il grafico.
 
       operationIdToDateMap.forEach(opDate => {
         // const date = opDate.date;
@@ -57,24 +60,17 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
       // Convertire l'oggetto in un array per il grafico
       const gainNameTransl = t('gain');
       const lossNameTransl = t('loss');
-      let newBarChartData = Object.keys(dateAmounts).map(date => ({
-        name: date,
-        [gainNameTransl]: dateAmounts[date].gain,
-        [lossNameTransl]: dateAmounts[date].loss,
-      }));
-
-      newBarChartData = newBarChartData.sort((a, b) => {
-        const dateA = new Date(a.name);
-        const dateB = new Date(b.name);
-        return dateA.getTime() - dateB.getTime();
+      const newBarChartData = Object.keys(dateAmounts).map(date => {
+        
+        return {
+          name: date,
+          [gainNameTransl]: dateAmounts[date].gain,
+          [lossNameTransl]: dateAmounts[date].loss,
+        }
       });
       setBarChartData(newBarChartData);
     }
   }, [operationIdToDateMap, operations]);
-
-  useEffect(() => {
-    console.log(barChartData);
-  }, [barChartData]);
   
   return (
     <Card {...props}>
@@ -96,7 +92,7 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <XAxis dataKey="name" />{/* <XAxis dataKey="name" ticks={weekLabels} /> */}
               <YAxis />
               <Tooltip />
               <Legend />
