@@ -1,22 +1,22 @@
 import { Portal, Button, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody, PopoverProps, Container, useColorMode, Tabs, TabList, Tab, TabPanels, TabPanel} from '@chakra-ui/react'
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { DateRange } from '../../interfaces/Date';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
-// import {
-//   Calendar,
-//   CalendarControls,
-//   CalendarDays,
-//   CalendarMonth,
-//   CalendarMonthName,
-//   CalendarMonths,
-//   CalendarNextButton,
-//   CalendarPrevButton,
-//   CalendarValues,
-//   CalendarDate,
-//   CalendarWeek,
-//   CalendarDefaultTheme
-// } from "@uselessdev/datepicker";
+import {
+  Calendar,
+  CalendarControls,
+  CalendarDays,
+  CalendarMonth,
+  CalendarMonthName,
+  CalendarMonths,
+  CalendarNextButton,
+  CalendarPrevButton,
+  CalendarValues,
+  CalendarDate,
+  CalendarWeek,
+  // CalendarDefaultTheme
+} from "@uselessdev/datepicker";
 // import 'react-calendar/dist/Calendar.css';
 // import { Label, Operation } from '../../interfaces/Operation';
 // import LabelTag from '../atoms/LabelTag';
@@ -33,8 +33,21 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
   const { colorMode } = useColorMode();
   const {t} = useTranslation('ns1',{ i18n } );
 
-  // const [dates, setDates] = useState<CalendarValues>({});
-  // const handleDateSelect = (dates: CalendarValues ) => setDates(dates);
+  const [dates, setDates] = useState<CalendarValues>({});
+  const handleDateSelect = (value: CalendarValues | CalendarDate) => {
+  if (typeof value === 'number') {
+    // Il valore è un CalendarDate (timestamp), quindi convertilo in Date
+    const dateValue = new Date(value);
+    // Imposta questo valore Date come sia l'inizio che la fine
+    const newDates: CalendarValues = { start: dateValue, end: dateValue };
+    setDates(newDates);
+  } else if(value instanceof Date) {
+    // Il valore è già CalendarValues, quindi può essere passato direttamente
+  } else
+    setDates(value);
+};
+
+  
 
   const popoverColor = () => {
     if(colorMode === 'light') return 'purple.200'
@@ -76,7 +89,7 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
                 <TabPanels>
                   <TabPanel>
                   
-                    {/* <ChakraProvider theme={CalendarDefaultTheme}>
+                    {/* <ChakraProvider theme={CalendarDefaultTheme}> */}
                       <Calendar value={dates} onSelectDate={handleDateSelect} >
                         <CalendarControls>
                           <CalendarPrevButton />
@@ -91,8 +104,8 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
                           </CalendarMonth>
                         </CalendarMonths>
                       </Calendar>
-                    </ChakraProvider>
-                   */}
+                    {/* </ChakraProvider> */}
+                  
                   </TabPanel>
                   <TabPanel>
                     <p>two!</p>
