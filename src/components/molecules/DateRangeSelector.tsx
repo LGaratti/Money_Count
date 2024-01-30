@@ -1,5 +1,5 @@
-import { Portal, Button, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody, PopoverProps, Container, useColorMode, Tabs, TabList, Tab, TabPanels, TabPanel} from '@chakra-ui/react'
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Button, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody, PopoverProps, Container, useColorMode, Tabs, TabList, Tab, TabPanels, TabPanel, Box} from '@chakra-ui/react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { DateRange } from '../../interfaces/Date';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
@@ -35,24 +35,28 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
 
   const [dates, setDates] = useState<CalendarValues>({});
   const handleDateSelect = (value: CalendarValues | CalendarDate) => {
-  if (typeof value === 'number') {
-    // Il valore è un CalendarDate (timestamp), quindi convertilo in Date
-    const dateValue = new Date(value);
-    // Imposta questo valore Date come sia l'inizio che la fine
-    const newDates: CalendarValues = { start: dateValue, end: dateValue };
-    setDates(newDates);
-  } else if(value instanceof Date) {
-    // Il valore è già CalendarValues, quindi può essere passato direttamente
-  } else
-    setDates(value);
-};
+    if (typeof value === 'number') {
+      // Il valore è un CalendarDate (timestamp), quindi convertilo in Date
+      const dateValue = new Date(value);
+      // Imposta questo valore Date come sia l'inizio che la fine
+      const newDates: CalendarValues = { start: dateValue, end: dateValue };
+      setDates(newDates);
+    } else if(value instanceof Date) {
+      // Il valore è già CalendarValues, quindi può essere passato direttamente
+    } else
+      setDates(value);
+  };
+  
+  useEffect(() => {
+    console.log(dates);
+  },[dates])
 
   
 
-  const popoverColor = () => {
-    if(colorMode === 'light') return 'purple.200'
-    else return 'purple.800' 
-  }
+  // const popoverColor = () => {
+  //   if(colorMode === 'light') return 'purple.100'
+  //   else return 'purple.700' 
+  // }
   
   const hoverColor = () => {
     if(colorMode === 'light') return 'secondary.600'
@@ -73,42 +77,51 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
             <Button bg={buttonColor()} 
               color={'white'} _hover={{ bg: hoverColor() }}> {t(dateRangeDisplayed.rangeDisplayed)}</Button>
           </PopoverTrigger>
-          <Portal>
-          <PopoverContent bg={popoverColor()}>
-            <PopoverArrow bg={popoverColor()}/>
+          <PopoverContent overflow={'visible'}  >
+            <PopoverArrow/>
             {/* <PopoverCloseButton /> */}
             {/* <PopoverHeader>Confirmation!</PopoverHeader> */}
             <PopoverBody>
-              <Tabs isFitted colorScheme={'purple'} variant={'solid-rounded'}>
+              <Tabs defaultIndex={1} isFitted colorScheme={'purple'} variant={'solid-rounded'}>
                 <TabList>
                   <Tab>{t('week')}</Tab>
                   <Tab>{t('month')}</Tab>
                   <Tab>{t('year')}</Tab>
                 </TabList>
-
                 <TabPanels>
                   <TabPanel>
-                  
-                    {/* <ChakraProvider theme={CalendarDefaultTheme}> */}
-                      <Calendar value={dates} onSelectDate={handleDateSelect} >
-                        <CalendarControls>
-                          <CalendarPrevButton />
-                          <CalendarNextButton />
-                        </CalendarControls>
-
-                        <CalendarMonths>
-                          <CalendarMonth>
-                            <CalendarMonthName />
-                            <CalendarWeek />
-                            <CalendarDays />
-                          </CalendarMonth>
-                        </CalendarMonths>
-                      </Calendar>
-                    {/* </ChakraProvider> */}
-                  
+                  <Box display="flex" justifyContent="center" alignItems="center">
+                    <Calendar weekStartsOn={1} value={dates} onSelectDate={handleDateSelect} allowOutsideDays weekDateSelection>
+                      <CalendarControls>
+                        <CalendarPrevButton />
+                        <CalendarNextButton />
+                      </CalendarControls>
+                      <CalendarMonths>
+                        <CalendarMonth>
+                          <CalendarMonthName />
+                          <CalendarWeek />
+                          <CalendarDays />
+                        </CalendarMonth>
+                      </CalendarMonths>
+                    </Calendar>
+                  </Box>    
                   </TabPanel>
                   <TabPanel>
-                    <p>two!</p>
+                  <Box display="flex" justifyContent="center" alignItems="center">
+                    <Calendar value={dates} onSelectDate={handleDateSelect} allowOutsideDays weekDateSelection>
+                      <CalendarControls>
+                        <CalendarPrevButton />
+                        <CalendarNextButton />
+                      </CalendarControls>
+                      <CalendarMonths>
+                        <CalendarMonth>
+                          <CalendarMonthName />
+                          <CalendarWeek />
+                          <CalendarDays />
+                        </CalendarMonth>
+                      </CalendarMonths>
+                    </Calendar>
+                  </Box> 
                   </TabPanel>
                   <TabPanel>
                     <p>three!</p>
@@ -120,7 +133,6 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
               </Tabs>
             </PopoverBody>
           </PopoverContent>
-          </Portal>
         </Popover>
       </Container>
     </>
