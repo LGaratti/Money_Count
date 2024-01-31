@@ -1,0 +1,15 @@
+.react-datepicker__header {
+  background-color: #9234e3; /* Colore di default */
+  color:#fff;
+}
+.react-datepicker__current-month {
+  color:#fff;
+}
+.react-datepicker__day-name {
+  color:#fff;
+}
+
+.react-datepicker {
+  font-family: 'Outfit Variable', sans-serif;
+}
+

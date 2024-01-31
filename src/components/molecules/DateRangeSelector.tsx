@@ -21,6 +21,8 @@ import i18n from '../../locales/i18n';
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import '../../styles/calendar.css';
+import { enUS, it } from 'date-fns/locale';
 
 // import 'react-calendar/dist/Calendar.css';
 // import { Label, Operation } from '../../interfaces/Operation';
@@ -38,26 +40,8 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
   const { colorMode } = useColorMode();
   const {t} = useTranslation('ns1',{ i18n } );
 
-  // const [dates, setDates] = useState<CalendarValues>({});
+  const currentLocale = i18n.language === 'it' ? it : enUS;
   const [startDate, setStartDate] = useState(new Date());
-  // const handleDateSelect = (value: CalendarValues | CalendarDate) => {
-  //   if (typeof value === 'number') {
-  //     // Il valore è un CalendarDate (timestamp), quindi convertilo in Date
-  //     const dateValue = new Date(value);
-  //     // Imposta questo valore Date come sia l'inizio che la fine
-  //     const newDates: CalendarValues = { start: dateValue, end: dateValue };
-  //     setDates(newDates);
-  //   } else if(value instanceof Date) {
-  //     // Il valore è già CalendarValues, quindi può essere passato direttamente
-  //   } else
-  //     setDates(value);
-  // };
-  
-  // useEffect(() => {
-  //   console.log(dates);
-  // },[dates])
-
-  
 
   const popoverColor = () => {
     if(colorMode === 'light') return 'purple.100'
@@ -111,10 +95,11 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
                       </CalendarMonths>
                     </Calendar> */}
                     <DatePicker
+                    locale={currentLocale}
                     selected={startDate}
                     onChange={(date) => date && setStartDate(date)}
                     dateFormat="I/R"
-                    locale="en-GB"
+                    
                     showWeekNumbers
                     showWeekPicker
                     inline
@@ -125,6 +110,7 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
                   <Box display="flex" justifyContent="center" alignItems="center">
                     
                     <DatePicker
+                      locale={currentLocale}
                       selected={startDate}
                       onChange={(date) => date && setStartDate(date)}
                       dateFormat="MM/yyyy"
@@ -135,7 +121,17 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
                   </Box> 
                   </TabPanel>
                   <TabPanel>
-                    <p>three!</p>
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                      <DatePicker
+                        locale={currentLocale}
+                        selected={startDate}
+                        onChange={(date) => date && setStartDate(date)}
+                        dateFormat="MM/yyyy"
+                        showMonthYearPicker
+                        showFullMonthYearPicker
+                        inline
+                      />
+                    </Box>
                   </TabPanel>
                   <TabPanel>
                     <p>four!</p>
