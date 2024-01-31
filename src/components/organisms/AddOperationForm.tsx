@@ -117,7 +117,7 @@ export const AddOperationCard = ({...props}) => {
                     id='first_date'
                     placeholder="Select Date and Time"
                     size={'sm'}
-                    type="datetime-local"
+                    type="date"
                     {...register('first_date', { required: t('required field') })}
                   />
                   <FormErrorMessage>

@@ -39,128 +39,128 @@ const switchStyles = defineMultiStyleConfig({
   }
 });
 
-var Calendar = {
-  parts: ['calendar', 'months'],
-  baseStyle: {
-    calendar: {
-      position: 'relative',
-      w: 'min-content',
-      borderWidth: '1px',
-      rounded: 'md',
-      shadow: 'lg',
-      bg:'white.100'
-    },
-    months: {
-      // p: 4,
-      w: '100%',
-      gridTemplateColumns: '1fr 1fr',
-      bg:'purple.200'
-    }
-  }
-};
+// var Calendar = {
+//   parts: ['calendar', 'months'],
+//   baseStyle: {
+//     calendar: {
+//       position: 'relative',
+//       w: 'min-content',
+//       borderWidth: '1px',
+//       rounded: 'md',
+//       shadow: 'lg',
+//       bg:'white.100'
+//     },
+//     months: {
+//       // p: 4,
+//       w: '100%',
+//       gridTemplateColumns: '1fr 1fr',
+//       bg:'purple.200'
+//     }
+//   }
+// };
 
-var CalendarMonth = {
-  parts: ['month', 'name', 'week', 'weekday', 'days'],
-  baseStyle: {
-    name: {
-      h: 8,
-      fontSize: 'md',
-      lineHeight: 6,
-      textAlign: 'center',
-      textTransform: 'capitalize'
-    },
-    week: {
-      gridTemplateColumns: 'repeat(7, 1fr)'
-    },
-    weekday: {
-      color: 'gray.500',
-      textAlign: 'center',
-      textTransform: 'capitalize'
-    },
-    days: {
-      gridTemplateColumns: 'repeat(7, 1fr)'
-    }
-  },
-  defaultProps: {
-    name: {
-      as: 'h2'
-    }
-  }
-};
+// var CalendarMonth = {
+//   parts: ['month', 'name', 'week', 'weekday', 'days'],
+//   baseStyle: {
+//     name: {
+//       h: 8,
+//       fontSize: 'md',
+//       lineHeight: 6,
+//       textAlign: 'center',
+//       textTransform: 'capitalize'
+//     },
+//     week: {
+//       gridTemplateColumns: 'repeat(7, 1fr)'
+//     },
+//     weekday: {
+//       color: 'gray.500',
+//       textAlign: 'center',
+//       textTransform: 'capitalize'
+//     },
+//     days: {
+//       gridTemplateColumns: 'repeat(7, 1fr)'
+//     }
+//   },
+//   defaultProps: {
+//     name: {
+//       as: 'h2'
+//     }
+//   }
+// };
 
-var CalendarDay = {
-  baseStyle: {
-    rounded: 'none',
-    // bgColor: 'transparent',
-    _hover: {
-      bgColor: 'gray.100'
-    },
-    _disabled: {
-      color: 'gray.200',
-      _hover: {
-        cursor: 'initial',
-        bgColor: 'transparent'
-      }
-    }
-  },
-  sizes: {
-    sm: {
-      h: 8
-    }
-  },
-  variants: {
-    selected: {
-      bgColor: 'purple.400',
-      color: 'white',
-      _hover: {
-        bgColor: 'purple.300'
-      }
-    },
-    range: {
-      bgColor: 'purple.200',
-      color: 'white',
-      _hover: {
-        bgColor: 'purple.100'
-      },
-      _disabled: {
-        _hover: {
-          bgColor: 'purple.300'
-        }
-      }
-    },
-    outside: {
-      color: 'gray.300'
-    },
-    today: {
-      bgColor: 'pink.100',
-      _hover: {
-        bgColor: 'pink.200'
-      }
-    }
-  },
-  defaultProps: {
-    size: 'sm'
-  }
-};
+// var CalendarDay = {
+//   baseStyle: {
+//     rounded: 'none',
+//     // bgColor: 'transparent',
+//     _hover: {
+//       bgColor: 'gray.100'
+//     },
+//     _disabled: {
+//       color: 'gray.200',
+//       _hover: {
+//         cursor: 'initial',
+//         bgColor: 'transparent'
+//       }
+//     }
+//   },
+//   sizes: {
+//     sm: {
+//       h: 8
+//     }
+//   },
+//   variants: {
+//     selected: {
+//       bgColor: 'purple.400',
+//       color: 'white',
+//       _hover: {
+//         bgColor: 'purple.300'
+//       }
+//     },
+//     range: {
+//       bgColor: 'purple.200',
+//       color: 'white',
+//       _hover: {
+//         bgColor: 'purple.100'
+//       },
+//       _disabled: {
+//         _hover: {
+//           bgColor: 'purple.300'
+//         }
+//       }
+//     },
+//     outside: {
+//       color: 'gray.300'
+//     },
+//     today: {
+//       bgColor: 'pink.100',
+//       _hover: {
+//         bgColor: 'pink.200'
+//       }
+//     }
+//   },
+//   defaultProps: {
+//     size: 'sm'
+//   }
+// };
 
-var CalendarControl = {
-  parts: ['controls', 'button'],
-  baseStyle: {
-    controls: {
-      position: 'absolute',
-      // p: 4,
-      w: '100%',
-      justifyContent: 'space-between'
-    },
-    button: {
-      h: 6,
-      px: 2,
-      lineHeight: 0,
-      fontSize: 'md',
-      rounded: 'md'
-    }
-  }
-};
+// var CalendarControl = {
+//   parts: ['controls', 'button'],
+//   baseStyle: {
+//     controls: {
+//       position: 'absolute',
+//       // p: 4,
+//       w: '100%',
+//       justifyContent: 'space-between'
+//     },
+//     button: {
+//       h: 6,
+//       px: 2,
+//       lineHeight: 0,
+//       fontSize: 'md',
+//       rounded: 'md'
+//     }
+//   }
+// };
 
 export default extendTheme(
   {
@@ -168,10 +168,10 @@ export default extendTheme(
     config,
     components: {
       Switch: switchStyles,
-      Calendar: Calendar,
-      CalendarMonth: CalendarMonth,
-      CalendarDay: CalendarDay,
-      CalendarControl: CalendarControl
+      // Calendar: Calendar,
+      // CalendarMonth: CalendarMonth,
+      // CalendarDay: CalendarDay,
+      // CalendarControl: CalendarControl
     },
     styles: {
       global: {
