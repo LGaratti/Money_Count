@@ -83,7 +83,7 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
   },[operations, labels]);
 
   return (
-    <Card minH={'330px'} {...props}>
+    <Card minH={'331.19px'} {...props}>
       <CardBody>
       <Heading size={'md'} m={1}>{t('portfolio summary')}</Heading>
       <Grid templateRows='repeat(1, 1fr)' templateColumns='repeat(2, 1fr)' gap={1}>

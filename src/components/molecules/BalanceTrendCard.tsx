@@ -73,7 +73,7 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
   }, [operationIdToDateMap, operations]);
   
   return (
-    <Card {...props} minH={'330px'}>
+    <Card {...props} minH={'331.19px'}>
       <CardHeader>
         <Heading size={'md'} m={1}>{t('budget chart')}</Heading>
       </CardHeader>
