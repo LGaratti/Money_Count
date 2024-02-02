@@ -21,9 +21,9 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
   const {t} = useTranslation('ns1',{ i18n } );
   const currentLocale = i18n.language === 'it' ? it : enUS;
   
-  const startWeekDate:Date = (new Date());
-  const startMonthDate:Date = (new Date());
-  const startYearDate:Date = (new Date());
+  const [startWeekDate,setStartWeekDate] = useState<Date>(new Date())
+  const [startMonthDate,setStartMonthDate] = useState<Date>(new Date())
+  const [startYearDate,setStartYearDate] = useState<Date>(new Date())
 
   const [isPopoverOpen, setPopoverOpen] = useState(false);
 
@@ -32,7 +32,10 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
   };
 
 
-  const setGeneralDate = (choosenDate:Date, typeOfRange:string) => {
+  const setGeneralDate = (choosenDate:Date, typeOfRange:TimeUnit) => {
+    setStartWeekDate(choosenDate);
+    setStartMonthDate(choosenDate);
+    setStartYearDate(choosenDate);
     closePopover();
     let tempEndDate:Date = new Date();
     let tempDateRange: DateRange = templateDateRange;
@@ -49,10 +52,25 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
         }
         break;
       case 'month':
+        tempEndDate = new Date( choosenDate.getFullYear(), choosenDate.getMonth() + 1 , 0);
+        tempDateRange = {
+          nTimeUnit:1,
+          timeUnit:TimeUnit.MONTH,
+          startDate:choosenDate,
+          endDate:tempEndDate,
+          rangeDisplayed: format(choosenDate, 'MMMM', {locale:currentLocale}) + " " + choosenDate.getFullYear(),
+        }
         
         break;
       case 'year':
-        
+        tempEndDate = new Date( choosenDate.getFullYear() + 1, choosenDate.getMonth() , 0);
+        tempDateRange = {
+          nTimeUnit:1,
+          timeUnit:TimeUnit.YEAR,
+          startDate:choosenDate,
+          endDate:tempEndDate,
+          rangeDisplayed: format(choosenDate, 'yyyy')
+        }
         break;
     
       default:
@@ -111,7 +129,7 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
                       <DatePicker
                       locale={currentLocale}
                       selected={startWeekDate}
-                      onChange={(date) => date && setGeneralDate(date,'week')}
+                      onChange={(date) => date && setGeneralDate(date,TimeUnit.WEEK)}
                       dateFormat="I/R"
                       showWeekNumbers
                       showWeekPicker
@@ -125,7 +143,7 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
                       <DatePicker
                         locale={currentLocale}
                         selected={startMonthDate}
-                        onChange={(date) => date && setGeneralDate(date,'month')}
+                        onChange={(date) => date && setGeneralDate(date,TimeUnit.MONTH)}
                         dateFormat="MM/yyyy"
                         showMonthYearPicker
                         showFullMonthYearPicker
@@ -138,7 +156,7 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
                       <DatePicker
                         locale={currentLocale}
                         selected={startYearDate}
-                        onChange={(date) => date && setGeneralDate(date,'year')}
+                        onChange={(date) => date && setGeneralDate(date,TimeUnit.YEAR)}
                         showYearPicker
                         dateFormat="yyyy"
                         inline
