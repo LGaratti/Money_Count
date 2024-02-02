@@ -3,6 +3,7 @@
 export interface DateRange{
   rangeDisplayed: string;
   startDate:Date;
+  endDate?:Date;
   timeUnit:TimeUnit;
   nTimeUnit:number;
 }
@@ -34,3 +35,10 @@ export const dayOfWeekMap: { [key: string]: PayDay } = {
   '5': PayDay.FRIDAY,
   '6': PayDay.SATURDAY
 };
+
+export const templateDateRange:DateRange = {
+  nTimeUnit:0,
+  rangeDisplayed:'',
+  startDate: new Date(),
+  timeUnit:TimeUnit.NONE
+}
