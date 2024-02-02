@@ -24,14 +24,23 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
   const [startMonthDate, setStartMonthDate] = useState(new Date());
   const [startYearDate, setStartYearDate] = useState(new Date());
 
+  const [isPopoverOpen, setPopoverOpen] = useState(false);
+
+  const closePopover = () => {
+    setPopoverOpen(false);
+  };
+
   useEffect( () => {
     console.log(startWeekDate);
+    closePopover();
   }, [startWeekDate])
   useEffect( () => {
     console.log(startMonthDate);
+    closePopover();
   }, [startMonthDate])
   useEffect( () => {
     console.log(startYearDate);
+    closePopover();
   }, [startYearDate])
 
   const popoverColor = () => {
@@ -53,9 +62,9 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
     <>
     
       <Container centerContent padding={2}>
-        <Popover {...props} >
+        <Popover {...props} isOpen={isPopoverOpen} onClose={closePopover}>
           <PopoverTrigger>
-            <Button bg={buttonColor()} 
+            <Button onClick={() => setPopoverOpen(!isPopoverOpen)} bg={buttonColor()} 
               color={'white'} _hover={{ bg: hoverColor() }}> {t(dateRangeDisplayed.rangeDisplayed)}</Button>
           </PopoverTrigger>
           <PopoverContent overflow={'visible'}  bg={popoverColor()} shadow={'md'}>
