@@ -1,5 +1,5 @@
 import { Button, Popover, PopoverTrigger, PopoverContent, PopoverArrow, PopoverBody, PopoverProps, Container, useColorMode, Tabs, TabList, Tab, TabPanels, TabPanel, Box} from '@chakra-ui/react'
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { DateRange } from '../../interfaces/Date';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
@@ -18,9 +18,21 @@ interface DateRangeSelectorProps extends PopoverProps {
 export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelectorProps) => {
   const { colorMode } = useColorMode();
   const {t} = useTranslation('ns1',{ i18n } );
-
   const currentLocale = i18n.language === 'it' ? it : enUS;
-  const [startDate, setStartDate] = useState(new Date());
+  
+  const [startWeekDate, setStartWeekDate] = useState(new Date());
+  const [startMonthDate, setStartMonthDate] = useState(new Date());
+  const [startYearDate, setStartYearDate] = useState(new Date());
+
+  useEffect( () => {
+    console.log(startWeekDate);
+  }, [startWeekDate])
+  useEffect( () => {
+    console.log(startMonthDate);
+  }, [startMonthDate])
+  useEffect( () => {
+    console.log(startYearDate);
+  }, [startYearDate])
 
   const popoverColor = () => {
     if(colorMode === 'light') return 'purple.100'
@@ -60,8 +72,8 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
                     <Box display="flex" justifyContent="center" alignItems="center">
                       <DatePicker
                       locale={currentLocale}
-                      selected={startDate}
-                      onChange={(date) => date && setStartDate(date)}
+                      selected={startWeekDate}
+                      onChange={(date) => date && setStartWeekDate(date)}
                       dateFormat="I/R"
                       showWeekNumbers
                       showWeekPicker
@@ -74,8 +86,8 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
                       
                       <DatePicker
                         locale={currentLocale}
-                        selected={startDate}
-                        onChange={(date) => date && setStartDate(date)}
+                        selected={startMonthDate}
+                        onChange={(date) => date && setStartMonthDate(date)}
                         dateFormat="MM/yyyy"
                         showMonthYearPicker
                         showFullMonthYearPicker
@@ -87,8 +99,8 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
                     <Box display="flex" justifyContent="center" alignItems="center">
                       <DatePicker
                         locale={currentLocale}
-                        selected={startDate}
-                        onChange={(date) => date && setStartDate(date)}
+                        selected={startYearDate}
+                        onChange={(date) => date && setStartYearDate(date)}
                         showYearPicker
                         dateFormat="yyyy"
                         inline
