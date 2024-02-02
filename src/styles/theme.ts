@@ -44,11 +44,7 @@ export default extendTheme(
     ...theme,
     config,
     components: {
-      Switch: switchStyles,
-      // Calendar: Calendar,
-      // CalendarMonth: CalendarMonth,
-      // CalendarDay: CalendarDay,
-      // CalendarControl: CalendarControl
+      Switch: switchStyles
     },
     styles: {
       global: {

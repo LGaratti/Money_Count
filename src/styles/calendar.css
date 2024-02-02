@@ -13,3 +13,6 @@
   font-family: 'Outfit Variable', sans-serif;
 }
 
+.react-datepicker__year-wrapper {
+  display: contents; 
+}

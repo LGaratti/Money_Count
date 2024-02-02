@@ -3,33 +3,12 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { DateRange } from '../../interfaces/Date';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
-// import {
-//   Calendar,
-//   CalendarControls,
-//   CalendarDays,
-//   CalendarMonth,
-//   CalendarMonthName,
-//   CalendarMonths,
-//   CalendarNextButton,
-//   CalendarPrevButton,
-//   CalendarValues,
-//   CalendarDate,
-//   CalendarWeek,
-//   // CalendarDefaultTheme
-// } from "@uselessdev/datepicker";
 
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import '../../styles/calendar.css';
 import { enUS, it } from 'date-fns/locale';
-
-// import 'react-calendar/dist/Calendar.css';
-// import { Label, Operation } from '../../interfaces/Operation';
-// import LabelTag from '../atoms/LabelTag';
-// type ValuePiece = Date | null;
-
-// type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 interface DateRangeSelectorProps extends PopoverProps {
   dateRangeDisplayed: DateRange,
@@ -62,17 +41,15 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
     <>
     
       <Container centerContent padding={2}>
-        <Popover {...props}>
+        <Popover {...props} >
           <PopoverTrigger>
             <Button bg={buttonColor()} 
               color={'white'} _hover={{ bg: hoverColor() }}> {t(dateRangeDisplayed.rangeDisplayed)}</Button>
           </PopoverTrigger>
-          <PopoverContent overflow={'visible'}  bg={popoverColor()}>
+          <PopoverContent overflow={'visible'}  bg={popoverColor()} shadow={'md'}>
             <PopoverArrow bg={popoverColor()}/>
-            {/* <PopoverCloseButton /> */}
-            {/* <PopoverHeader>Confirmation!</PopoverHeader> */}
             <PopoverBody>
-              <Tabs defaultIndex={1} isFitted colorScheme={'purple'} variant={'solid-rounded'}>
+              <Tabs defaultIndex={1} isFitted colorScheme={'purple'} > {/*variant={'customTabsVariant'} >*/}
                 <TabList>
                   <Tab>{t('week')}</Tab>
                   <Tab>{t('month')}</Tab>
@@ -80,48 +57,21 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
                 </TabList>
                 <TabPanels>
                   <TabPanel>
-                  <Box display="flex" justifyContent="center" alignItems="center">
-                    {/* <Calendar weekStartsOn={1} value={dates} onSelectDate={handleDateSelect} allowOutsideDays weekDateSelection>
-                      <CalendarControls>
-                        <CalendarPrevButton />
-                        <CalendarNextButton />
-                      </CalendarControls>
-                      <CalendarMonths>
-                        <CalendarMonth>
-                          <CalendarMonthName />
-                          <CalendarWeek />
-                          <CalendarDays />
-                        </CalendarMonth>
-                      </CalendarMonths>
-                    </Calendar> */}
-                    <DatePicker
-                    locale={currentLocale}
-                    selected={startDate}
-                    onChange={(date) => date && setStartDate(date)}
-                    dateFormat="I/R"
-                    
-                    showWeekNumbers
-                    showWeekPicker
-                    inline
-                    />
-                  </Box>    
-                  </TabPanel>
-                  <TabPanel>
-                  <Box display="flex" justifyContent="center" alignItems="center">
-                    
-                    <DatePicker
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                      <DatePicker
                       locale={currentLocale}
                       selected={startDate}
                       onChange={(date) => date && setStartDate(date)}
-                      dateFormat="MM/yyyy"
-                      showMonthYearPicker
-                      showFullMonthYearPicker
+                      dateFormat="I/R"
+                      showWeekNumbers
+                      showWeekPicker
                       inline
-                    />
-                  </Box> 
+                      />
+                    </Box>    
                   </TabPanel>
                   <TabPanel>
                     <Box display="flex" justifyContent="center" alignItems="center">
+                      
                       <DatePicker
                         locale={currentLocale}
                         selected={startDate}
@@ -131,10 +81,19 @@ export const DateRangeSelector = ({dateRangeDisplayed,...props}: DateRangeSelect
                         showFullMonthYearPicker
                         inline
                       />
-                    </Box>
+                    </Box> 
                   </TabPanel>
                   <TabPanel>
-                    <p>four!</p>
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                      <DatePicker
+                        locale={currentLocale}
+                        selected={startDate}
+                        onChange={(date) => date && setStartDate(date)}
+                        showYearPicker
+                        dateFormat="yyyy"
+                        inline
+                      />
+                    </Box>
                   </TabPanel>
                 </TabPanels>
               </Tabs>
