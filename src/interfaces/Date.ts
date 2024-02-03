@@ -40,5 +40,6 @@ export const templateDateRange:DateRange = {
   nTimeUnit:0,
   rangeDisplayed:'',
   startDate: new Date(),
+  endDate: undefined,
   timeUnit:TimeUnit.NONE
 }
