@@ -21,9 +21,8 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
   const {t} = useTranslation('ns1',{ i18n } );
   const currentLocale = i18n.language === 'it' ? it : enUS;
   
-  const [startDate,setStartDate] = useState<Date>(new Date());
-  const [endDate,setEndDate] = useState<Date>(new Date());
-
+  const [startDate,setStartDate] = useState<Date>();
+  const [endDate,setEndDate] = useState<Date>();
   const [isPopoverOpen, setPopoverOpen] = useState(false);
 
   const closePopover = () => {
@@ -32,19 +31,17 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
 
 
   const setGeneralDate = (choosenDate?:Date, choosenEndDate?:Date,typeOfRange?:TimeUnit) => {
-    if(!choosenDate)
-      return;
-    setStartDate(choosenDate);
-    if(choosenEndDate)
-      setEndDate(choosenEndDate);
+    if(choosenDate)
+      setStartDate(choosenDate);
+    else return;
+    setEndDate(choosenEndDate);
     // eslint-disable-next-line prefer-const
     let tempDateRange: DateRange = dateRangeDisplayed;
     tempDateRange.nTimeUnit = 1;
     tempDateRange.timeUnit = TimeUnit.NONE;
-    tempDateRange.startDate = startDate;
-    tempDateRange.endDate = endDate;
-    tempDateRange.rangeDisplayed = format(startDate, 'd/M/yy') + ' - ' + format(endDate, 'd/M/yy');
     tempDateRange.timeUnit = typeOfRange || TimeUnit.NONE;
+    tempDateRange.startDate = choosenDate;
+
     switch (typeOfRange) {
       case 'none':
         if(choosenEndDate)
@@ -52,13 +49,14 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
           setEndDate(choosenEndDate)
           tempDateRange.nTimeUnit = 0;
         }
+        else return;
         break;
       case 'week':
         setEndDate(new Date( choosenDate.getFullYear(), choosenDate.getMonth(), choosenDate.getDate() + 6));
           break;
       case 'month':
         setEndDate(new Date( choosenDate.getFullYear(), choosenDate.getMonth() + 1 , 0));
-        tempDateRange.rangeDisplayed = format(startDate, 'MMMM', {locale:currentLocale}) + " " + startDate.getFullYear();
+        tempDateRange.rangeDisplayed = format(choosenDate, 'MMMM', {locale:currentLocale}) + " " + choosenDate.getFullYear();
           break;
       case 'year':
         setEndDate(new Date( choosenDate.getFullYear() + 1, choosenDate.getMonth() , 0));
@@ -68,21 +66,12 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
       default:
         break;
     }
-    if ( endDate !== startDate) {
-      setDateRangeDisplayed(tempDateRange);
-      closePopover();
-    }
-    console.log(tempDateRange);
+    if( choosenEndDate )
+      tempDateRange.rangeDisplayed = format(choosenDate, 'd/M/yy') + ' - ' + format(choosenEndDate, 'd/M/yy');
+    setDateRangeDisplayed(tempDateRange);
+    closePopover();
+  console.log(tempDateRange);
   };
-
-  // useEffect( () => {
-  //   console.log(startMonthDate);
-  //   closePopover();
-  // }, [startMonthDate])
-  // useEffect( () => {
-  //   console.log(startYearDate);
-  //   closePopover();
-  // }, [startYearDate])
 
   const popoverColor = () => {
     if(colorMode === 'light') return 'purple.100'
@@ -113,7 +102,7 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
             <PopoverBody>
               <Tabs defaultIndex={1} isFitted colorScheme={'purple'} > {/*variant={'customTabsVariant'} >*/}
                 <TabList>
-                  <Tab>{t('week')}</Tab>
+                  <Tab>{t('range')}</Tab>
                   <Tab>{t('month')}</Tab>
                   <Tab>{t('year')}</Tab>
                 </TabList>
@@ -127,13 +116,13 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
                       startDate={startDate}
                       endDate={endDate}
                       selectsRange
+                      disabledKeyboardNavigation
                       inline
                     />
                     </Box>    
                   </TabPanel>
                   <TabPanel>
                     <Box display="flex" justifyContent="center" alignItems="center">
-                      
                       <DatePicker
                         locale={currentLocale}
                         selected={startDate}
@@ -141,6 +130,7 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
                         dateFormat="MM/yyyy"
                         showMonthYearPicker
                         showFullMonthYearPicker
+                        disabledKeyboardNavigation
                         inline
                       />
                     </Box> 
@@ -153,6 +143,7 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
                         onChange={(date) => date && setGeneralDate(date,undefined,TimeUnit.YEAR)}
                         showYearPicker
                         dateFormat="yyyy"
+                        disabledKeyboardNavigation
                         inline
                       />
                     </Box>
