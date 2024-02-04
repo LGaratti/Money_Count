@@ -226,7 +226,7 @@ export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: n
   else {
     operationsForDates.sort((a, b) => a.date.getTime() - b.date.getTime());
   }
-  console.log('tempOperationsDates: ',numberOfOps)
+  console.log('',operationsForDates,numberOfOps)
   setOperationsDates(operationsForDates);
   
 }

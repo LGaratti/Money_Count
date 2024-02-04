@@ -16,7 +16,7 @@ interface DateRangeSelectorProps extends PopoverProps {
   setDateRangeDisplayed: Dispatch<SetStateAction<DateRange>>
 }
 
-export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...props}: DateRangeSelectorProps) => {
+export const DateRangeSelector = ({dateRangeDisplayed , setDateRangeDisplayed, ...props}: DateRangeSelectorProps) => {
   const { colorMode } = useColorMode();
   const {t} = useTranslation('ns1',{ i18n } );
   const currentLocale = i18n.language === 'it' ? it : enUS;
@@ -24,6 +24,7 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
   const [startDate,setStartDate] = useState<Date>();
   const [endDate,setEndDate] = useState<Date>();
   const [isPopoverOpen, setPopoverOpen] = useState(false);
+  const [, setTabIndex] = useState(0)
 
   const closePopover = () => {
     setPopoverOpen(false);
@@ -36,31 +37,46 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
     else return;
     setEndDate(choosenEndDate);
     // eslint-disable-next-line prefer-const
-    let tempDateRange: DateRange = dateRangeDisplayed;
-    tempDateRange.nTimeUnit = 1;
-    tempDateRange.timeUnit = TimeUnit.NONE;
+    let tempDateRange: DateRange = { ...dateRangeDisplayed };
     tempDateRange.timeUnit = typeOfRange || TimeUnit.NONE;
     tempDateRange.startDate = choosenDate;
+    tempDateRange.nTimeUnit = 0;
 
     switch (typeOfRange) {
       case 'none':
-        if(choosenEndDate)
-        {
-          setEndDate(choosenEndDate)
+        if(choosenEndDate) {
           tempDateRange.nTimeUnit = 0;
+          tempDateRange.rangeDisplayed = format(choosenDate, 'd/M/yy') + ' - ' + format(choosenEndDate, 'd/M/yy');
+          tempDateRange.endDate = choosenEndDate;
         }
         else return;
         break;
-      case 'week':
-        setEndDate(new Date( choosenDate.getFullYear(), choosenDate.getMonth(), choosenDate.getDate() + 6));
-          break;
-      case 'month':
-        setEndDate(new Date( choosenDate.getFullYear(), choosenDate.getMonth() + 1 , 0));
+      case 'week': {
+          const tempEndDate: Date = new Date( choosenDate.getFullYear(), choosenDate.getMonth(), choosenDate.getDate() + 6);
+          tempDateRange.timeUnit = TimeUnit.WEEK;
+          tempDateRange.nTimeUnit = 1;
+          tempDateRange.rangeDisplayed = format(choosenDate, 'd/M/yy') + ' - ' + format(tempEndDate, 'd/M/yy');
+          tempDateRange.endDate = tempEndDate;
+          setEndDate(tempEndDate);
+        }  
+        break;
+      case 'month': {
+        const tempEndDate: Date = new Date( choosenDate.getFullYear(), choosenDate.getMonth() + 1 , 0)
+        tempDateRange.timeUnit = TimeUnit.MONTH;
+        tempDateRange.nTimeUnit = 1;
         tempDateRange.rangeDisplayed = format(choosenDate, 'MMMM', {locale:currentLocale}) + " " + choosenDate.getFullYear();
-          break;
-      case 'year':
-        setEndDate(new Date( choosenDate.getFullYear() + 1, choosenDate.getMonth() , 0));
+        tempDateRange.endDate = tempEndDate;
+        setEndDate(tempEndDate);
+      }
+        break;
+      case 'year': {
+        const tempEndDate: Date = new Date( choosenDate.getFullYear() + 1, choosenDate.getMonth() , 0);
+        tempDateRange.timeUnit = TimeUnit.YEAR;
+        tempDateRange.nTimeUnit = 1;
         tempDateRange.rangeDisplayed = format(choosenDate, 'yyyy')
+        tempDateRange.endDate = tempEndDate;
+        setEndDate(tempEndDate);
+      }
           break;
       //   
       default:
@@ -70,8 +86,13 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
       tempDateRange.rangeDisplayed = format(choosenDate, 'd/M/yy') + ' - ' + format(choosenEndDate, 'd/M/yy');
     setDateRangeDisplayed(tempDateRange);
     closePopover();
-  console.log(tempDateRange);
+  // console.log("tempDateRange in DateRangeSelector: ",tempDateRange);
   };
+
+  const resetDates = () => {
+    setStartDate(undefined);
+    setEndDate(undefined);
+  } 
 
   const popoverColor = () => {
     if(colorMode === 'light') return 'purple.100'
@@ -100,7 +121,10 @@ export const DateRangeSelector = ({dateRangeDisplayed,setDateRangeDisplayed,...p
           <PopoverContent overflow={'visible'}  bg={popoverColor()} shadow={'md'}>
             <PopoverArrow bg={popoverColor()}/>
             <PopoverBody>
-              <Tabs defaultIndex={1} isFitted colorScheme={'purple'} > {/*variant={'customTabsVariant'} >*/}
+              <Tabs defaultIndex={1} isFitted colorScheme={'purple'} onChange={(index) => {
+                setTabIndex(index)
+                resetDates();
+              }}> {/*variant={'customTabsVariant'} >*/}
                 <TabList>
                   <Tab>{t('range')}</Tab>
                   <Tab>{t('month')}</Tab>
