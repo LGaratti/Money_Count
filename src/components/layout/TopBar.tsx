@@ -1,4 +1,4 @@
-import { Heading, AbsoluteCenter, useColorMode, Switch, HStack, Spacer, Icon, Button, Wrap } from "@chakra-ui/react";
+import { Heading, useColorMode, Switch, HStack, Spacer, Icon, Button, Wrap } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { MdPostAdd } from "react-icons/md";
@@ -10,7 +10,7 @@ export const TopBar = () => {
   const {t} = useTranslation('ns1',{ i18n } );
 
   return (
-    <HStack w="full" p={2} justify="space-between">
+    <HStack w="full" p={2} justify="space-between" position="sticky">
       <Wrap spacing={4}>
         <Link to="/">
           <Button>Home</Button>
@@ -19,20 +19,20 @@ export const TopBar = () => {
           <Button>Demo</Button>
         </Link>
       </Wrap>
-      <HStack >
-        <AbsoluteCenter axis='horizontal'>
-          <Heading size={'2xl'}>
-            <Link to="/">
-              Money Count
-            </Link>
-          </Heading>
-        </AbsoluteCenter>
-      </HStack>
-      <Spacer />
+      
+      <Spacer/>
+        <Heading size={'2xl'}>
+          <Link to="/">
+            Money Count
+          </Link>
+        </Heading>
+      <Spacer/>
+      
+      {/* <Spacer /> */}
       <HStack>
         <Link to="/demo">
           <Button
-            rightIcon={<MdPostAdd/>}
+            rightIcon={<MdPostAdd/>} 
             bg={colorMode === 'light' ? 'primary.600' : 'primary.300'} 
             color={colorMode === 'light' ? 'white' : 'black'}>
             {t('add operation')}
@@ -49,7 +49,7 @@ export const TopBar = () => {
         />
         <Icon
           as={colorMode === 'light' ? FaSun : FaMoon}
-          position="absolute"
+          position="absolute"     //TODO Da modificare
           color={colorMode === 'light' ? 'primary.50' : 'white'} 
           marginLeft={colorMode === 'light' ? '7' : '1.5'}
           pointerEvents="none"
