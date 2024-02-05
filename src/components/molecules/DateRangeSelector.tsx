@@ -47,12 +47,12 @@ export const DateRangeSelector = ({dateRangeDisplayed , setDateRangeDisplayed, .
         if(choosenEndDate) {
           tempDateRange.nTimeUnit = 0;
           tempDateRange.rangeDisplayed = format(choosenDate, 'd/M/yy') + ' - ' + format(choosenEndDate, 'd/M/yy');
-          tempDateRange.endDate = choosenEndDate;
+          tempDateRange.endDate = new Date( choosenEndDate.getFullYear(), choosenEndDate.getMonth(), choosenEndDate.getDate(), 23,59,59);;
         }
         else return;
         break;
       case 'week': {
-          const tempEndDate: Date = new Date( choosenDate.getFullYear(), choosenDate.getMonth(), choosenDate.getDate() + 6);
+          const tempEndDate: Date = new Date( choosenDate.getFullYear(), choosenDate.getMonth(), choosenDate.getDate() + 6, 23,59,59);
           tempDateRange.timeUnit = TimeUnit.WEEK;
           tempDateRange.nTimeUnit = 1;
           tempDateRange.rangeDisplayed = format(choosenDate, 'd/M/yy') + ' - ' + format(tempEndDate, 'd/M/yy');
@@ -61,7 +61,7 @@ export const DateRangeSelector = ({dateRangeDisplayed , setDateRangeDisplayed, .
         }  
         break;
       case 'month': {
-        const tempEndDate: Date = new Date( choosenDate.getFullYear(), choosenDate.getMonth() + 1 , 0)
+        const tempEndDate: Date = new Date( choosenDate.getFullYear(), choosenDate.getMonth() + 1 , 0, 23, 59, 59)
         tempDateRange.timeUnit = TimeUnit.MONTH;
         tempDateRange.nTimeUnit = 1;
         tempDateRange.rangeDisplayed = format(choosenDate, 'MMMM', {locale:currentLocale}) + " " + choosenDate.getFullYear();
@@ -70,7 +70,7 @@ export const DateRangeSelector = ({dateRangeDisplayed , setDateRangeDisplayed, .
       }
         break;
       case 'year': {
-        const tempEndDate: Date = new Date( choosenDate.getFullYear() + 1, choosenDate.getMonth() , 0);
+        const tempEndDate: Date = new Date( choosenDate.getFullYear() + 1, choosenDate.getMonth(), 0, 23, 59, 59);
         tempDateRange.timeUnit = TimeUnit.YEAR;
         tempDateRange.nTimeUnit = 1;
         tempDateRange.rangeDisplayed = format(choosenDate, 'yyyy')

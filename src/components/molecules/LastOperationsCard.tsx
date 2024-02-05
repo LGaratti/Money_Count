@@ -7,6 +7,11 @@ import { useEffect, useState } from 'react';
 import { enUS, it } from 'date-fns/locale';
 import { format } from 'date-fns';
 
+interface DateOps {
+  date:Date;
+  op:Operation;
+}
+
 interface LastOperationsCardProps extends CardProps {
   operations?: Operation[];
   opsToDate: OperationsForDate[];
@@ -16,24 +21,23 @@ export const LastOperationsCard = ({operations, opsToDate, ...props}: LastOperat
   const { colorMode } = useColorMode();
   const {t} = useTranslation('ns1',{ i18n } );
   const currentLocale = i18n.language === 'it' ? it : enUS;
-  const [gains,setGains] = useState<Operation[]>();
-  const [losses,setLosses] = useState<Operation[]>();
+  const [gains,setGains] = useState<DateOps[]>();
+  const [losses,setLosses] = useState<DateOps[]>();
   useEffect( () => {
     if(!operations || !opsToDate)
       return;
     // eslint-disable-next-line prefer-const
-    let tempGains:Operation[] = []
+    let tempGains:DateOps[] = []
     // eslint-disable-next-line prefer-const
-    let tempLosses:Operation[] = [];
+    let tempLosses:DateOps[] = [];
     opsToDate.forEach( opToDate => {
       opToDate.operations_id.forEach( opId => {
         const operation = operations.find(op2 => op2.operation_id === opId) || undefined;
-      if(operation){
-          operation.last_date = opToDate.date;
+        if(operation){
           if(operation.amount > 0)
-            tempGains.push(operation)
+            tempGains.push({date:opToDate.date,op:operation})
           else
-            tempLosses.push(operation)
+            tempLosses.push({date:opToDate.date,op:operation})
         }
       })
     })
@@ -51,10 +55,10 @@ export const LastOperationsCard = ({operations, opsToDate, ...props}: LastOperat
     return filteredLabels;
   }
 
-  const atLeastOneLabel = (tableOps: Operation[]) => {
+  const atLeastOneLabel = (tableOps: DateOps[]) => {
     let atLeastOne = false;
     tableOps?.map(operation => {
-      const labels = labelsWithoutGainAndLoss(operation.labels)
+      const labels = labelsWithoutGainAndLoss(operation.op.labels)
       if( labels.length > 0 )
         atLeastOne = true;
     })
@@ -65,7 +69,7 @@ export const LastOperationsCard = ({operations, opsToDate, ...props}: LastOperat
     return format(date, 'P', { locale: currentLocale }); // Utilizza il formato di data desiderato
   };
 
-  const OperationsTable = ({ ops, title, color}: { ops?: Operation[], title: string, color: string}) => (
+  const OperationsTable = ({ ops, title, color}: { ops?: DateOps[], title: string, color: string}) => (
     
     <Box>
       <Heading size={'sm'} textAlign="center" m={2} color={ colorMode === 'light' && color+'.500' || color+'.600'}>{t(title)}</Heading>
@@ -82,17 +86,17 @@ export const LastOperationsCard = ({operations, opsToDate, ...props}: LastOperat
               </Tr>
             </Thead>
             <Tbody>
-              {ops.map((operation) => (
-                <Tr key={operation.operation_id}>
-                  <Td>{operation.last_date ? formatDate(operation.last_date) : formatDate(operation.first_date)}</Td>
-                  <Td>{operation.name}</Td>
+              {ops.map((dateOp) => (
+                <Tr key={dateOp.op.operation_id}>
+                  <Td>{dateOp.date && formatDate(dateOp.date)}</Td>
+                  <Td>{dateOp.op.name}</Td>
                   <Td >
-                    {operation.amount + ' €'}
+                    {dateOp.op.amount + ' €'}
                   </Td>
                   {atLeastOneLabel(ops) &&
                     <Td>
                       <Wrap spacing={2}>
-                        {labelsWithoutGainAndLoss(operation.labels).map((label, index) => (
+                        {labelsWithoutGainAndLoss(dateOp.op.labels).map((label, index) => (
                           <LabelTag key={index} label={label} />
                         ))}
                       </Wrap>
