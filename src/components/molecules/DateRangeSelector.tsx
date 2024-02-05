@@ -47,7 +47,7 @@ export const DateRangeSelector = ({dateRangeDisplayed , setDateRangeDisplayed, .
         if(choosenEndDate) {
           tempDateRange.nTimeUnit = 0;
           tempDateRange.rangeDisplayed = format(choosenDate, 'd/M/yy') + ' - ' + format(choosenEndDate, 'd/M/yy');
-          tempDateRange.endDate = new Date( choosenEndDate.getFullYear(), choosenEndDate.getMonth(), choosenEndDate.getDate(), 23,59,59);;
+          tempDateRange.endDate = new Date( choosenEndDate.getFullYear(), choosenEndDate.getMonth(), choosenEndDate.getDate(), 23,59,59);
         }
         else return;
         break;
