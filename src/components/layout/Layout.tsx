@@ -5,7 +5,7 @@ import { TopBar } from "./TopBar";
 function Layout() {
   const { colorMode } = useColorMode();
   return (
-    <VStack w="100vw" h="100vh" spacing={5} overflow="hidden">
+    <VStack w="100vw" h="100vh" spacing={5} overflow="auto">
       <TopBar />
       <Image
         w="100%"
