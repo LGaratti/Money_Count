@@ -42,8 +42,10 @@ export const LastOperationsCard = ({operations, opsToDate, ...props}: LastOperat
       })
     })
 
-    setGains(tempGains);
-    setLosses(tempLosses);
+    tempGains.sort((a, b) => b.date.getTime() - a.date.getTime());
+    tempLosses.sort((a, b) => b.date.getTime() - a.date.getTime());
+    setGains(tempGains.slice(0, 4));
+    setLosses(tempLosses.slice(0, 4));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[opsToDate])
  // Filter operations into gains and losses
