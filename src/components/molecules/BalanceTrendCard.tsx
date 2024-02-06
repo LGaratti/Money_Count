@@ -5,15 +5,18 @@ import i18n from "../../locales/i18n";
 import { Label as LabelOp, Operation, OperationsForDate } from "../../interfaces/Operation";
 import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { format } from 'date-fns';
+import { addDays, differenceInCalendarDays, format } from 'date-fns';
 import LabelTag from "../atoms/LabelTag";
 import { DateRange } from "../../interfaces/Date";
+import { enUS, it } from "date-fns/locale";
 
 interface BarChartData {
-  [x: string]: string | number; //gain and loss, declared in this way to allow translaction
+  gain:number;
+  loss:number;
   name: string;
-  // operations: Operation[]                                                                       //TODO 
-  // Necessario aggiungere l'array di operazione per poi mostrare nel tooltip che customizzeremo le varie operazioni che compongono la bar
+  startDate:Date;
+  endDate:Date;
+  operations: Operation[]
 } 
 
 interface BalanceTrendCardProps extends CardProps {
@@ -25,6 +28,7 @@ interface BalanceTrendCardProps extends CardProps {
 
 export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, dateRangeDisplayed, ...props} : BalanceTrendCardProps) => {
   const {t} = useTranslation('ns1',{ i18n } );
+  const currentLocale = i18n.language === 'it' ? it : enUS;
   const theme = useTheme();
   
   const [barChartData, setBarChartData] = useState<BarChartData[]>([]);
@@ -32,109 +36,120 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
   useEffect(() => {
     if (operationIdToDateMap && operations) {
       // Creare un oggetto per tenere traccia dei guadagni e delle perdite per ogni data
-      const dateAmounts: Record<string, { gain: number; loss: number; }> = {};
+      
+      // eslint-disable-next-line prefer-const
+      let dateAmounts: BarChartData[] = []; //TOVERIFY perchè mi consiglia const?
+      const startDate = new Date(dateRangeDisplayed.startDate);
+      const endDate = dateRangeDisplayed.endDate ? new Date(dateRangeDisplayed.endDate) : new Date();
+      const totalDays = differenceInCalendarDays(endDate, startDate);
+
+      const segmentRangedDaysKey = (startDate:Date,endDate:Date) => {
+          if(endDate.getFullYear() !== startDate.getFullYear()) //TODO Cambiare e inserire solo il giorno in mezzo al range tra startDate e endDate
+            return `${format(startDate, 'd/M/yy',{locale:currentLocale})}-${format(endDate, 'd/M/yy',{locale:currentLocale})}`;
+          else
+            return `${format(startDate, 'd/M',{locale:currentLocale})}-${format(endDate, 'd/M',{locale:currentLocale})}`;
+      }
+      const segmentDaysKey = (opDate:Date) => {
+        if(endDate.getFullYear() !== startDate.getFullYear())
+          return `${format(opDate, 'd/M/yy',{locale:currentLocale})}`;
+        else
+          return `${format(opDate, 'd/M',{locale:currentLocale})}`;
+      }
       // const maxSegmNumb = 10;
       // //TODO Da modificare in base al range di date selezionate. fare n segmenti  per rendere comprensibile il grafico.
-      // switch (dateRangeDisplayed.timeUnit) {
-      //   case 'none':
-      //     if (operationIdToDateMap && operationIdToDateMap.length > 10) {
-      //       const startDate = new Date(dateRangeDisplayed.startDate);
-      //       const endDate = dateRangeDisplayed.endDate ? new Date(dateRangeDisplayed.endDate) : new Date();
-      //       const totalDays = differenceInCalendarDays(endDate, startDate);
-      //       const segmentSize = Math.ceil(totalDays / 10); // Arrotonda per eccesso per avere al massimo 10 segmenti
+      switch (dateRangeDisplayed.timeUnit) {
+        case 'none':
+          if (operationIdToDateMap.length > 9) {
+            
+            const segmentSize = Math.ceil(totalDays / 9); // Arrotonda per eccesso per avere al massimo 9 segmenti
       
-      //       const dateAmounts:newBarChartData[] = [{gain:0,loss:0,name:'',operations:[]}];
+            for (let i = 0; i < 9; i++) {
+              // Calcola l'inizio e la fine di ogni segmento
+              const segmentStartDate = addDays(startDate, i * segmentSize);
+              const segmentEndDate = i === 8 ? endDate : addDays(segmentStartDate, segmentSize); // se è l'ultimo conta fino ad end date
       
-      //       for (let i = 0; i < 10; i++) {
-      //         // Calcola l'inizio e la fine di ogni segmento
-      //         const segmentStartDate = addDays(startDate, i * segmentSize);
-      //         const segmentEndDate = i === 9 ? endDate : addDays(segmentStartDate, segmentSize);
-      
-      //         // Inizializza i segmenti
-      //         const segmentKey = `${format(segmentStartDate, 'd/M/yy')} - ${format(segmentEndDate, 'd/M/yy')}`;
-      //         dateAmounts.push({ gain: 0, loss: 0, name:'', operations:[]});
-      
-      //         operationIdToDateMap.forEach(opDate => {
-      //           opDate.operations_id.forEach(op => {
-      //             const operation = operations.find(op2 => op2.operation_id === op);
-      //             if (operation) {
-      //               const operationDate = new Date(operation.first_date);
-      //               if (operationDate >= segmentStartDate && operationDate < segmentEndDate) {
-      //                 // Aggiungi i valori al segmento corretto
-      //                 const amount = operation.amount;
-      //                 if (amount > 0) {
-      //                   dateAmounts[segmentKey].gain += amount;
-      //                 } else {
-      //                   dateAmounts[segmentKey].loss += Math.abs(amount);
-      //                 }
-      //               }
-      //             }
-      //           });
-      //         });
-      //       }
-      
-      //       // Converti l'oggetto in un array per il grafico
-      //       const newBarChartData = Object.keys(dateAmounts).map(segmentKey => {
-      //         return {
-      //           name: segmentKey,
-      //           [t('gain')]: dateAmounts[segmentKey].gain,
-      //           [t('loss')]: dateAmounts[segmentKey].loss,
-      //         };
-      //       });
-      
-      //       setBarChartData(newBarChartData);
-      //     }
-      //     break;
-      //   case 'week':
-          
-      //     break;
-        
-      //   case 'month':
-          
-      //     break;
-
-      //   case 'year':
-          
-      //     break;
-      
-      //   default:
-      //     break;
-      // }
-      operationIdToDateMap.forEach(opDate => {
-        // const date = opDate.date;
-        opDate.operations_id.forEach( op => {
-          const operation = operations.find(op2 => op2.operation_id === op);
-          if(operation)
-          {
-            const amount = operation ? operation.amount : 0;
-            const dateString = format(opDate.date, 'd/M/yy');
-            // Inizializzare i valori se non esistono già per quella data
-            if (!dateAmounts[dateString]) {
-              dateAmounts[dateString] = { gain: 0, loss: 0 };
-            }
-
-            // Sommare i guadagni e le perdite per quella data
-            if (operation.amount > 0) {
-              dateAmounts[dateString].gain += amount;
-            } else {
-              dateAmounts[dateString].loss += Math.abs(amount);
-            }
+              operationIdToDateMap.forEach(opDate => {
+                const operationDate = new Date(opDate.date);
+                opDate.operations_id.forEach(op => {
+                  const operation = operations.find(op2 => op2.operation_id === op);
+                  if (operation) {
+                    if (operationDate >= segmentStartDate && operationDate < segmentEndDate) {
+                      // Aggiungi i valori al segmento corretto
+                      const groupName = operation.amount >= 0 ? "gain": "loss";
+                      const amount = operation.amount;
+                      // Se non esiste lo pusho, se esiste aggiungo il conteggio e l'operazione nell'array operations
+                      const tempDateAmounts = dateAmounts.findIndex(dateA => dateA.name === segmentRangedDaysKey(segmentStartDate,segmentEndDate))
+                      if (tempDateAmounts !== -1) {
+                        dateAmounts[tempDateAmounts][groupName] += Math.abs(amount); 
+                        dateAmounts[tempDateAmounts].operations.push(operation);
+                      }
+                      else {
+                        const newObj = {
+                          gain: groupName === "gain" ? Math.abs(amount) : 0, // Imposta gain a amount solo se groupName è "gain"
+                          loss: groupName === "loss" ? Math.abs(amount) : 0,
+                          startDate:segmentStartDate,
+                          endDate:segmentEndDate,
+                          name: segmentRangedDaysKey(segmentStartDate,segmentEndDate),
+                          operations: [operation],
+                        };
+                        dateAmounts.push(newObj);
+                      }
+                    }
+                  }
+                });
+              });
+            }   
           }
-        })
-      })
-
-      // Convertire l'oggetto in un array per il grafico
-      const gainNameTransl = t('gain');
-      const lossNameTransl = t('loss');
-      const newBarChartData = Object.keys(dateAmounts).map(date => {
+          else {
+            operationIdToDateMap.forEach(opDate => {
+              opDate.operations_id.forEach(op => {
+                const operation = operations.find(op2 => op2.operation_id === op);
+                if (operation) {
+                  const operationDate = new Date(opDate.date);
+                  if (operationDate >= startDate && operationDate < endDate) {
+                    // Aggiungi i valori al segmento corretto
+                    const groupName = operation.amount >= 0 ? "gain": "loss";
+                    const amount = operation.amount;
+                    // Se non esiste lo pusho, se esiste aggiungo il conteggio e l'operazione nell'array operations
+                    const tempDateAmounts = dateAmounts.findIndex(dateA => {dateA.name === segmentDaysKey(operationDate)})
+                    if (tempDateAmounts !== -1) {
+                      dateAmounts[tempDateAmounts][groupName] += Math.abs(amount); 
+                      dateAmounts[tempDateAmounts].operations.push(operation);
+                    }
+                    else {
+                      const newObj = {
+                        gain: groupName === "gain" ? amount : 0, // Imposta gain a amount solo se groupName è "gain"
+                        loss: groupName === "loss" ? Math.abs(amount) : 0,
+                        startDate:startDate,
+                        endDate:endDate,
+                        name: segmentDaysKey(operationDate),
+                        operations: [operation],
+                      };
+                      dateAmounts.push(newObj);
+                    }
+                  }
+                }
+              });
+            });
+          }
+          break;
+        case 'week':
+          
+          break;
         
-        return {
-          name: date,
-          [gainNameTransl]: dateAmounts[date].gain,
-          [lossNameTransl]: dateAmounts[date].loss,
-        }
-      });
-      setBarChartData(newBarChartData);
+        case 'month':
+          
+          break;
+
+        case 'year':
+          
+          break;
+      
+        default:
+          break;
+      }
+      console.log("dateAmounts",dateAmounts)
+      setBarChartData(dateAmounts);
     }
   }, [operationIdToDateMap, operations, dateRangeDisplayed]);
   
@@ -162,8 +177,8 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
               <YAxis />
               <Tooltip />
               {/* <Legend /> */}
-              <Bar dataKey={t('gain')} fill={theme.colors.green[400]} /> 
-              <Bar dataKey={t('loss')} fill={theme.colors.red[500]} />
+              <Bar dataKey={"gain"} fill={theme.colors.green[400]} /> 
+              <Bar dataKey={"loss"} fill={theme.colors.red[500]} />
             </BarChart>
           </ResponsiveContainer>
         </Box> 
