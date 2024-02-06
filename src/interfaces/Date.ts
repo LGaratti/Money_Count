@@ -35,11 +35,3 @@ export const dayOfWeekMap: { [key: string]: PayDay } = {
   '5': PayDay.FRIDAY,
   '6': PayDay.SATURDAY
 };
-
-export const templateDateRange:DateRange = {
-  nTimeUnit:0,
-  rangeDisplayed:'',
-  startDate: new Date(),
-  endDate: undefined,
-  timeUnit:TimeUnit.NONE
-}

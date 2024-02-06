@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { format } from 'date-fns';
 import LabelTag from "../atoms/LabelTag";
+import { DateRange } from "../../interfaces/Date";
 
 interface BarChartData {
   [x: string]: string | number; //gain and loss, declared in this way to allow translaction
@@ -19,9 +20,10 @@ interface BalanceTrendCardProps extends CardProps {
   operations?: Operation[],
   labels?: LabelOp[],
   operationIdToDateMap?: OperationsForDate[],
+  dateRangeDisplayed: DateRange,
 }
 
-export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...props} : BalanceTrendCardProps) => {
+export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, dateRangeDisplayed, ...props} : BalanceTrendCardProps) => {
   const {t} = useTranslation('ns1',{ i18n } );
   const theme = useTheme();
   
@@ -31,9 +33,73 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
     if (operationIdToDateMap && operations) {
       // Creare un oggetto per tenere traccia dei guadagni e delle perdite per ogni data
       const dateAmounts: Record<string, { gain: number; loss: number; }> = {};
+      // const maxSegmNumb = 10;
+      // //TODO Da modificare in base al range di date selezionate. fare n segmenti  per rendere comprensibile il grafico.
+      // switch (dateRangeDisplayed.timeUnit) {
+      //   case 'none':
+      //     if (operationIdToDateMap && operationIdToDateMap.length > 10) {
+      //       const startDate = new Date(dateRangeDisplayed.startDate);
+      //       const endDate = dateRangeDisplayed.endDate ? new Date(dateRangeDisplayed.endDate) : new Date();
+      //       const totalDays = differenceInCalendarDays(endDate, startDate);
+      //       const segmentSize = Math.ceil(totalDays / 10); // Arrotonda per eccesso per avere al massimo 10 segmenti
+      
+      //       const dateAmounts:newBarChartData[] = [{gain:0,loss:0,name:'',operations:[]}];
+      
+      //       for (let i = 0; i < 10; i++) {
+      //         // Calcola l'inizio e la fine di ogni segmento
+      //         const segmentStartDate = addDays(startDate, i * segmentSize);
+      //         const segmentEndDate = i === 9 ? endDate : addDays(segmentStartDate, segmentSize);
+      
+      //         // Inizializza i segmenti
+      //         const segmentKey = `${format(segmentStartDate, 'd/M/yy')} - ${format(segmentEndDate, 'd/M/yy')}`;
+      //         dateAmounts.push({ gain: 0, loss: 0, name:'', operations:[]});
+      
+      //         operationIdToDateMap.forEach(opDate => {
+      //           opDate.operations_id.forEach(op => {
+      //             const operation = operations.find(op2 => op2.operation_id === op);
+      //             if (operation) {
+      //               const operationDate = new Date(operation.first_date);
+      //               if (operationDate >= segmentStartDate && operationDate < segmentEndDate) {
+      //                 // Aggiungi i valori al segmento corretto
+      //                 const amount = operation.amount;
+      //                 if (amount > 0) {
+      //                   dateAmounts[segmentKey].gain += amount;
+      //                 } else {
+      //                   dateAmounts[segmentKey].loss += Math.abs(amount);
+      //                 }
+      //               }
+      //             }
+      //           });
+      //         });
+      //       }
+      
+      //       // Converti l'oggetto in un array per il grafico
+      //       const newBarChartData = Object.keys(dateAmounts).map(segmentKey => {
+      //         return {
+      //           name: segmentKey,
+      //           [t('gain')]: dateAmounts[segmentKey].gain,
+      //           [t('loss')]: dateAmounts[segmentKey].loss,
+      //         };
+      //       });
+      
+      //       setBarChartData(newBarChartData);
+      //     }
+      //     break;
+      //   case 'week':
+          
+      //     break;
+        
+      //   case 'month':
+          
+      //     break;
 
-      //TODO Da modificare in base al range di date selezionate. fare n segmenti  per rendere comprensibile il grafico.
-
+      //   case 'year':
+          
+      //     break;
+      
+      //   default:
+      //     break;
+      // }
       operationIdToDateMap.forEach(opDate => {
         // const date = opDate.date;
         opDate.operations_id.forEach( op => {
@@ -70,7 +136,7 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, ...p
       });
       setBarChartData(newBarChartData);
     }
-  }, [operationIdToDateMap, operations]);
+  }, [operationIdToDateMap, operations, dateRangeDisplayed]);
   
   return (
     <Card {...props} minH={'331.19px'}>
