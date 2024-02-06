@@ -1,4 +1,4 @@
-import { Heading, useColorMode, Switch, HStack, Spacer, Icon, Button, Wrap } from "@chakra-ui/react";
+import { Heading, useColorMode, Switch, HStack, Icon, Button, Wrap, Box, Grid } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { MdPostAdd } from "react-icons/md";
@@ -10,7 +10,7 @@ export const TopBar = () => {
   const {t} = useTranslation('ns1',{ i18n } );
 
   return (
-    <HStack w="full" p={2} justify="space-between" position="sticky">
+    <Grid templateColumns="repeat(3, 1fr)" w="full" p={2} position="sticky">
       <Wrap spacing={4}>
         <Link to="/">
           <Button>Home</Button>
@@ -18,18 +18,13 @@ export const TopBar = () => {
         <Link to="/demo">
           <Button>Demo</Button>
         </Link>
-      </Wrap>
-      
-      <Spacer/>
+     </Wrap>
+      <Box justifySelf="center">
         <Heading size={'2xl'}>
-          <Link to="/">
-            Money Count
-          </Link>
+          <Link to="/">Money Count</Link>
         </Heading>
-      <Spacer/>
-      
-      {/* <Spacer /> */}
-      <HStack>
+      </Box>
+      <Wrap justifySelf="end" spacing={4}>
         <Link to="/demo">
           <Button
             rightIcon={<MdPostAdd/>} 
@@ -38,23 +33,23 @@ export const TopBar = () => {
             {t('add operation')}
           </Button>
         </Link>
-      </HStack>
-      <HStack>
-        <Switch variant={'switchTheme'}
-          isChecked={colorMode === 'dark'}
-          defaultChecked = {colorMode === 'dark'}
-          onChange={toggleColorMode} 
-          colorScheme={colorMode === 'light' ? 'white' : 'black'} 
-          size='lg'
-        />
-        <Icon
-          as={colorMode === 'light' ? FaSun : FaMoon}
-          position="absolute"     //TODO Da modificare
-          color={colorMode === 'light' ? 'primary.50' : 'white'} 
-          marginLeft={colorMode === 'light' ? '7' : '1.5'}
-          pointerEvents="none"
-        />
-      </HStack>
-    </HStack>
+        <HStack>
+          <Switch variant={'switchTheme'}
+            isChecked={colorMode === 'dark'}
+            defaultChecked = {colorMode === 'dark'}
+            onChange={toggleColorMode} 
+            colorScheme={colorMode === 'light' ? 'white' : 'black'} 
+            size='lg'
+          />
+          <Icon
+            as={colorMode === 'light' ? FaSun : FaMoon}
+            position="absolute"     //TODO Da modificare
+            color={colorMode === 'light' ? 'primary.50' : 'white'} 
+            marginLeft={colorMode === 'light' ? '7' : '1.5'}
+            pointerEvents="none"
+          />
+        </HStack>
+      </Wrap>
+    </Grid>
   );
 };
