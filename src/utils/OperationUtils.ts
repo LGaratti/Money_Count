@@ -57,9 +57,7 @@ function isLeapYear(year: number): boolean {
 
 export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: number, descendingOrder: boolean, filteredLabels: Label[], operations: Operation[], setOperationsDates: React.Dispatch<SetStateAction<OperationsForDate[]>>) {
 
-
-  // eslint-disable-next-line prefer-const
-  let operationsForDates: OperationsForDate[] = [];
+  const operationsForDates: OperationsForDate[] = [];
 
   // operations.forEach(operation => {
   for (const operation of operations) {
@@ -102,8 +100,7 @@ export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: n
           // Calcola e aggiungi le date
           const count: number = operation.periodic_count || 1;
           for (let i = 0; i <= dayCount; i += count) {
-            // eslint-disable-next-line prefer-const
-            let newDate = new Date(operation.first_date);
+            const newDate = new Date(operation.first_date);
             newDate.setDate(newDate.getDate() + i);
             if (operation.payday && operation.payday.length > 0) {
               while (!operation.payday.includes(dayOfWeekMap[newDate.getDay().toString()])) {
@@ -125,14 +122,12 @@ export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: n
           
           const count: number = (operation.periodic_count || 1) * 7;
           for (let i = 0; i <= weekCount; i += count) {
-            // eslint-disable-next-line prefer-const
-            let weekStartDate = new Date(operation.first_date);
+            const weekStartDate = new Date(operation.first_date);
             weekStartDate.setDate(weekStartDate.getDate() + i);
             
             if (operation.payday && operation.payday.length > 0) {
               operation.payday.forEach(payday => {
-                // eslint-disable-next-line prefer-const
-                let paydayDate = new Date(weekStartDate);
+                const paydayDate = new Date(weekStartDate);
                 while (dayOfWeekMap[paydayDate.getDay().toString()] !== payday) {
                   paydayDate.setDate(paydayDate.getDate() + 1);
                 }
@@ -186,8 +181,7 @@ export function fetchOpsIdToDateMap(startDate:Date, endDate:Date, numberOfOps: n
         
           const count: number = operation.periodic_count || 1;
           for (let i = 0; i <= yearCount; i += count) {
-            // eslint-disable-next-line prefer-const
-            let newDate = new Date(operation.first_date);
+            const newDate = new Date(operation.first_date);
             newDate.setFullYear(newDate.getFullYear() + i);
             if (newDate.getMonth() === 1 && newDate.getDate() === 29 && !isLeapYear(newDate.getFullYear())) {
               newDate.setDate(28);

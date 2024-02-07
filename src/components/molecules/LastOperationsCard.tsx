@@ -26,10 +26,8 @@ export const LastOperationsCard = ({operations, opsToDate, ...props}: LastOperat
   useEffect( () => {
     if(!operations || !opsToDate)
       return;
-    // eslint-disable-next-line prefer-const
-    let tempGains:DateOps[] = []
-    // eslint-disable-next-line prefer-const
-    let tempLosses:DateOps[] = [];
+    const tempGains:DateOps[] = []
+    const tempLosses:DateOps[] = [];
     opsToDate.forEach( opToDate => {
       opToDate.operations_id.forEach( opId => {
         const operation = operations.find(op2 => op2.operation_id === opId) || undefined;

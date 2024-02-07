@@ -37,8 +37,7 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
     if (operationIdToDateMap && operations) {
       // Creare un oggetto per tenere traccia dei guadagni e delle perdite per ogni data
       
-      // eslint-disable-next-line prefer-const
-      let dateAmounts: BarChartData[] = []; //TOVERIFY perchè mi consiglia const?
+      const dateAmounts: BarChartData[] = [];
       const startDate = new Date(dateRangeDisplayed.startDate);
       const endDate = dateRangeDisplayed.endDate ? new Date(dateRangeDisplayed.endDate) : new Date();
       const totalDays = differenceInCalendarDays(endDate, startDate);

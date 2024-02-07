@@ -36,8 +36,8 @@ export const DateRangeSelector = ({dateRangeDisplayed , setDateRangeDisplayed, .
       setStartDate(choosenDate);
     else return;
     setEndDate(choosenEndDate);
-    // eslint-disable-next-line prefer-const
-    let tempDateRange: DateRange = { ...dateRangeDisplayed };
+    
+    const tempDateRange: DateRange = { ...dateRangeDisplayed };
     tempDateRange.timeUnit = typeOfRange || TimeUnit.NONE;
     tempDateRange.startDate = choosenDate;
     tempDateRange.nTimeUnit = 0;
