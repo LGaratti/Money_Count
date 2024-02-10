@@ -3,21 +3,12 @@ import { Box, Card, CardBody, CardHeader, CardProps, Heading, useTheme } from "@
 import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
 import { Label as LabelOp, Operation, OperationsForDate } from "../../interfaces/Operation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { addDays, differenceInCalendarDays, format } from 'date-fns';
 import LabelTag from "../atoms/LabelTag";
 import { DateRange } from "../../interfaces/Date";
 import { enUS, it } from "date-fns/locale";
-
-interface BarChartData {
-  gain:number;
-  loss:number;
-  name: string;
-  startDate:Date;
-  endDate:Date;
-  operations: Operation[]
-} 
+// import { BarCharSegment } from "../../utils/RechartsUtils";
 
 interface BalanceTrendCardProps extends CardProps {
   operations?: Operation[],
@@ -31,124 +22,59 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
   const currentLocale = i18n.language === 'it' ? it : enUS;
   const theme = useTheme();
   
-  const [barChartData, setBarChartData] = useState<BarChartData[]>([]);
+  // const [barChartData, setBarCharSegment] = useState<BarCharSegment[]>([]);
 
   useEffect(() => {
     if (operationIdToDateMap && operations) {
-      // Creare un oggetto per tenere traccia dei guadagni e delle perdite per ogni data
-      
-      const dateAmounts: BarChartData[] = [];
-      const startDate = new Date(dateRangeDisplayed.startDate);
-      const endDate = dateRangeDisplayed.endDate ? new Date(dateRangeDisplayed.endDate) : new Date();
-      const totalDays = differenceInCalendarDays(endDate, startDate);
 
-      const segmentRangedDaysKey = (startDate:Date,endDate:Date) => {
-          if(endDate.getFullYear() !== startDate.getFullYear()) //TODO Cambiare e inserire solo il giorno in mezzo al range tra startDate e endDate
-            return `${format(startDate, 'd/M/yy',{locale:currentLocale})}-${format(endDate, 'd/M/yy',{locale:currentLocale})}`;
-          else
-            return `${format(startDate, 'd/M',{locale:currentLocale})}-${format(endDate, 'd/M',{locale:currentLocale})}`;
-      }
-      const segmentDaysKey = (opDate:Date) => {
-        if(endDate.getFullYear() !== startDate.getFullYear())
-          return `${format(opDate, 'd/M/yy',{locale:currentLocale})}`;
-        else
-          return `${format(opDate, 'd/M',{locale:currentLocale})}`;
-      }
-      // const maxSegmNumb = 10;
-      // //TODO Da modificare in base al range di date selezionate. fare n segmenti  per rendere comprensibile il grafico.
-      switch (dateRangeDisplayed.timeUnit) {
-        case 'none':
-          if (operationIdToDateMap.length > 9) {
-            
-            const segmentSize = Math.ceil(totalDays / 9); // Arrotonda per eccesso per avere al massimo 9 segmenti
-      
-            for (let i = 0; i < 9; i++) {
-              // Calcola l'inizio e la fine di ogni segmento
-              const segmentStartDate = addDays(startDate, i * segmentSize);
-              const segmentEndDate = i === 8 ? endDate : addDays(segmentStartDate, segmentSize); // se è l'ultimo conta fino ad end date
-      
-              operationIdToDateMap.forEach(opDate => {
-                const operationDate = new Date(opDate.date);
-                opDate.operations_id.forEach(op => {
-                  const operation = operations.find(op2 => op2.operation_id === op);
-                  if (operation) {
-                    if (operationDate >= segmentStartDate && operationDate < segmentEndDate) {
-                      // Aggiungi i valori al segmento corretto
-                      const groupName = operation.amount >= 0 ? "gain": "loss";
-                      const amount = operation.amount;
-                      // Se non esiste lo pusho, se esiste aggiungo il conteggio e l'operazione nell'array operations
-                      const tempDateAmounts = dateAmounts.findIndex(dateA => dateA.name === segmentRangedDaysKey(segmentStartDate,segmentEndDate))
-                      if (tempDateAmounts !== -1) {
-                        dateAmounts[tempDateAmounts][groupName] += Math.abs(amount); 
-                        dateAmounts[tempDateAmounts].operations.push(operation);
-                      }
-                      else {
-                        const newObj = {
-                          gain: groupName === "gain" ? Math.abs(amount) : 0, // Imposta gain a amount solo se groupName è "gain"
-                          loss: groupName === "loss" ? Math.abs(amount) : 0,
-                          startDate:segmentStartDate,
-                          endDate:segmentEndDate,
-                          name: segmentRangedDaysKey(segmentStartDate,segmentEndDate),
-                          operations: [operation],
-                        };
-                        dateAmounts.push(newObj);
-                      }
-                    }
-                  }
-                });
-              });
-            }   
-          }
-          else {
-            operationIdToDateMap.forEach(opDate => {
-              opDate.operations_id.forEach(op => {
-                const operation = operations.find(op2 => op2.operation_id === op);
-                if (operation) {
-                  const operationDate = new Date(opDate.date);
-                  if (operationDate >= startDate && operationDate < endDate) {
-                    // Aggiungi i valori al segmento corretto
-                    const groupName = operation.amount >= 0 ? "gain": "loss";
-                    const amount = operation.amount;
-                    // Se non esiste lo pusho, se esiste aggiungo il conteggio e l'operazione nell'array operations
-                    const tempDateAmounts = dateAmounts.findIndex(dateA => {dateA.name === segmentDaysKey(operationDate)})
-                    if (tempDateAmounts !== -1) {
-                      dateAmounts[tempDateAmounts][groupName] += Math.abs(amount); 
-                      dateAmounts[tempDateAmounts].operations.push(operation);
-                    }
-                    else {
-                      const newObj = {
-                        gain: groupName === "gain" ? amount : 0, // Imposta gain a amount solo se groupName è "gain"
-                        loss: groupName === "loss" ? Math.abs(amount) : 0,
-                        startDate:startDate,
-                        endDate:endDate,
-                        name: segmentDaysKey(operationDate),
-                        operations: [operation],
-                      };
-                      dateAmounts.push(newObj);
-                    }
-                  }
-                }
-              });
-            });
-          }
-          break;
-        case 'week':
-          
-          break;
-        
-        case 'month':
-          
-          break;
+      // TODO da scommentare
+//       const dateAmounts: BarCharSegment[] = calculateSegments(currentLocale,dateRangeDisplayed)
 
-        case 'year':
-          
-          break;
-      
-        default:
-          break;
-      }
-      console.log("dateAmounts",dateAmounts)
-      setBarChartData(dateAmounts);
+
+//       OLD---------------------------------------------------------------------------------------------------------------------
+//       const segmentSize = Math.ceil(totalDays / 9); // Arrotonda per eccesso per avere al massimo 9 segmenti
+//             
+//       for (let i = 0; i < 9; i++) {
+//         // Calcola l'inizio e la fine di ogni segmento
+//         const segmentStartDate = addDays(startDate, i * segmentSize);
+//         const segmentEndDate = i === 8 ? endDate : addDays(segmentStartDate, segmentSize); // se è l'ultimo conta fino ad end date
+//         const segmentKeyString:string = segmentKey(segmentStartDate,segmentEndDate,currentLocale,dateRangeDisplayed);
+// 
+//         operationIdToDateMap.forEach(opDate => {
+//           const operationDate = new Date(opDate.date);
+//           opDate.operations_id.forEach(op => {
+//             const operation = operations.find(op2 => op2.operation_id === op);
+//             if (operation) {
+//               if (operationDate >= segmentStartDate && operationDate < segmentEndDate) {
+//                 // Aggiungi i valori al segmento corretto
+//                 const groupName = operation.amount >= 0 ? "gain": "loss";
+//                 const amount = operation.amount;
+//                 // Se non esiste lo pusho, se esiste aggiungo il conteggio e l'operazione nell'array operations
+//                 const tempDateAmounts = dateAmounts.findIndex(dateA => dateA.name === segmentKeyString)
+//                 if (tempDateAmounts !== -1) {
+//                   dateAmounts[tempDateAmounts][groupName] += Math.abs(amount); 
+//                   dateAmounts[tempDateAmounts].operations.push(operation);
+//                 }
+//                 else {
+//                   const newObj = {
+//                     gain: groupName === "gain" ? Math.abs(amount) : 0, // Imposta gain a amount solo se groupName è "gain"
+//                     loss: groupName === "loss" ? Math.abs(amount) : 0,
+//                     startDate:segmentStartDate,
+//                     endDate:segmentEndDate,
+//                     name: segmentKeyString,
+//                     operations: [operation],
+//                   };
+//                   dateAmounts.push(newObj);
+//                 }
+//               }
+//             }
+//           });
+//         });
+//       }
+// console.log("dateAmounts",dateAmounts)
+// setBarCharSegment(dateAmounts);
+// !OLD---------------------------------------------------------------------------------------------------------------------
+  console.log(currentLocale)
     }
   }, [operationIdToDateMap, operations, dateRangeDisplayed]);
   
@@ -163,7 +89,7 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
             <BarChart
               width={500}
               height={400}
-              data={barChartData}
+              // data={barChartData} TODO da scommentare
               margin={{
                 top: 5,
                 right: 30,
