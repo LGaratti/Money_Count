@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, CardHeader, CardProps, Heading, useTheme } from "@chakra-ui/react";
+import { Box, Card, CardBody, CardHeader, CardProps, Heading, useColorMode, useTheme } from "@chakra-ui/react";
 // import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Customized  } from 'recharts';
 import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
@@ -23,7 +23,8 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
   const {t} = useTranslation('ns1',{ i18n } );
   const currentLocale = i18n.language === 'it' ? it : enUS;
   const theme = useTheme();
-  
+  const { colorMode } = useColorMode();
+  const rechartsTextColor = colorMode === 'light' ? 'black' : 'white';
   const [barChartData, setBarCharSegment] = useState<BarCharSegment[]>([]);
 
   useEffect(() => {
@@ -91,8 +92,8 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />{/* <XAxis dataKey="name" ticks={weekLabels} /> */}
-              <YAxis />
+              <XAxis dataKey="name" stroke={rechartsTextColor}/>{/* <XAxis dataKey="name" ticks={weekLabels} /> */}
+              <YAxis stroke={rechartsTextColor} />
               <Tooltip />
               {/* <Legend /> */}
               <Bar dataKey={"gain"} fill={theme.colors.green[400]} /> 
