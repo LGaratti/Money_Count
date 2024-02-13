@@ -1,4 +1,4 @@
-import { addDays, differenceInCalendarDays, eachMonthOfInterval, eachWeekOfInterval, endOfMonth, format, startOfMonth } from "date-fns";
+import { addDays, differenceInCalendarDays, eachMonthOfInterval, endOfMonth, format} from "date-fns";
 import { DateRange } from "../interfaces/Date";
 import { OperationsForDate } from "../interfaces/Operation";
 
@@ -64,24 +64,7 @@ export const calculateSegments = (currentLocale:Locale, dateRangeDisplayed:DateR
     } break;
     
     case 'month': {
-      if (dateRangeDisplayed.nTimeUnit === 1) {
-        const monthStart = startOfMonth(startDate);
-        const monthEnd = endOfMonth(endDate);
-        const weeks = eachWeekOfInterval({ start: monthStart, end: monthEnd }, { weekStartsOn: 1 }); // Considerando il lunedì come primo giorno della settimana
-        weeks.forEach((weekStart,index) => {
-          let weekEnd = addDays(weekStart, 6);
-          weekEnd = weekEnd > endDate ? endDate : weekEnd; // Assicurati che non superi la data di fine
-          const weekNumber = index + 1;
-          const nameTemp = `Week ${weekNumber}`; // Questo sostituisce la chiamata a segmentDaysKey per questo caso specifico
-          const segmentTemp: BarCharSegment = segmentConstructor(nameTemp, weekStart, weekEnd);
-          segmentsTemp.push(segmentTemp);
-        });
-        return segmentsTemp;
-      }
-      else { // TOVERIFY
-        formatStyle = "MM/yy";
-        segmentSize = 7 * dateRangeDisplayed.nTimeUnit; // <--------------------------------------------------------------------------------------TODO ARRIVATO FINO A QUA----------------------------------------------------------------- 
-      }
+        segmentSize = 7 * dateRangeDisplayed.nTimeUnit;
     } break;
       
     case 'year':{
@@ -97,7 +80,7 @@ export const calculateSegments = (currentLocale:Locale, dateRangeDisplayed:DateR
       }
       else { // TOVERIFY
         formatStyle = "MM/yy";
-        segmentSize = 30 * dateRangeDisplayed.nTimeUnit; // <--------------------------------------------------------------------------------------TODO ARRIVATO FINO A QUA----------------------------------------------------------------- 
+        segmentSize = 30 * dateRangeDisplayed.nTimeUnit;
       }
     } break;
   
