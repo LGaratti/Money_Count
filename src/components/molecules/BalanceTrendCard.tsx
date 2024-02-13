@@ -96,7 +96,6 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
               <XAxis dataKey="name" stroke={rechartsTextColor}/>{/* <XAxis dataKey="name" ticks={weekLabels} /> */}
               <YAxis stroke={rechartsTextColor} />
               <Tooltip content={<BarCharTooltip />} />
-              {/* <Legend /> */}
               <Bar dataKey={"gain"} fill={theme.colors.green[400]} /> 
               <Bar dataKey={"loss"} fill={theme.colors.red[500]} />
             </BarChart>

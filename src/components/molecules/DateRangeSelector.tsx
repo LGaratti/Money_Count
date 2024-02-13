@@ -94,20 +94,9 @@ export const DateRangeSelector = ({dateRangeDisplayed , setDateRangeDisplayed, .
     setEndDate(undefined);
   } 
 
-  const popoverColor = () => {
-    if(colorMode === 'light') return 'purple.100'
-    else return 'purple.800' 
-  }
-  
-  const hoverColor = () => {
-    if(colorMode === 'light') return 'secondary.600'
-    else return 'secondary.600' 
-  }
-
-  const buttonColor = () => {
-    if(colorMode === 'light') return 'secondary.500'
-    else return 'secondary.400'
-  }
+  const popoverColor = () => (colorMode === 'light' ? 'secondary.100' : 'purple.800');
+  const hoverColor = () => ('secondary.600');
+  const buttonColor = () => (colorMode === 'light' ? 'secondary.500' : 'secondary.400');
 
   return (
     <>
