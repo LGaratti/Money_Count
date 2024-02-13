@@ -10,6 +10,7 @@ import { DateRange } from "../../interfaces/Date";
 import { enUS, it } from "date-fns/locale";
 import { BarCharSegment, calculateSegments } from "../../utils/RechartsUtils";
 import { format, startOfDay } from "date-fns";
+import BarCharTooltip from "../atoms/BarCharTooltip";
 // import { BarCharSegment } from "../../utils/RechartsUtils";
 
 interface BalanceTrendCardProps extends CardProps {
@@ -94,7 +95,7 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" stroke={rechartsTextColor}/>{/* <XAxis dataKey="name" ticks={weekLabels} /> */}
               <YAxis stroke={rechartsTextColor} />
-              <Tooltip />
+              <Tooltip content={<BarCharTooltip />} />
               {/* <Legend /> */}
               <Bar dataKey={"gain"} fill={theme.colors.green[400]} /> 
               <Bar dataKey={"loss"} fill={theme.colors.red[500]} />
