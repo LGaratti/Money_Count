@@ -1,4 +1,4 @@
-import { addDays, differenceInCalendarDays, eachWeekOfInterval, endOfMonth, format, startOfMonth } from "date-fns";
+import { addDays, differenceInCalendarDays, eachMonthOfInterval, eachWeekOfInterval, endOfMonth, format, startOfMonth } from "date-fns";
 import { DateRange } from "../interfaces/Date";
 import { OperationsForDate } from "../interfaces/Operation";
 
@@ -78,15 +78,28 @@ export const calculateSegments = (currentLocale:Locale, dateRangeDisplayed:DateR
         });
         return segmentsTemp;
       }
-      else {
-        formatStyle = "mm/yy";
+      else { // TOVERIFY
+        formatStyle = "MM/yy";
         segmentSize = 7 * dateRangeDisplayed.nTimeUnit; // <--------------------------------------------------------------------------------------TODO ARRIVATO FINO A QUA----------------------------------------------------------------- 
       }
     } break;
       
-    case 'year':
-      
-      break;
+    case 'year':{
+      if (dateRangeDisplayed.nTimeUnit === 1) {
+        const months = eachMonthOfInterval({ start: startDate, end: endDate });
+        months.forEach((monthStart) => {
+          const monthEnd = endOfMonth(monthStart);
+          const nameTemp = format(monthStart, "MMM yyyy", { locale: currentLocale });
+          const segmentTemp = segmentConstructor(nameTemp, monthStart, monthEnd > endDate ? endDate : monthEnd);
+          segmentsTemp.push(segmentTemp);
+        });
+        return segmentsTemp;
+      }
+      else { // TOVERIFY
+        formatStyle = "MM/yy";
+        segmentSize = 30 * dateRangeDisplayed.nTimeUnit; // <--------------------------------------------------------------------------------------TODO ARRIVATO FINO A QUA----------------------------------------------------------------- 
+      }
+    } break;
   
     default:
       break;
@@ -100,6 +113,5 @@ export const calculateSegments = (currentLocale:Locale, dateRangeDisplayed:DateR
     const segmentTemp: BarCharSegment = segmentConstructor(nameTemp, startDateTemp, endDateTemp);
     segmentsTemp.push(segmentTemp); 
   }
-  
-  
+  return segmentsTemp;
 }

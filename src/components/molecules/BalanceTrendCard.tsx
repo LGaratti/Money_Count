@@ -3,11 +3,13 @@ import { Box, Card, CardBody, CardHeader, CardProps, Heading, useTheme } from "@
 import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
 import { Label as LabelOp, Operation, OperationsForDate } from "../../interfaces/Operation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import LabelTag from "../atoms/LabelTag";
 import { DateRange } from "../../interfaces/Date";
 import { enUS, it } from "date-fns/locale";
+import { BarCharSegment, calculateSegments } from "../../utils/RechartsUtils";
+import { format, startOfDay } from "date-fns";
 // import { BarCharSegment } from "../../utils/RechartsUtils";
 
 interface BalanceTrendCardProps extends CardProps {
@@ -22,60 +24,51 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
   const currentLocale = i18n.language === 'it' ? it : enUS;
   const theme = useTheme();
   
-  // const [barChartData, setBarCharSegment] = useState<BarCharSegment[]>([]);
+  const [barChartData, setBarCharSegment] = useState<BarCharSegment[]>([]);
 
   useEffect(() => {
-    if (operationIdToDateMap && operations) {
-
-      // TODO da scommentare
-//       const dateAmounts: BarCharSegment[] = calculateSegments(currentLocale,dateRangeDisplayed)
-
-
-//       OLD---------------------------------------------------------------------------------------------------------------------
-//       const segmentSize = Math.ceil(totalDays / 9); // Arrotonda per eccesso per avere al massimo 9 segmenti
-//             
-//       for (let i = 0; i < 9; i++) {
-//         // Calcola l'inizio e la fine di ogni segmento
-//         const segmentStartDate = addDays(startDate, i * segmentSize);
-//         const segmentEndDate = i === 8 ? endDate : addDays(segmentStartDate, segmentSize); // se è l'ultimo conta fino ad end date
-//         const segmentKeyString:string = segmentKey(segmentStartDate,segmentEndDate,currentLocale,dateRangeDisplayed);
-// 
-//         operationIdToDateMap.forEach(opDate => {
-//           const operationDate = new Date(opDate.date);
-//           opDate.operations_id.forEach(op => {
-//             const operation = operations.find(op2 => op2.operation_id === op);
-//             if (operation) {
-//               if (operationDate >= segmentStartDate && operationDate < segmentEndDate) {
-//                 // Aggiungi i valori al segmento corretto
-//                 const groupName = operation.amount >= 0 ? "gain": "loss";
-//                 const amount = operation.amount;
-//                 // Se non esiste lo pusho, se esiste aggiungo il conteggio e l'operazione nell'array operations
-//                 const tempDateAmounts = dateAmounts.findIndex(dateA => dateA.name === segmentKeyString)
-//                 if (tempDateAmounts !== -1) {
-//                   dateAmounts[tempDateAmounts][groupName] += Math.abs(amount); 
-//                   dateAmounts[tempDateAmounts].operations.push(operation);
-//                 }
-//                 else {
-//                   const newObj = {
-//                     gain: groupName === "gain" ? Math.abs(amount) : 0, // Imposta gain a amount solo se groupName è "gain"
-//                     loss: groupName === "loss" ? Math.abs(amount) : 0,
-//                     startDate:segmentStartDate,
-//                     endDate:segmentEndDate,
-//                     name: segmentKeyString,
-//                     operations: [operation],
-//                   };
-//                   dateAmounts.push(newObj);
-//                 }
-//               }
-//             }
-//           });
-//         });
-//       }
-// console.log("dateAmounts",dateAmounts)
-// setBarCharSegment(dateAmounts);
-// !OLD---------------------------------------------------------------------------------------------------------------------
-  console.log(currentLocale)
+    if (!operationIdToDateMap || !operations) {
+      return;
     }
+    const emptySegments: BarCharSegment[] = calculateSegments(currentLocale,dateRangeDisplayed) || [];
+    
+    const isSameYear = emptySegments[0].startDate.getFullYear() === emptySegments[emptySegments.length - 1].endDate.getFullYear();
+
+    const populatedSegments: BarCharSegment[] = emptySegments.map(segment => {
+      let gainSum = 0;
+      let lossSum = 0;
+  
+      const operationsForSegment = operationIdToDateMap.filter(opToDate => {
+        const opDate = startOfDay(new Date(opToDate.date));
+        return opDate >= startOfDay(segment.startDate) && opDate <= startOfDay(segment.endDate);
+      });
+  
+      operationsForSegment.forEach(opToDate => {
+        opToDate.operations_id.forEach(opId => {
+          const operationToAdd = operations.find(op => op.operation_id === opId);
+          if (operationToAdd) {
+            if (operationToAdd.amount >= 0) {
+              gainSum += operationToAdd.amount;
+            } else {
+              lossSum += Math.abs(operationToAdd.amount);
+            }
+          }
+        });
+      });
+  
+      const updatedSegment = { ...segment, gain: gainSum, loss: lossSum, operationsForDate: operationsForSegment };
+
+      // Se c'è una sola operationDate con un solo operations_id, aggiorna il nome del segmento con quella data specifica
+      if (updatedSegment.operationsForDate.length === 1 && updatedSegment.operationsForDate[0].operations_id.length === 1) {
+        const specificOpDate = new Date(updatedSegment.operationsForDate[0].date);
+        const formatStyle = isSameYear ? "d/M" : "d/M/yy";
+        updatedSegment.name = format(specificOpDate, formatStyle, { locale: currentLocale });
+      }
+      return updatedSegment;
+    });
+
+  
+    setBarCharSegment(populatedSegments);    
   }, [operationIdToDateMap, operations, dateRangeDisplayed]);
   
   return (
@@ -89,7 +82,7 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
             <BarChart
               width={500}
               height={400}
-              // data={barChartData} TODO da scommentare
+              data={barChartData}
               margin={{
                 top: 5,
                 right: 30,
