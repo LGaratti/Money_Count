@@ -67,7 +67,7 @@ export default function Homepage() {
       </GridItem>
       <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <Card>next payments</Card>
+          <Card>Grafico ad area di cassa</Card>
         </Skeleton>
       </GridItem>
     </Grid>
