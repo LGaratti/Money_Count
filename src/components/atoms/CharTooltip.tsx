@@ -27,26 +27,26 @@ export const CharTooltip: React.FC<CharTooltipProps> = ({ active, payload, label
       case CharTooltipMode.AREA:
         return (
           <Flex key={index}>
-            {t(name)}:<Text color={value >= 0 ? "green.300" : "red.300"}> {value.toLocaleString()} €</Text>
+            {t(name)}:<Text color={value >= 0 ? "green.300" : "red.300"}> {value.toString()} €</Text>
           </Flex>
         );
       case CharTooltipMode.BAR:
         return (
           <Flex key={index}>
-            {t(name)}:<Text color={index % 2 === 0 ? "green.300" : "red.300"}> {value.toLocaleString()} €</Text>
+            {t(name)}:<Text color={index % 2 === 0 ? "green.300" : "red.300"}> {value.toString()} €</Text>
           </Flex>
         );
       case CharTooltipMode.PIE:
         if (name === "gain" || name === "loss") {
           return (
             <Flex key={index}>
-              {t(name)}:<Text color={name === "gain" ? "green.300" : "red.300"}> {value.toLocaleString()} €</Text>
+              {t(name)}:<Text color={name === "gain" ? "green.300" : "red.300"}> {value.toString()} €</Text>
             </Flex>
           );
         } else {
           return (
             <Flex key={index}>
-              {t(name) + ": " + value.toLocaleString() + " €"}
+              {t(name) + ": " + value.toString() + " €"}
             </Flex>
           );
         }
