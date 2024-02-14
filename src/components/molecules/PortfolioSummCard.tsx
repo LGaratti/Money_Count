@@ -2,21 +2,17 @@ import { Box, Card, CardBody, CardProps, Grid, GridItem, Heading } from "@chakra
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Customized  } from 'recharts';
 import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
-import { Label as LabelOp, Operation } from "../../interfaces/Operation";
+import { Label as LabelOp, Operation, OperationsForDate } from "../../interfaces/Operation";
 import { useEffect, useState } from "react";
 import LabelTag from "../atoms/LabelTag";
 import { useTheme } from "@chakra-ui/react";
 import CharTooltip, { CharTooltipMode } from "../atoms/CharTooltip";
+import { PieCharSegment } from "../../utils/RechartsUtils";
 
 interface PortfolioSummCardProps extends CardProps {
   operations?: Operation[],
   labels?: LabelOp[],
-}
-
-interface DataPie {
-  name?:string,
-  value?:number,
-  label?:LabelOp
+  operationIdToDateMap?: OperationsForDate[]
 }
 
 interface CustomLabelProps {
@@ -45,43 +41,59 @@ const CustomLabel: React.FC<CustomLabelProps> = ({ value }) => {
   );
 };
 
-export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSummCardProps) => {
+export const PortfolioSummCard = ({operations, labels, operationIdToDateMap, ...props} : PortfolioSummCardProps) => {
   // const { colorMode } = useColorMode();
   const {t} = useTranslation('ns1',{ i18n } );
   const theme = useTheme();
 
-  const [dataInOutPie, setDataInOutPie] = useState<DataPie[]>([]);
-  const [dataForLabelsPie, setDataForLabelsPie] = useState<DataPie[]>([]);
+  const [dataInOutPie, setDataInOutPie] = useState<PieCharSegment[]>([]);
+  const [dataForLabelsPie, setDataForLabelsPie] = useState<PieCharSegment[]>([]);
   const [balance,setBalance] = useState<number>(0);
 
   useEffect(() => {
     let sumGainOps = 0;
     let sumLossOps = 0;
-    operations?.forEach( operation => {
-      if (operation.amount >= 0) {
-        sumGainOps += Math.abs(operation.amount);
-      }
-      else {
-        sumLossOps += Math.abs(operation.amount);
-      }
+
+    const tempLabelPieData: PieCharSegment[] = [];
+
+    operationIdToDateMap?.forEach( opForDate => {
+      opForDate.operations_id.forEach( op_id => {
+        const operationToAdd = operations?.find(op => op.operation_id === op_id);
+        if (operationToAdd) {
+          if (operationToAdd.amount >= 0) {
+            sumGainOps += operationToAdd.amount;
+          }
+          else {
+            sumLossOps += Math.abs(operationToAdd.amount);
+          }
+
+          operationToAdd.labels.forEach( label => {
+            if(label.name !== "gain" && label.name !== "loss") {
+              const existingLabel = tempLabelPieData.find(labelPie => labelPie.label?.label_id === label.label_id)
+              if(existingLabel && existingLabel.value) {
+                existingLabel.value += Math.abs(operationToAdd.amount)
+              }
+              else {
+                tempLabelPieData.push({
+                  value: Math.abs(operationToAdd.amount),
+                  label: label,
+                  name: label.name
+                })
+              }
+            }
+          })
+        }
+      })
     })
-    const tempOperationToPie: DataPie[] = [
-      {name: 'gain', value:sumGainOps},
-      {name: 'loss', value:sumLossOps},
-    ]  
+
+    const tempOperationToPie: PieCharSegment[] = [
+        {name: 'gain', value:sumGainOps},
+        {name: 'loss', value:sumLossOps},
+      ]  
     setDataInOutPie(tempOperationToPie);
     setBalance(sumGainOps - sumLossOps);
-    
-    let tempLabels = labels || [];
-    tempLabels = tempLabels.filter(label => label.name !== "gain" && label.name !== "loss");
-    const tempOperationsLabelsPie: DataPie[] = tempLabels?.map(label => {
-      const tempOperations: Operation[] = operations?.filter(operation => operation.labels.some(opLabel => opLabel.label_id === label.label_id)) || [];
-      let sum = 0; 
-      tempOperations.forEach(operation => { sum = sum + Math.abs(operation.amount) });
-      return { name: label.name, value: sum, label: label };
-    }) || [];
-    setDataForLabelsPie(tempOperationsLabelsPie);
-  },[operations, labels]);
+    setDataForLabelsPie(tempLabelPieData);
+  },[operations, labels, operationIdToDateMap]);
 
   return (
     <Card minH={'331.19px'} {...props}>
@@ -143,9 +155,9 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
             </ResponsiveContainer>
           </Box>
           <Box display="flex" justifyContent="space-evenly">
-            {labels?.map( label => {
-              if (label.name !== "gain" && label.name !== 'loss')
-                return <><LabelTag key={label.label_id} label={label}/></>
+            {dataForLabelsPie?.map( segmLabelPie => {
+              if (segmLabelPie.label && segmLabelPie.label.name !== "gain" && segmLabelPie.label.name !== 'loss')
+                return <><LabelTag key={segmLabelPie.label.label_id} label={segmLabelPie.label}/></>
             })}
           </Box>
         </GridItem>

@@ -40,7 +40,7 @@ export default function Homepage() {
     const startDate = dateRangeDisplayed.startDate; // Clona la data di endDate
     const endDate = dateRangeDisplayed.endDate || new Date( startDate.getFullYear(), startDate.getMonth(), startDate.getDate() - 30); // Supponiamo che tu abbia già endDate inizializzato con una data
     fetchOpsIdToDateMap(startDate, endDate, -1, false, [], operationArray, setOperationIdToDateMap); // TODO sarà da modificare
-    console.log("startDate",startDate,endDate, dateRangeDisplayed)
+    // console.log("startDate",startDate,endDate, dateRangeDisplayed)
   },[operationArray,dateRangeDisplayed])
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function Homepage() {
       </GridItem>
       <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <PortfolioSummCard operations={operationArray} labels={labelsArray}/>
+          <PortfolioSummCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap}/>
         </Skeleton>
       </GridItem>
       <GridItem>

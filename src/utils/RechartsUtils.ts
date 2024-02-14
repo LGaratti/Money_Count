@@ -1,6 +1,6 @@
 import { addDays, differenceInCalendarDays, eachMonthOfInterval, endOfMonth, format} from "date-fns";
 import { DateRange } from "../interfaces/Date";
-import { OperationsForDate } from "../interfaces/Operation";
+import { Label, OperationsForDate } from "../interfaces/Operation";
 
 export interface BarCharSegment {
   gain:number;
@@ -17,6 +17,12 @@ export interface AreaCharSegment {
   startDate:Date;
   endDate:Date;
   operationsForDate: OperationsForDate[]
+} 
+
+export interface PieCharSegment {
+  name?:string,
+  value?:number,
+  label?:Label
 } 
 
 export const calculateSegments = (currentLocale:Locale, dateRangeDisplayed:DateRange) => {
