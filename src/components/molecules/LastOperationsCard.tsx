@@ -118,10 +118,10 @@ export const LastOperationsCard = ({operations, opsToDate, ...props}: LastOperat
       <Heading size={'md'} m={1}>{t('latest operations')}</Heading>
         <Grid templateRows='repeat(1, 1fr)' templateColumns='repeat(2, 1fr)' gap={1}>
           <GridItem > 
-            <OperationsTable ops={gains} title='In ingresso' color='green'/>
+            <OperationsTable ops={gains} title={t('gain')} color='green'/>
           </GridItem>
           <GridItem>
-            <OperationsTable ops={losses} title='In uscita' color='red'/>
+            <OperationsTable ops={losses} title={t('loss')} color='red'/>
           </GridItem>
         </Grid>
       </CardBody>
