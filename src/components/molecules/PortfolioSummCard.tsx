@@ -6,6 +6,7 @@ import { Label as LabelOp, Operation } from "../../interfaces/Operation";
 import { useEffect, useState } from "react";
 import LabelTag from "../atoms/LabelTag";
 import { useTheme } from "@chakra-ui/react";
+import CharTooltip, { CharTooltipMode } from "../atoms/CharTooltip";
 
 interface PortfolioSummCardProps extends CardProps {
   operations?: Operation[],
@@ -103,13 +104,10 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
               label 
             >
               {dataInOutPie.map((data, index) => (
-                data.name === 'gain' &&
-                <Cell key={`cell-${index}`} fill={theme.colors.green[300]} />
-                ||
-                <Cell key={`cell-${index}`} fill={theme.colors.red[400]} />
+                <Cell key={`cell-${index}`} fill={data.name === 'gain' && theme.colors.green[300] || theme.colors.red[400]} />
               ))}
             </Pie>
-            <Tooltip />
+            <Tooltip content={<CharTooltip mode={CharTooltipMode.PIE}/>} />
             <Customized component={ <CustomLabel value={balance} viewBox={{cx: 0,cy: 0}}/>}></Customized>
             </PieChart>
             </ResponsiveContainer>
@@ -140,7 +138,7 @@ export const PortfolioSummCard = ({operations, labels, ...props} : PortfolioSumm
                 <Cell key={`cell-${index}`} fill={theme.colors[labelName.label?.color_rgb || "grey"][500]} /> 
               ))}
             </Pie>
-            <Tooltip />
+            <Tooltip content={<CharTooltip mode={CharTooltipMode.PIE}/>} />
             </PieChart>
             </ResponsiveContainer>
           </Box>
