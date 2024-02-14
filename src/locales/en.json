@@ -25,6 +25,10 @@
   "yearly":"Yearly",
 
   "add operation":"Add operation",
+  "first step": "First step",
+  "operation info": "Operation info",
+  "second step": "Second step",
+  "temporal info": "temporal info",
 
   "recurrence count":"Recurrence count",
   "infinite":"Infinite",

@@ -25,6 +25,10 @@
   "yearly":"Aunnuale",
 
   "add operation":"Aggiungi operazione",
+  "first step": "Primo passo",
+  "operation info": "Informazioni generali",
+  "second step": "Secondo passo",
+  "temporal info": "Informazioni temporali",
 
   "recurrence count":"Numero di ricorrenze",
   "infinite":"Infinite",
