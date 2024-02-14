@@ -1,4 +1,4 @@
-import { Skeleton, Grid, GridItem, Card, Box} from "@chakra-ui/react";
+import { Skeleton, Grid, GridItem, Box} from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
 import { fetchLabelsFromServer, fetchOpsLabelsFromServer } from "../utils/supabaseClient";
 import { operationArrayReducer } from "../utils/OperationArrayReducer";
@@ -10,6 +10,7 @@ import { fetchOpsIdToDateMap } from "../utils/OperationUtils";
 import DateRangeSelector from "../components/molecules/DateRangeSelector";
 import { DateRange, TimeUnit } from "../interfaces/Date";
 import { subDays } from "date-fns";
+import OperationTrendCard from "../components/molecules/OperationsTrendCard";
 // import { useTranslation } from "react-i18next";
 // import i18n from "../locales/i18n";
 
@@ -62,12 +63,12 @@ export default function Homepage() {
       </GridItem>
       <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <BalanceTrendCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap} dateRangeDisplayed={dateRangeDisplayed}/>
+          <OperationTrendCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap} dateRangeDisplayed={dateRangeDisplayed}/>
         </Skeleton>
       </GridItem>
       <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <Card>Grafico ad area di cassa</Card>
+          <BalanceTrendCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap} dateRangeDisplayed={dateRangeDisplayed}/>
         </Skeleton>
       </GridItem>
     </Grid>
