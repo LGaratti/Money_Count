@@ -4,14 +4,12 @@ import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
 import { Label as LabelOp, Operation, OperationsForDate } from "../../interfaces/Operation";
 import { useEffect, useState } from "react";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import LabelTag from "../atoms/LabelTag";
+import { AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, Area } from "recharts";
 import { DateRange } from "../../interfaces/Date";
 import { enUS, it } from "date-fns/locale";
-import { BarCharSegment, calculateSegments } from "../../utils/RechartsUtils";
+import { AreaCharSegment, BarCharSegment, calculateSegments } from "../../utils/RechartsUtils";
 import { format, startOfDay } from "date-fns";
-import BarCharTooltip from "../atoms/BarCharTooltip";
-// import { BarCharSegment } from "../../utils/RechartsUtils";
+import CharTooltip, { CharTooltipMode } from "../atoms/CharTooltip";
 
 interface BalanceTrendCardProps extends CardProps {
   operations?: Operation[],
@@ -26,7 +24,7 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
   const theme = useTheme();
   const { colorMode } = useColorMode();
   const rechartsTextColor = colorMode === 'light' ? 'black' : 'white';
-  const [barChartData, setBarCharSegment] = useState<BarCharSegment[]>([]);
+  const [AreaCharData, setAreaCharSegment] = useState<AreaCharSegment[]>([]);
 
   useEffect(() => {
     if (!operationIdToDateMap || !operations) {
@@ -36,10 +34,8 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
     
     const isSameYear = emptySegments[0].startDate.getFullYear() === emptySegments[emptySegments.length - 1].endDate.getFullYear();
 
-    const populatedSegments: BarCharSegment[] = emptySegments.map(segment => {
-      let gainSum = 0;
-      let lossSum = 0;
-  
+    let amountSum = 0;
+    const populatedSegments: AreaCharSegment[] = emptySegments.map(segment => {
       const operationsForSegment = operationIdToDateMap.filter(opToDate => {
         const opDate = startOfDay(new Date(opToDate.date));
         return opDate >= startOfDay(segment.startDate) && opDate <= startOfDay(segment.endDate);
@@ -50,15 +46,15 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
           const operationToAdd = operations.find(op => op.operation_id === opId);
           if (operationToAdd) {
             if (operationToAdd.amount >= 0) {
-              gainSum += operationToAdd.amount;
+              amountSum += operationToAdd.amount;
             } else {
-              lossSum += Math.abs(operationToAdd.amount);
+              amountSum -= Math.abs(operationToAdd.amount);
             }
           }
         });
       });
   
-      const updatedSegment = { ...segment, gain: gainSum, loss: lossSum, operationsForDate: operationsForSegment };
+      const updatedSegment:AreaCharSegment = { ...segment, amount: amountSum, operationsForDate: operationsForSegment };
 
       // Se c'è una sola operationDate con un solo operations_id, aggiorna il nome del segmento con quella data specifica
       if (updatedSegment.operationsForDate.length === 1 && updatedSegment.operationsForDate[0].operations_id.length === 1) {
@@ -69,8 +65,8 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
       return updatedSegment;
     });
 
-  
-    setBarCharSegment(populatedSegments);    
+    console.log(populatedSegments)
+    setAreaCharSegment(populatedSegments);
   }, [operationIdToDateMap, operations, dateRangeDisplayed]);
   
   return (
@@ -81,10 +77,10 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
       <CardBody>
         <Box height={200}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart
+            <AreaChart
               width={500}
               height={400}
-              data={barChartData}
+              data={AreaCharData}
               margin={{
                 top: 5,
                 right: 30,
@@ -95,18 +91,11 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" stroke={rechartsTextColor}/>{/* <XAxis dataKey="name" ticks={weekLabels} /> */}
               <YAxis stroke={rechartsTextColor} />
-              <Tooltip content={<BarCharTooltip />} />
-              <Bar dataKey={"gain"} fill={theme.colors.green[400]} /> 
-              <Bar dataKey={"loss"} fill={theme.colors.red[500]} />
-            </BarChart>
+              <Tooltip content={<CharTooltip mode={CharTooltipMode.AREA}/>} />
+              <Area type="monotone" dataKey="amount" stroke={theme.colors.purple[400]}  fill={theme.colors.purple[400]}  />
+            </AreaChart>
           </ResponsiveContainer>
-        </Box> 
-        <Box display="flex" justifyContent="space-evenly">
-            {labels?.map( label => {
-              if (label.name === "gain" || label.name === 'loss')
-                return <><LabelTag key={label.label_id} label={label}/></>
-            })}
-        </Box>        
+        </Box>       
       </CardBody>
     </Card>
   );

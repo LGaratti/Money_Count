@@ -9,6 +9,14 @@ export interface BarCharSegment {
   startDate:Date;
   endDate:Date;
   operationsForDate: OperationsForDate[]
+}
+
+export interface AreaCharSegment {
+  amount: number;
+  name: string;
+  startDate:Date;
+  endDate:Date;
+  operationsForDate: OperationsForDate[]
 } 
 
 export const calculateSegments = (currentLocale:Locale, dateRangeDisplayed:DateRange) => {
