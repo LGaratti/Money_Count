@@ -55,7 +55,6 @@ export const CharTooltip: React.FC<CharTooltipProps> = ({ active, payload, label
     }
 
   }
-  console.log(active, payload, label, mode);
   if (active && payload && payload.length > 0) {
     return (
       <Card bg={bg} color={'white'}>

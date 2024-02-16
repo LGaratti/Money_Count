@@ -86,7 +86,6 @@ export const DateRangeSelector = ({dateRangeDisplayed , setDateRangeDisplayed, .
       tempDateRange.rangeDisplayed = format(choosenDate, 'd/M/yy') + ' - ' + format(choosenEndDate, 'd/M/yy');
     setDateRangeDisplayed(tempDateRange);
     closePopover();
-  // console.log("tempDateRange in DateRangeSelector: ",tempDateRange);
   };
 
   const resetDates = () => {

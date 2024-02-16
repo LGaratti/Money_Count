@@ -25,7 +25,7 @@ import { fetchLabelsFromServer } from '../../utils/supabaseClient';
 import { FaEuroSign } from 'react-icons/fa';
 import { TimeUnit } from '../../interfaces/Date';
 
-export const AddOperationModal = ({...props}:ModalProps) => {
+export const AddOperationModal = ({onClose,...props}:ModalProps) => {
   const {t} = useTranslation('ns1',{ i18n } );
   const [serverLabels, setServerLabels] = useState<Label[]>([]);
   const [labels, setLabels] = useState<Label[]>([]);
@@ -83,6 +83,7 @@ export const AddOperationModal = ({...props}:ModalProps) => {
     register,
     // formState: { errors, isSubmitting },
     formState: { errors },
+    reset,
   } = useForm<Operation>();
 
   // Gestione del submit per il primo form
@@ -116,6 +117,7 @@ export const AddOperationModal = ({...props}:ModalProps) => {
     console.log("SPARATOOOOOOOOO", finalData);
     // Inserimento dei dati combinati al server TODO DA SCOMMENTARE
     // InsertOpFromServer(finalData);
+    onClose();
   };
 
   // Step Handling
@@ -147,10 +149,34 @@ export const AddOperationModal = ({...props}:ModalProps) => {
     }
   };
 
+  // Funzione per resettare lo stato del form
+  const resetFormState = () => {
+    setLabels([]);       
+    // setAmount(0);
+    setPeriodic_unit(undefined);
+    // setStepOneData({});
+    setActiveStep(0);
+    reset({
+      name: '', // Assicurati di includere tutti i campi del tuo form qui
+      amount: 0,
+      labels: [],
+      description: '',
+      first_date: undefined,
+      periodic_unit: undefined, // o qualsiasi valore iniziale appropriato
+      periodic_count: 0, // o qualsiasi valore iniziale appropriato
+      // ...qualsiasi altro campo che necessita di essere resettato
+    });
+  };
+
+  const handleClose = () => {
+    resetFormState();
+    onClose();
+  }
+
 
   return (
     <> 
-      <Modal {...props}>
+      <Modal onClose={handleClose} {...props} >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>

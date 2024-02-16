@@ -52,7 +52,6 @@ export async function fetchOpsLabelsFromServer(operationArrayReducer: Dispatch<O
     return firstDate1 - firstDate2; // Ordina in base all'ordine cronologico crescente
   });
   initOperations(operationArrayReducer, sortedOperations);
-  // console.log("Operazioni ricevute dal server:", sortedOperations);
 }
 
 export async function fetchLabelsFromServer( setLabel: Dispatch<SetStateAction<Label[]>>) {
@@ -73,10 +72,7 @@ export async function fetchLabelsFromServer( setLabel: Dispatch<SetStateAction<L
     const foundLabel = tempLabels.find(label => label.label_id === labelFromServer.label_id);
     if (!foundLabel)  tempLabels.push(labelFromServer);
   });
-
   setLabel(tempLabels);
-
-  // console.log("Labels ricevute dal server:", tempLabels);
 }
 
 export async function InsertOpFromServer(operation: Operation) {

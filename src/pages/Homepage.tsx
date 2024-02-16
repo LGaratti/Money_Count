@@ -11,8 +11,6 @@ import DateRangeSelector from "../components/molecules/DateRangeSelector";
 import { DateRange, TimeUnit } from "../interfaces/Date";
 import { subDays } from "date-fns";
 import OperationTrendCard from "../components/molecules/OperationsTrendCard";
-// import { useTranslation } from "react-i18next";
-// import i18n from "../locales/i18n";
 
 const inizializeDateRange: DateRange = {
   rangeDisplayed:'current month',
@@ -23,7 +21,6 @@ const inizializeDateRange: DateRange = {
 }
 
 export default function Homepage() {
-  // const {t} = useTranslation('ns1',{ i18n } );
   const [operationArray, dispatch] = useReducer(operationArrayReducer, []);
   const [labelsArray, setLabelsArray] = useState<Label[]>([]);
   const [operationIdToDateMap, setOperationIdToDateMap] = useState<OperationsForDate[]>([]);
@@ -37,10 +34,9 @@ export default function Homepage() {
   },[]);
 
   useEffect(() => {
-    const startDate = dateRangeDisplayed.startDate; // Clona la data di endDate
-    const endDate = dateRangeDisplayed.endDate || new Date( startDate.getFullYear(), startDate.getMonth(), startDate.getDate() - 30); // Supponiamo che tu abbia già endDate inizializzato con una data
-    fetchOpsIdToDateMap(startDate, endDate, -1, false, [], operationArray, setOperationIdToDateMap); // TODO sarà da modificare
-    // console.log("startDate",startDate,endDate, dateRangeDisplayed)
+    const startDate = dateRangeDisplayed.startDate;
+    const endDate = dateRangeDisplayed.endDate || new Date( startDate.getFullYear(), startDate.getMonth(), startDate.getDate() - 30);
+    fetchOpsIdToDateMap(startDate, endDate, -1, false, [], operationArray, setOperationIdToDateMap);
   },[operationArray,dateRangeDisplayed])
 
   useEffect(() => {

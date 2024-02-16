@@ -65,7 +65,6 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
       return updatedSegment;
     });
 
-    console.log(populatedSegments)
     setAreaCharSegment(populatedSegments);
   }, [operationIdToDateMap, operations, dateRangeDisplayed]);
   
