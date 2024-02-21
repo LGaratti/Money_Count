@@ -1,62 +1,83 @@
-# Getting Started with Create React App
+# Money Count
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Money Count is a comprehensive financial tracking web application that empowers users to effortlessly manage their income and expenditures. Utilizing the robustness of React and the flexibility of Chakra UI, integrated with the precision of TypeScript, this application is developed with Vite to expedite the development process. Backed by Supabase for database interactions and authentication, Money Count is designed for secure and scalable user experiences.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Transaction Management**: Log and categorize financial transactions, with a quick overview of recent activities.
+- **Visual Analytics**: Employing Recharts for a detailed graphical representation of financial data, offering insights at a glance.
+- **Responsive Design**: Thanks to Chakra UI, the interface adapts seamlessly across different devices and screen sizes.
+- **Interactive Calendar**: React Calendar is used to select and navigate through dates for better tracking of transactions.
+- **Form Handling**: Implements React Hook Form for optimized form state management, providing an intuitive and efficient user input experience.
 
-### `yarn start`
+## Technologies
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Frontend**: React.js, Chakra UI, TypeScript
+- **Development**: Vite, Yarn
+- **Backend**: Supabase
+- **Deployment**: Vercel (Note: A public demo is not available at the moment)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Prerequisites
 
-### `yarn test`
+Ensure the following tools are installed on your system:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js (LTS version)
+- Yarn package manager
 
-### `yarn build`
+## Local Development
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Follow these steps to get your development environment set up:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/LGaratti/Money_Count.git
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. Change to the project directory:
+   ```sh
+   cd money-count
+   ```
 
-### `yarn eject`
+3. Install dependencies:
+   ```sh
+   yarn
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+4. Start the development server with Vite:
+   ```sh
+   npx vite
+   ```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+5. The application will be running on [http://localhost:5173](http://localhost:5173).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Environment Configuration
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Create a `.env.local` file at the project root and populate it with your Supabase credentials:
 
-## Learn More
+```sh
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Contributing
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Interested in contributing to Money Count? Great! Please check out our [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to proceed.
 
+## Deployment
 
+Money Count is configured for deployment with Vercel. To deploy, push the repository to GitHub and connect it with Vercel for seamless CI/CD.
 
+## Acknowledgements
 
+- [Vite](https://vitejs.dev/): Frontend tooling for the modern web.
+- [React](https://reactjs.org/): Building user interfaces with component-based architecture.
+- [Chakra UI](https://chakra-ui.com/): Accessible components for a delightful design system.
+- [Recharts](http://recharts.org/): Composable charting library built on React components.
+- [React Hook Form](https://react-hook-form.com/): Performant, flexible and extensible forms with easy-to-use validation.
+- [React Calendar](https://www.npmjs.com/package/react-calendar): A modular and customizable calendar component for React.
+- [Supabase](https://supabase.io/): Open-source Firebase alternative providing database and authentication solutions.
+- [Vercel](https://vercel.com/): Platform for frontend frameworks and static sites, built to integrate with your headless content, commerce, or database.
 
+## License
 
-
-# Appunti da tradurre
-## requisiti
-# npm
-# yarn
-# 
-## installazione pacchetti
-alcuni pacchetti richiedono di scaricare i tipi.
-Di solito si scaricano in questo modo:
-yarn add --dev @types/{package_name}
+This project is open-sourced under the MIT License. See the [LICENSE](LICENSE) file for more details.
