@@ -7,7 +7,7 @@ Money Count is a comprehensive financial tracking web application that empowers 
 
 - **Transaction Management**: Easily log and categorize financial transactions and get a snapshot of recent activities.
 - **Visual Analytics**: Use Recharts for rendering detailed graphs and charts that provide insightful financial analytics.
-- **Responsive and Adaptive Design**: Crafted with Chakra UI, the application offers a fluid and adaptive user experience across all device sizes.
+- **Internationalization**: Utilizing react-i18next for internationalization, enabling multi-language support.
 - **Interactive Calendar**: Incorporates React Calendar for date selection, enabling users to track their transactions effectively.
 - **Form Management**: Utilizes React Hook Form to streamline form handling with efficient user input validation.
 - **Theme Customization**: Offers theme personalization capabilities, allowing users to choose and customize the Chakra UI theme to their preference.
