@@ -59,10 +59,6 @@ VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-## Contributing
-
-Interested in contributing to Money Count? Great! Please check out our [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to proceed.
-
 ## Deployment
 
 Money Count is configured for deployment with Vercel. To deploy, push the repository to GitHub and connect it with Vercel for seamless CI/CD.
