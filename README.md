@@ -1,58 +1,61 @@
 # Money Count
+![Main Menu Preview](https://github.com/LGaratti/Money_Count/blob/main/public/moneycount-dashboard.png)
 
-Money Count is a comprehensive financial tracking web application that empowers users to effortlessly manage their income and expenditures. Utilizing the robustness of React and the flexibility of Chakra UI, integrated with the precision of TypeScript, this application is developed with Vite to expedite the development process. Backed by Supabase for database interactions and authentication, Money Count is designed for secure and scalable user experiences.
+Money Count is a comprehensive financial tracking web application that empowers users to effortlessly manage their income and expenditures. Built with the modern capabilities of React, Chakra UI, and TypeScript, this application employs Vite for an accelerated development lifecycle. It leverages Supabase for robust database interactions and secure authentication.
 
 ## Features
 
-- **Transaction Management**: Log and categorize financial transactions, with a quick overview of recent activities.
-- **Visual Analytics**: Employing Recharts for a detailed graphical representation of financial data, offering insights at a glance.
-- **Responsive Design**: Thanks to Chakra UI, the interface adapts seamlessly across different devices and screen sizes.
-- **Interactive Calendar**: React Calendar is used to select and navigate through dates for better tracking of transactions.
-- **Form Handling**: Implements React Hook Form for optimized form state management, providing an intuitive and efficient user input experience.
+- **Transaction Management**: Easily log and categorize financial transactions and get a snapshot of recent activities.
+- **Visual Analytics**: Use Recharts for rendering detailed graphs and charts that provide insightful financial analytics.
+- **Responsive and Adaptive Design**: Crafted with Chakra UI, the application offers a fluid and adaptive user experience across all device sizes.
+- **Interactive Calendar**: Incorporates React Calendar for date selection, enabling users to track their transactions effectively.
+- **Form Management**: Utilizes React Hook Form to streamline form handling with efficient user input validation.
+- **Theme Customization**: Offers theme personalization capabilities, allowing users to choose and customize the Chakra UI theme to their preference.
+- **Dark and Light Modes**: Supports a toggle between dark and light modes, catering to user comfort and accessibility.
 
 ## Technologies
 
-- **Frontend**: React.js, Chakra UI, TypeScript
+- **Frontend**: React.js, Chakra UI, TypeScript, Recharts, React Hook Form, React Calendar
 - **Development**: Vite, Yarn
 - **Backend**: Supabase
-- **Deployment**: Vercel (Note: A public demo is not available at the moment)
+- **Deployment**: Vercel
 
 ## Prerequisites
 
-Ensure the following tools are installed on your system:
+To run this project, you will need:
 
 - Node.js (LTS version)
 - Yarn package manager
 
 ## Local Development
 
-Follow these steps to get your development environment set up:
+To set up the project on your local machine:
 
 1. Clone the repository:
    ```sh
    git clone https://github.com/LGaratti/Money_Count.git
    ```
 
-2. Change to the project directory:
+2. Enter the project directory:
    ```sh
    cd money-count
    ```
 
-3. Install dependencies:
+3. Install the necessary dependencies:
    ```sh
    yarn
    ```
 
-4. Start the development server with Vite:
+4. Launch the development server with Vite:
    ```sh
    npx vite
    ```
 
-5. The application will be running on [http://localhost:5173](http://localhost:5173).
+5. Access the application at [http://localhost:5173](http://localhost:5173).
 
 ## Environment Configuration
 
-Create a `.env.local` file at the project root and populate it with your Supabase credentials:
+Set up your environment variables by creating a `.env.local` file at the root of the project with the following contents:
 
 ```sh
 VITE_SUPABASE_URL=your_supabase_url
@@ -61,19 +64,21 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 ## Deployment
 
-Money Count is configured for deployment with Vercel. To deploy, push the repository to GitHub and connect it with Vercel for seamless CI/CD.
+Money Count is prepared for deployment on Vercel. Simply push your code to GitHub and set up a project on Vercel for continuous deployment.
 
 ## Acknowledgements
 
-- [Vite](https://vitejs.dev/): Frontend tooling for the modern web.
-- [React](https://reactjs.org/): Building user interfaces with component-based architecture.
-- [Chakra UI](https://chakra-ui.com/): Accessible components for a delightful design system.
-- [Recharts](http://recharts.org/): Composable charting library built on React components.
-- [React Hook Form](https://react-hook-form.com/): Performant, flexible and extensible forms with easy-to-use validation.
-- [React Calendar](https://www.npmjs.com/package/react-calendar): A modular and customizable calendar component for React.
-- [Supabase](https://supabase.io/): Open-source Firebase alternative providing database and authentication solutions.
-- [Vercel](https://vercel.com/): Platform for frontend frameworks and static sites, built to integrate with your headless content, commerce, or database.
+This project makes use of some remarkable open-source software:
+
+- [Vite](https://vitejs.dev/): Enhanced tooling for front-end development.
+- [React](https://reactjs.org/): A library for crafting dynamic user interfaces.
+- [Chakra UI](https://chakra-ui.com/): A component library for creating accessible and beautiful UIs.
+- [Recharts](http://recharts.org/): A charting library built with React components.
+- [React Hook Form](https://react-hook-form.com/): Efficient form management for React.
+- [React Calendar](https://www.npmjs.com/package/react-calendar): Flexible calendar component for React.
+- [Supabase](https://supabase.io/): An open-source alternative to Firebase.
+- [Vercel](https://vercel.com/): A platform for automating front-end deployments.
 
 ## License
 
-This project is open-sourced under the MIT License. See the [LICENSE](LICENSE) file for more details.
+Money Count is distributed under the MIT License. For more details, check out the [LICENSE](LICENSE) file.
