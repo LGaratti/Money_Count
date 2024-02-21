@@ -81,4 +81,4 @@ This project makes use of some remarkable open-source software:
 
 ## License
 
-Money Count is distributed under the MIT License. For more details, check out the [LICENSE](LICENSE) file.
+Money Count is distributed under the MIT License.
