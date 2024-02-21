@@ -1,22 +1,50 @@
 {
+
+  "current month":"Current Month",
+  "custom range":"Custom Range",
+  "week":"Week",
+  "month":"Month",
+  "year":"Year",
+  "range":"Range",
+
   "id":"ID",
   "name":"Name",
   "amount":"Amount",
   "labels":"Labels",
   "description":"Description",
   "date":"Date",
+
   "required field": "Required Field",
   "amount equal to 0": "Amount equal to 0",
   "recurrence":"Recurrence",
+
   "none":"Never",
   "dayly":"Dayly",
   "weekly":"Weekly",
   "monthly":"Monhtly",
   "yearly":"Yearly",
+
   "add operation":"Add operation",
+  "first step": "First step",
+  "operation info": "Operation info",
+  "second step": "Second step",
+  "temporal info": "temporal info",
+
   "recurrence count":"Recurrence count",
   "infinite":"Infinite",
+
   "latest operations":"Latest operations",
   "income operations":"Income operations",
-  "outcome operations":"Outcome operations"
+  "outcome operations":"Outcome operations",
+  
+  "portfolio summary":" Portfolio summary",
+  "gain/loss summary":"Gain/Loss summary",
+  "labels summary":"Labels summary",
+  "budget chart":"Budget Chart",
+  "operations chart":"operations chart",
+
+  "next operations":"Next Operations",
+
+  "gain": "Gain",
+  "loss": "Loss"
 }

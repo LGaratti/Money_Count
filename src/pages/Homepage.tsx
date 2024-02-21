@@ -1,33 +1,73 @@
-import { Skeleton, SimpleGrid } from "@chakra-ui/react";
+import { Skeleton, Grid, GridItem, Box} from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
-import { fetchOpsLabelsFromServer } from "../utils/supabaseClient";
+import { fetchLabelsFromServer, fetchOpsLabelsFromServer } from "../utils/supabaseClient";
 import { operationArrayReducer } from "../utils/OperationArrayReducer";
-import OperationsCard from "../components/molecules/OperationsCard";
+import LastOperationsCard from "../components/molecules/LastOperationsCard";
+import PortfolioSummCard from "../components/molecules/PortfolioSummCard";
+import { Label, OperationsForDate } from "../interfaces/Operation";
+import BalanceTrendCard from "../components/molecules/BalanceTrendCard";
+import { fetchOpsIdToDateMap } from "../utils/OperationUtils";
+import DateRangeSelector from "../components/molecules/DateRangeSelector";
+import { DateRange, TimeUnit } from "../interfaces/Date";
+import { subDays } from "date-fns";
+import OperationTrendCard from "../components/molecules/OperationsTrendCard";
+
+const inizializeDateRange: DateRange = {
+  rangeDisplayed:'current month',
+  startDate: subDays(new Date(), 30),
+  endDate: new Date(),
+  timeUnit: TimeUnit.NONE,
+  nTimeUnit:0
+}
 
 export default function Homepage() {
   const [operationArray, dispatch] = useReducer(operationArrayReducer, []);
+  const [labelsArray, setLabelsArray] = useState<Label[]>([]);
+  const [operationIdToDateMap, setOperationIdToDateMap] = useState<OperationsForDate[]>([]);
+  const [dateRangeDisplayed, setDateRangeDisplayed] = useState<DateRange>(inizializeDateRange);
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => { 
     fetchOpsLabelsFromServer(dispatch);
+    fetchLabelsFromServer(setLabelsArray);
     setIsLoading(false);
   },[]);
+
+  useEffect(() => {
+    const startDate = dateRangeDisplayed.startDate;
+    const endDate = dateRangeDisplayed.endDate || new Date( startDate.getFullYear(), startDate.getMonth(), startDate.getDate() - 30);
+    fetchOpsIdToDateMap(startDate, endDate, -1, false, [], operationArray, setOperationIdToDateMap);
+  },[operationArray,dateRangeDisplayed])
+
+  useEffect(() => {
+    console.log("operationIdToDateMap",operationIdToDateMap);
+  },[operationIdToDateMap])
+
   return (
-    <SimpleGrid columns={3} spacing={4}>
+    <Box>
+    <DateRangeSelector dateRangeDisplayed={dateRangeDisplayed} setDateRangeDisplayed={setDateRangeDisplayed}></DateRangeSelector>
+    <Grid templateRows='repeat(2, 1fr)' templateColumns='repeat(2, 1fr)'gap={4}>
+      <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}> 
-          <OperationsCard operations={operationArray} cardTitle="latest operations"/>
+          <LastOperationsCard operations={operationArray} opsToDate={operationIdToDateMap}/>
         </Skeleton>
+      </GridItem>
+      <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <OperationsCard cardTitle="income operations" operations = { operationArray.filter( operation => {
-            if (operation?.amount >= 0) {
-              return operation
-            }})}/>
+          <PortfolioSummCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap}/>
         </Skeleton>
+      </GridItem>
+      <GridItem>
         <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <OperationsCard cardTitle="outcome operations" operations = { operationArray.filter( operation => {
-            if (operation?.amount < 0) {
-              return operation
-            }})}/>
+          <OperationTrendCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap} dateRangeDisplayed={dateRangeDisplayed}/>
         </Skeleton>
-    </SimpleGrid>
+      </GridItem>
+      <GridItem>
+        <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
+          <BalanceTrendCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap} dateRangeDisplayed={dateRangeDisplayed}/>
+        </Skeleton>
+      </GridItem>
+    </Grid>
+    </Box>
   );
 }

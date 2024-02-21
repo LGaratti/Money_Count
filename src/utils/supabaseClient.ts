@@ -31,23 +31,27 @@ export async function fetchOpsLabelsFromServer(operationArrayReducer: Dispatch<O
     throw error;
   if(!data)
     throw new Error("empty response from server");
-    const tempOperations: Operation[] = [];
+  const tempOperations: Operation[] = [];
 
-    data.forEach((operationLabel) => {
-      const foundOperation = tempOperations.find(operation => operation.operation_id === operationLabel.operation.operation_id);
-  
-      if (!foundOperation) {
-        // Se l'operazione non esiste, creala con un array vuoto per labels
-        const newOperation = { ...operationLabel.operation, labels: [operationLabel.label] };
-        tempOperations.push(newOperation);
-      } else {
-        // Se l'operazione esiste già, aggiungi la label (assicurandosi che labels sia un array)
-        foundOperation.labels = foundOperation.labels || []; // Assicura che labels sia un array
-        foundOperation.labels.push(operationLabel.label);
-      }
-    });
-  initOperations(operationArrayReducer, tempOperations);
-  console.log("Operazioni ricevute dal server:", tempOperations);
+  data.forEach((operationLabel) => {
+    const foundOperation = tempOperations.find(operation => operation.operation_id === operationLabel.operation.operation_id);
+
+    if (!foundOperation) {
+      // Se l'operazione non esiste, creala con un array vuoto per labels
+      const newOperation = { ...operationLabel.operation, labels: [operationLabel.label] };
+      tempOperations.push(newOperation);
+    } else {
+      // Se l'operazione esiste già, aggiungi la label
+      foundOperation.labels = foundOperation.labels || []; 
+      foundOperation.labels.push(operationLabel.label);
+    }
+  });
+  const sortedOperations = tempOperations.sort((op1, op2) => {
+    const firstDate1 = new Date(op1.first_date).getTime(); // Converti la data in millisecondi
+    const firstDate2 = new Date(op2.first_date).getTime();
+    return firstDate1 - firstDate2; // Ordina in base all'ordine cronologico crescente
+  });
+  initOperations(operationArrayReducer, sortedOperations);
 }
 
 export async function fetchLabelsFromServer( setLabel: Dispatch<SetStateAction<Label[]>>) {
@@ -68,10 +72,7 @@ export async function fetchLabelsFromServer( setLabel: Dispatch<SetStateAction<L
     const foundLabel = tempLabels.find(label => label.label_id === labelFromServer.label_id);
     if (!foundLabel)  tempLabels.push(labelFromServer);
   });
-
   setLabel(tempLabels);
-
-  console.log("Labels ricevute dal server:", tempLabels);
 }
 
 export async function InsertOpFromServer(operation: Operation) {
