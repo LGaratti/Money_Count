@@ -1,5 +1,3 @@
-
-
 export interface DateRange{
   rangeDisplayed: string;
   startDate:Date;

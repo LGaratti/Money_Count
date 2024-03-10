@@ -2,21 +2,13 @@ import { createClient } from "@supabase/supabase-js";
 import { Label, Operation, OperationsAction } from "../interfaces/Operation";
 import { initOperations } from "./OperationUtils";
 import { Dispatch, SetStateAction } from "react";
+import { OperationLabel } from "../interfaces/Server";
 
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-export interface OperationLabel {
-  operation:Operation,
-  label:Label
-}
-
-export interface LabelFromServer {
-  label:Label
-}
 
 export async function fetchOpsLabelsFromServer(operationArrayReducer: Dispatch<OperationsAction>) {
   const { data , error } = await supabase
