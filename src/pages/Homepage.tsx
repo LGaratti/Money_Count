@@ -1,6 +1,6 @@
 import { Skeleton, Grid, GridItem, Box} from "@chakra-ui/react";
 import { useEffect, useReducer, useState } from "react";
-import { fetchLabelsFromServer, fetchOpsLabelsFromServer } from "../utils/supabaseClient";
+import { fetchOpsLabelsFromServerFastify, fetchLabelsFromServerFastify } from "../utils/ServerUtils";
 import { operationArrayReducer } from "../utils/OperationArrayReducer";
 import LastOperationsCard from "../components/molecules/LastOperationsCard";
 import PortfolioSummCard from "../components/molecules/PortfolioSummCard";
@@ -28,8 +28,8 @@ export default function Homepage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => { 
-    fetchOpsLabelsFromServer(dispatch);
-    fetchLabelsFromServer(setLabelsArray);
+    fetchOpsLabelsFromServerFastify(dispatch);
+    fetchLabelsFromServerFastify(setLabelsArray);
     setIsLoading(false);
   },[]);
 

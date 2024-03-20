@@ -21,7 +21,7 @@ import { Label, Operation } from '../../interfaces/Operation';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
 import LabelsComponent from '../molecules/LabelsComponent';
-import { fetchLabelsFromServer } from '../../utils/supabaseClient';
+import { fetchLabelsFromServerFastify } from '../../utils/ServerUtils';
 import { FaEuroSign } from 'react-icons/fa';
 import { TimeUnit } from '../../interfaces/Date';
 
@@ -34,7 +34,7 @@ export const AddOperationModal = ({onClose,...props}:ModalProps) => {
 
   // Labels updated from server at first render
   useEffect(() => { 
-    fetchLabelsFromServer(setServerLabels);
+    fetchLabelsFromServerFastify(setServerLabels);
   },[]);
 
   // gain and loss label assigned due to amount sign
