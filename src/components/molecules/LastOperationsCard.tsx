@@ -66,7 +66,7 @@ export const LastOperationsCard = ({operations, opsToDate, ...props}: LastOperat
   }
 
   const formatDate = (date:Date) => {
-    return format(date, 'P', { locale: currentLocale }); // Utilizza il formato di data desiderato
+    return format(date, "d/M/yy", { locale: currentLocale }); // Utilizza il formato di data desiderato
   };
 
   const OperationsTable = ({ ops, title, color}: { ops?: DateOps[], title: string, color: string}) => (
