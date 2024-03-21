@@ -73,7 +73,7 @@ export const DateRangeSelector = ({dateRangeDisplayed , setDateRangeDisplayed, .
         const tempEndDate: Date = new Date( choosenDate.getFullYear() + 1, choosenDate.getMonth(), 0, 23, 59, 59);
         tempDateRange.timeUnit = TimeUnit.YEAR;
         tempDateRange.nTimeUnit = 1;
-        tempDateRange.rangeDisplayed = format(choosenDate, 'yyyy')
+        tempDateRange.rangeDisplayed = format(choosenDate, 'yyyy');
         tempDateRange.endDate = tempEndDate;
         setEndDate(tempEndDate);
       }

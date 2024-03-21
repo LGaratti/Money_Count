@@ -5,7 +5,7 @@ import i18n from "../../locales/i18n";
 import { Label as LabelOp, Operation, OperationsForDate } from "../../interfaces/Operation";
 import { useEffect, useState } from "react";
 import { AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, Area } from "recharts";
-import { DateRange } from "../../interfaces/Date";
+import { DateRange, TimeUnit } from "../../interfaces/Date";
 import { enUS, it } from "date-fns/locale";
 import { AreaCharSegment, BarCharSegment, calculateSegments } from "../../utils/RechartsUtils";
 import { format, startOfDay } from "date-fns";
@@ -57,14 +57,13 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
       const updatedSegment:AreaCharSegment = { ...segment, amount: amountSum, operationsForDate: operationsForSegment };
 
       // Se c'è una sola operationDate con un solo operations_id, aggiorna il nome del segmento con quella data specifica
-      if (updatedSegment.operationsForDate.length === 1 && updatedSegment.operationsForDate[0].operations_id.length === 1) {
+      if (updatedSegment.operationsForDate.length === 1 && updatedSegment.operationsForDate[0].operations_id.length === 1 && dateRangeDisplayed.timeUnit !== TimeUnit.YEAR) {
         const specificOpDate = new Date(updatedSegment.operationsForDate[0].date);
         const formatStyle = isSameYear ? "d/M" : "d/M/yy";
         updatedSegment.name = format(specificOpDate, formatStyle, { locale: currentLocale });
       }
       return updatedSegment;
     });
-
     setAreaCharSegment(populatedSegments);
   }, [operationIdToDateMap, operations, dateRangeDisplayed]);
   

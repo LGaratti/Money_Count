@@ -6,7 +6,7 @@ import { Label as LabelOp, Operation, OperationsForDate } from "../../interfaces
 import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import LabelTag from "../atoms/LabelTag";
-import { DateRange } from "../../interfaces/Date";
+import { DateRange, TimeUnit } from "../../interfaces/Date";
 import { enUS, it } from "date-fns/locale";
 import { BarCharSegment, calculateSegments } from "../../utils/RechartsUtils";
 import { format, startOfDay } from "date-fns";
@@ -62,7 +62,7 @@ export const OperationTrendCard = ({operations, labels, operationIdToDateMap, da
       const updatedSegment = { ...segment, gain: gainSum, loss: lossSum, operationsForDate: operationsForSegment };
 
       // Se c'è una sola operationDate con un solo operations_id, aggiorna il nome del segmento con quella data specifica
-      if (updatedSegment.operationsForDate.length === 1 && updatedSegment.operationsForDate[0].operations_id.length === 1) {
+      if (updatedSegment.operationsForDate.length === 1 && updatedSegment.operationsForDate[0].operations_id.length === 1 && dateRangeDisplayed.timeUnit !== TimeUnit.YEAR) {
         const specificOpDate = new Date(updatedSegment.operationsForDate[0].date);
         const formatStyle = isSameYear ? "d/M" : "d/M/yy";
         updatedSegment.name = format(specificOpDate, formatStyle, { locale: currentLocale });

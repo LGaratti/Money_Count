@@ -32,7 +32,7 @@ export async function fetchOpsLabelsFromServerFastify(operationArrayReducer: Dis
         return firstDate1 - firstDate2; // Ordina in base all'ordine cronologico crescente
       });
       initOperations(operationArrayReducer, sortedOperations);
-      console.log(sortedOperations);
+      console.log("sortedOperations",sortedOperations);
     } catch (error) {
       console.error("Errore durante il fetch delle operazioni con etichette:", error);
     }
