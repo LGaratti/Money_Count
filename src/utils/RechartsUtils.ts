@@ -86,7 +86,7 @@ export const calculateSegments = (currentLocale:Locale, dateRangeDisplayed:DateR
         const months = eachMonthOfInterval({ start: startDate, end: endDate });
         months.forEach((monthStart) => {
           const monthEnd = endOfMonth(monthStart);
-          const nameTemp = format(monthStart, "MMM yy", { locale: currentLocale });
+          const nameTemp = format(monthStart, "MMM", { locale: currentLocale });
           const segmentTemp = segmentConstructor(nameTemp, monthStart, monthEnd > endDate ? endDate : monthEnd);
           segmentsTemp.push(segmentTemp);
         });
