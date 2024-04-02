@@ -11,6 +11,8 @@ import DateRangeSelector from "../components/molecules/DateRangeSelector";
 import { DateRange, TimeUnit } from "../interfaces/Date";
 import { subDays } from "date-fns";
 import OperationTrendCard from "../components/molecules/OperationsTrendCard";
+import { useModal } from "../utils/ModalContext";
+import AddOperationModal from "../components/organisms/AddOperationModal";
 
 const inizializeDateRange: DateRange = {
   rangeDisplayed:'current month',
@@ -22,6 +24,8 @@ const inizializeDateRange: DateRange = {
 
 export default function Homepage() {
   const [operationArray, dispatch] = useReducer(operationArrayReducer, []);
+  // const { operationArray, dispatch } = useOperations();
+  const { isOpen, onClose } = useModal();
   const [labelsArray, setLabelsArray] = useState<Label[]>([]);
   const [operationIdToDateMap, setOperationIdToDateMap] = useState<OperationsForDate[]>([]);
   const [dateRangeDisplayed, setDateRangeDisplayed] = useState<DateRange>(inizializeDateRange);
@@ -45,29 +49,30 @@ export default function Homepage() {
 
   return (
     <Box>
-    <DateRangeSelector dateRangeDisplayed={dateRangeDisplayed} setDateRangeDisplayed={setDateRangeDisplayed}></DateRangeSelector>
-    <Grid templateRows='repeat(2, 1fr)' templateColumns='repeat(2, 1fr)'gap={4}>
-      <GridItem>
-        <Skeleton fadeDuration={1} isLoaded = {!isLoading}> 
-          <LastOperationsCard operations={operationArray} opsToDate={operationIdToDateMap}/>
-        </Skeleton>
-      </GridItem>
-      <GridItem>
-        <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <PortfolioSummCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap}/>
-        </Skeleton>
-      </GridItem>
-      <GridItem>
-        <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <OperationTrendCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap} dateRangeDisplayed={dateRangeDisplayed}/>
-        </Skeleton>
-      </GridItem>
-      <GridItem>
-        <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
-          <BalanceTrendCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap} dateRangeDisplayed={dateRangeDisplayed}/>
-        </Skeleton>
-      </GridItem>
-    </Grid>
+      <DateRangeSelector dateRangeDisplayed={dateRangeDisplayed} setDateRangeDisplayed={setDateRangeDisplayed}></DateRangeSelector>
+      <Grid templateRows='repeat(2, 1fr)' templateColumns='repeat(2, 1fr)'gap={4}>
+        <GridItem>
+          <Skeleton fadeDuration={1} isLoaded = {!isLoading}> 
+            <LastOperationsCard operations={operationArray} opsToDate={operationIdToDateMap}/>
+          </Skeleton>
+        </GridItem>
+        <GridItem>
+          <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
+            <PortfolioSummCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap}/>
+          </Skeleton>
+        </GridItem>
+        <GridItem>
+          <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
+            <OperationTrendCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap} dateRangeDisplayed={dateRangeDisplayed}/>
+          </Skeleton>
+        </GridItem>
+        <GridItem>
+          <Skeleton fadeDuration={1} isLoaded = {!isLoading}>
+            <BalanceTrendCard operations={operationArray} labels={labelsArray} operationIdToDateMap={operationIdToDateMap} dateRangeDisplayed={dateRangeDisplayed}/>
+          </Skeleton>
+        </GridItem>
+      </Grid>
+      <AddOperationModal dispatchOp={dispatch} isCentered size={'xl'} isOpen={isOpen} onClose={onClose} children={undefined}/>
     </Box>
   );
 }

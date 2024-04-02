@@ -15,17 +15,20 @@ import { Modal, ModalBody, ModalHeader, FormControl, FormLabel, Input, Button, N
   StepDescription,
   StepSeparator,
   ModalFooter } from '@chakra-ui/react'
-import {  useEffect, useRef, useState } from 'react';
+import {  Dispatch, useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Label, Operation } from '../../interfaces/Operation';
+import { Label, Operation, OperationsAction } from '../../interfaces/Operation';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../locales/i18n';
 import LabelsComponent from '../molecules/LabelsComponent';
-import { fetchLabelsFromServerFastify } from '../../utils/ServerUtils';
+import { fetchLabelsFromServerFastify, InsertOpToServerFastify } from '../../utils/ServerUtils';
 import { FaEuroSign } from 'react-icons/fa';
 import { TimeUnit } from '../../interfaces/Date';
 
-export const AddOperationModal = ({onClose,...props}:ModalProps) => {
+interface TestModalProps extends ModalProps {
+  dispatchOp: Dispatch<OperationsAction>
+}
+export const AddOperationModal = ({onClose, dispatchOp, ...props}:TestModalProps) => {
   const {t} = useTranslation('ns1',{ i18n } );
   const [serverLabels, setServerLabels] = useState<Label[]>([]);
   const [labels, setLabels] = useState<Label[]>([]);
@@ -76,8 +79,6 @@ export const AddOperationModal = ({onClose,...props}:ModalProps) => {
   const [stepOneData, setStepOneData] = useState({});
   const formStep1Ref = useRef<HTMLFormElement>(null);
   const formStep2Ref = useRef<HTMLFormElement>(null); 
-
-
   const {
     handleSubmit,
     register,
@@ -90,20 +91,11 @@ export const AddOperationModal = ({onClose,...props}:ModalProps) => {
   const onSubmitStep1: SubmitHandler<Operation> = (data) => {
     data.labels = labels;
     // Salva i dati del primo step nello stato
-    console.log(data)
     setStepOneData(data);
     // Passa al prossimo step
     handleStep(true);
   };
 
-  // OLD
-  // const onSubmitStep2: SubmitHandler<Operation> = (data) => {
-  //   data.labels = labels;
-  //   data.first_date;
-  //   if(data?.periodic_unit === 'none')
-  //     data.periodic_unit = undefined;
-  //   InsertOpFromServer(data);
-  // };
   const onSubmitStep2: SubmitHandler<Operation> = (data) => {
     // Combina i dati del primo e secondo step
     const finalData = {
@@ -114,10 +106,8 @@ export const AddOperationModal = ({onClose,...props}:ModalProps) => {
       periodic_unit: data?.periodic_unit === 'none' ? undefined : data.periodic_unit,
     };
   
-    console.log("SPARATOOOOOOOOO", finalData);
-    // Inserimento dei dati combinati al server TODO DA SCOMMENTARE
-    // InsertOpFromServer(finalData);
-    onClose();
+    InsertOpToServerFastify(finalData, dispatchOp);
+    handleClose();
   };
 
   // Step Handling
@@ -163,7 +153,7 @@ export const AddOperationModal = ({onClose,...props}:ModalProps) => {
       description: '',
       first_date: undefined,
       periodic_unit: undefined, // o qualsiasi valore iniziale appropriato
-      periodic_count: 0, // o qualsiasi valore iniziale appropriato
+      periodic_count: undefined, // o qualsiasi valore iniziale appropriato
       // ...qualsiasi altro campo che necessita di essere resettato
     });
   };

@@ -8,6 +8,7 @@ import ErrorPage from "./pages/ErrorPage";
 import Homepage from "./pages/Homepage";
 import theme from "./styles/theme";
 import '@fontsource-variable/outfit';
+import { ModalProvider } from "./utils/ModalContext";
 
 const router = createBrowserRouter([
   {
@@ -31,7 +32,9 @@ function App() {
   return (
     <I18nextProvider i18n={i18n}>
       <ChakraProvider theme={theme}>
-        <RouterProvider router={router} />
+        <ModalProvider>
+          <RouterProvider router={router} />
+        </ModalProvider>
       </ChakraProvider>
     </I18nextProvider>
   );

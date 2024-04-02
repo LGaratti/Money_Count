@@ -1,16 +1,16 @@
-import { Heading, useColorMode, Switch, HStack, Icon, Button, Wrap, Box, Grid, useDisclosure } from "@chakra-ui/react";
+import { Heading, useColorMode, Switch, HStack, Icon, Button, Wrap, Box, Grid } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { MdPostAdd } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
-import AddOperationModal from "../organisms/AddOperationModal";
+import { useModal } from "../../utils/ModalContext";
 
 export const TopBar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const {t} = useTranslation('ns1',{ i18n } );
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { onOpen } = useModal();
 
   return (
     <Grid templateColumns="repeat(3, 1fr)" w="full" p={2} position="sticky">
@@ -21,7 +21,7 @@ export const TopBar = () => {
         <Link to="/demo">
           <Button>Demo</Button>
         </Link>
-     </Wrap>
+      </Wrap>
       <Box justifySelf="center">
         <Heading size={'2xl'}>
           <Link to="/">Money Count</Link>
@@ -36,7 +36,6 @@ export const TopBar = () => {
             onClick={onOpen}>
             {t('add operation')}
           </Button>
-          <AddOperationModal isCentered size={'xl'} isOpen={isOpen} onClose={onClose} children={undefined}/>
         {/* </Link> */}
         <HStack>
           <Switch variant={'switchTheme'}
