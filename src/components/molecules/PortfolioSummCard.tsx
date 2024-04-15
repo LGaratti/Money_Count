@@ -127,7 +127,7 @@ export const PortfolioSummCard = ({operations, labels, operationIdToDateMap, ...
           <Box display="flex" justifyContent="space-evenly">
             {labels?.map( label => {
               if (label.name === "gain" || label.name === 'loss')
-                return <><LabelTag key={label.label_id} label={label}/></>
+                return <LabelTag key={label.label_id} label={label}/>
             })}
           </Box>
         </GridItem>
@@ -157,7 +157,7 @@ export const PortfolioSummCard = ({operations, labels, operationIdToDateMap, ...
           <Box display="flex" justifyContent="space-evenly">
             {dataForLabelsPie?.map( segmLabelPie => {
               if (segmLabelPie.label && segmLabelPie.label.name !== "gain" && segmLabelPie.label.name !== 'loss')
-                return <><LabelTag key={segmLabelPie.label.label_id} label={segmLabelPie.label}/></>
+                return <LabelTag key={segmLabelPie.label.label_id} label={segmLabelPie.label}/>
             })}
           </Box>
         </GridItem>

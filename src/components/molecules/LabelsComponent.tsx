@@ -90,7 +90,7 @@ export const LabelsComponent = ({ serverLabels,//  setServerLabels, // TOADD
           </Menu>
         </GridItem>
         <GridItem>
-          {labels.map((label) => ( <LabelTag label={label} /> ))}
+          {labels.map((label) => ( <LabelTag key={label.label_id} label={label} /> ))}
         </GridItem>
       </Grid>
     </>

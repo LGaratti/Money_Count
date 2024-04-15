@@ -96,8 +96,8 @@ export const LastOperationsCard = ({operations, opsToDate, ...props}: LastOperat
                   {atLeastOneLabel(ops) &&
                     <Td>
                       <Wrap spacing={2}>
-                        {labelsWithoutGainAndLoss(dateOp.op.labels).map((label, index) => (
-                          <LabelTag key={index} label={label} />
+                        {labelsWithoutGainAndLoss(dateOp.op.labels).map((label) => (
+                          <LabelTag key={label.label_id} label={label} />
                         ))}
                       </Wrap>
                     </Td>

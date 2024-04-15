@@ -72,7 +72,7 @@ export const OperationTrendCard = ({operations, labels, operationIdToDateMap, da
 
   
     setBarCharSegment(populatedSegments);    
-  }, [operationIdToDateMap, operations, dateRangeDisplayed]);
+  }, [operationIdToDateMap, operations, dateRangeDisplayed, currentLocale]);
   
   return (
     <Card {...props} minH={'331.19px'}>
@@ -105,7 +105,7 @@ export const OperationTrendCard = ({operations, labels, operationIdToDateMap, da
         <Box display="flex" justifyContent="space-evenly">
             {labels?.map( label => {
               if (label.name === "gain" || label.name === 'loss')
-                return <><LabelTag key={label.label_id} label={label}/></>
+                return <LabelTag key={label.label_id} label={label}/>
             })}
         </Box>        
       </CardBody>

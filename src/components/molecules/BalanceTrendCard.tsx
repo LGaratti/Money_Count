@@ -12,13 +12,13 @@ import { format, startOfDay } from "date-fns";
 import CharTooltip, { CharTooltipMode } from "../atoms/CharTooltip";
 
 interface BalanceTrendCardProps extends CardProps {
-  operations?: Operation[],
-  labels?: LabelOp[],
-  operationIdToDateMap?: OperationsForDate[],
-  dateRangeDisplayed: DateRange,
+  operations?: Operation[];
+  labels?: LabelOp[];
+  operationIdToDateMap?: OperationsForDate[];
+  dateRangeDisplayed: DateRange;
 }
 
-export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, dateRangeDisplayed, ...props} : BalanceTrendCardProps) => {
+export const BalanceTrendCard = ({operations, operationIdToDateMap, dateRangeDisplayed, ...props} : BalanceTrendCardProps) => {
   const {t} = useTranslation('ns1',{ i18n } );
   const currentLocale = i18n.language === 'it' ? it : enUS;
   const theme = useTheme();
@@ -65,7 +65,7 @@ export const BalanceTrendCard = ({operations, labels, operationIdToDateMap, date
       return updatedSegment;
     });
     setAreaCharSegment(populatedSegments);
-  }, [operationIdToDateMap, operations, dateRangeDisplayed]);
+  }, [operationIdToDateMap, operations, dateRangeDisplayed, currentLocale]);
   
   return (
     <Card {...props} minH={'331.19px'}>
