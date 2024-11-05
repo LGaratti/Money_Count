@@ -101,7 +101,7 @@ export const PortfolioSummCard = ({operations, labels, operationIdToDateMap, ...
       <Heading size={'md'} m={1}>{t('portfolio summary')}</Heading>
       <Grid templateRows='repeat(1, 1fr)' templateColumns='repeat(2, 1fr)' gap={1}>
         <GridItem>
-          <Heading size={'sm'} textAlign="center" m={2} >{t('gain/loss summary')}</Heading>
+          <Heading size={'sm'} textAlign="center" m={2} >{t('gain/loss')}</Heading>
           <Box height={200}>
             <ResponsiveContainer>
             <PieChart>
@@ -132,7 +132,7 @@ export const PortfolioSummCard = ({operations, labels, operationIdToDateMap, ...
           </Box>
         </GridItem>
         <GridItem>
-          <Heading size={'sm'} textAlign="center" m={2} >{t('labels summary')}</Heading>
+          <Heading size={'sm'} textAlign="center" m={2} >{t('labels')}</Heading>
           <Box height={200}>
             <ResponsiveContainer>
             <PieChart>

@@ -15,12 +15,12 @@ import { useModal } from "../utils/ModalContext";
 import AddOperationModal from "../components/organisms/AddOperationModal";
 
 const inizializeDateRange: DateRange = {
-  rangeDisplayed:'current month',
+  rangeDisplayed: "current month",
   startDate: subDays(new Date(), 30),
   endDate: new Date(),
   timeUnit: TimeUnit.NONE,
-  nTimeUnit:0
-}
+  nTimeUnit: 0,
+};
 
 export default function Homepage() {
   const [operationArray, dispatch] = useReducer(operationArrayReducer, []);
@@ -35,17 +35,17 @@ export default function Homepage() {
     fetchOpsLabelsFromServerFastify(dispatch);
     fetchLabelsFromServerFastify(setLabelsArray);
     setIsLoading(false);
-  },[]);
+  }, []);
 
   useEffect(() => {
     const startDate = dateRangeDisplayed.startDate;
     const endDate = dateRangeDisplayed.endDate || new Date( startDate.getFullYear(), startDate.getMonth(), startDate.getDate() - 30);
     fetchOpsIdToDateMap(startDate, endDate, -1, false, [], operationArray, setOperationIdToDateMap);
-  },[operationArray,dateRangeDisplayed])
+  }, [operationArray,dateRangeDisplayed]);
 
   useEffect(() => {
-    console.log("operationIdToDateMap",operationIdToDateMap);
-  },[operationIdToDateMap])
+    console.log("operationIdToDateMap", operationIdToDateMap);
+  }, [operationIdToDateMap]);
 
   return (
     <Box>
