@@ -1,4 +1,4 @@
-import { Card, CardBody, Heading, Table, TableContainer, CardProps, Tbody, Td, Th, Thead, Tr, Wrap, Grid, Box, GridItem, useColorMode} from '@chakra-ui/react'
+import { Card, CardBody, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Wrap, Box, useColorMode, VStack, Stack, StackProps } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
 import { Label, Operation, OperationsForDate} from "../../interfaces/Operation";
@@ -12,7 +12,7 @@ interface DateOps {
   op: Operation;
 }
 
-interface LastOperationsCardProps extends CardProps {
+interface LastOperationsCardProps extends StackProps {
   operations?: Operation[];
   opsToDate: OperationsForDate[];
 }
@@ -42,7 +42,7 @@ export const LastOperationsCard = ({ operations, opsToDate, ...props }: LastOper
     tempLosses.sort((a, b) => b.date.getTime() - a.date.getTime());
     setGains(tempGains.slice(0, 4));
     setLosses(tempLosses.slice(0, 4));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [opsToDate]);
 
   const labelsWithoutGainAndLoss = (labels: Label[]) => {
@@ -94,7 +94,7 @@ export const LastOperationsCard = ({ operations, opsToDate, ...props }: LastOper
                       <Wrap spacing={2}>
                         {labelsWithoutGainAndLoss(dateOp.op.labels).map(
                           (label) => (
-                          <LabelTag key={label.label_id} label={label} />
+                            <LabelTag key={label.label_id} label={label} />
                           )
                         )}
                       </Wrap>
@@ -111,7 +111,7 @@ export const LastOperationsCard = ({ operations, opsToDate, ...props }: LastOper
 
   return (
     <Card {...props} minH={'331.19px'}>
-      <CardBody>
+    <CardBody>
     <VStack {...props}>
       <Heading size={"md"} m={1}>
         {t("latest operations")}
@@ -121,7 +121,7 @@ export const LastOperationsCard = ({ operations, opsToDate, ...props }: LastOper
         <OperationsTable ops={losses} title={t("loss")} color="red" />
       </Stack>
     </VStack>
-      </CardBody>
+    </CardBody>
     </Card>
   );
 };

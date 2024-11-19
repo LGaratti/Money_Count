@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, CardProps, Grid, GridItem, Heading } from "@chakra-ui/react";
+import { Box, Card, CardBody, StackProps, Grid, GridItem, Heading } from "@chakra-ui/react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Customized  } from 'recharts';
 import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
@@ -9,7 +9,7 @@ import { useTheme } from "@chakra-ui/react";
 import CharTooltip, { CharTooltipMode } from "../atoms/CharTooltip";
 import { PieCharSegment } from "../../utils/RechartsUtils";
 
-interface PortfolioSummCardProps extends CardProps {
+interface PortfolioSummCardProps extends StackProps {
   operations?: Operation[],
   labels?: LabelOp[],
   operationIdToDateMap?: OperationsForDate[]
