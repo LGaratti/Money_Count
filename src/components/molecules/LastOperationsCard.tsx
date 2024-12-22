@@ -1,4 +1,4 @@
-import { Card, CardBody, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Wrap, Box, useColorMode, VStack, Stack, StackProps } from "@chakra-ui/react";
+import { Card, CardBody, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Wrap, Box, useColorMode, VStack, Stack, StackProps, Spacer } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
 import i18n from "../../locales/i18n";
 import { Label, Operation, OperationsForDate} from "../../interfaces/Operation";
@@ -118,6 +118,7 @@ export const LastOperationsCard = ({ operations, opsToDate, ...props }: LastOper
       </Heading>
       <Stack direction={{ base: "column", md: "row" }}>
         <OperationsTable ops={gains} title={t("gain")} color="green" />
+        <Spacer/>
         <OperationsTable ops={losses} title={t("loss")} color="red" />
       </Stack>
     </VStack>
